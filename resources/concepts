@@ -1,0 +1,52 @@
+ver temperaturas das lampadas para cada tipo de verdura para quando o LDR dizer que está com pouca luminosidade. Quantos Kelvins
+
+Sensor de Umidade do Solo atua solenoid
+Sensor de Umidade da statufa aciona os vaporisadores
+Sensor de CO2
+
+
+
+Temperatura Ideal
+Acelga
+15 °C a 25 °C
+Agrião
+15 °C a 25 °C
+Cebolinha
+Até 25 °C
+Couve-Flor
+15 °C a 25 °C
+Pimentão
+15 °C a 25 °C
+Repolho
+15 °C a 25 °C
+
+Tabela 2 – Umidade do Ar Ideal para Algumas Hortaliças
+Hortaliça
+Umidade do Ar Recomendada
+Tomate
+50 a 70%
+Melão
+65 a 75%
+Pepino
+70 a 90%
+Pimentão
+50 a 70%
+
+2.6.5 Concentração de CO2
+A concentração do CO2 no ar atmosférico exerce contribuição importante para a temperatura ambiente. Em casas de vegetação Observa-se que a concentração ótima é atingida em 0,2% de CO2, pois acima dessa concentração a taxa de fotossíntese já não poderá melhorar. Conseqüentemente, qualquer concentração abaixo desse ótimo (0,2%) está funcionando como limitante para o melhor rendimento do processo fotossintético (FREITAS, 2005).
+
+2.6.9 Evapotranspiração
+Evapotranspiração é o processo simultâneo de transferência de água para a atmosfera por evaporação da água do solo, superfícies livres de água e água retida pelas plantas e pela transpiração das plantas. A evapotranspiração de referência (Eto) no interior de ambiente protegido é sempre inferior, ficando entre 45 % e 77 % da verificada para o meio exterior (FARIAS et al., 1994).
+
+Desta forma, próximo ao Equador, é comum a temperatura do ambiente dentro da casa-de-vegetação das 12 às 14 h chegar a ser superior a 50 ºC, o que pode prejudicar as plantas, dependendo da espécie, via estresse térmico (Levitt, 1972), com diversos danos. Já Larcher (2000) salienta como distúrbios funcionais causados pelo excesso de calor as alterações nas membranas das tilacóides dos cloroplastos e a inibição do fotossistema II, com a depressão da fotossíntese. As plantas tentam resistir ou tolerar o calor, elevando a taxa transpiratória (Levitt, 1972) e/ou aumentando o isolamento térmico, com incremento de ruberina, mecanismos de prevenção via aclimatação ao calor (Larcher, 2000).
+Com o incremento da radiação infravermelha e da calórica no interior da casa-de-vegetação, com o conseqüente aumento da temperatura, pode ocorrer, dependendo da espécie vegetal, da duração do estresse e do estádio do desenvolvimento vegetal, vários danos no metabolismo vegetal, como o incremento anormal da respiração oxidativa e das fotorrespiração nas plantas de metabolismo C3 e a desnaturação de proteínas sensíveis (Levitt, 1972), sendo que em alguns casos pode ocorrer a aclimatação ao calor (Larcher, 2000). Neste processo e para se reduzir a umidade relativa do ar, de duas em duas horas, deve-se abrir, as portas da casa-de-vegetação por períodos de 5 a 10 min (FILHO, 2002).
+
+            1. ResfriamentoEvaporativo
+O sistema mais comum de resfriamento evaporativo utilizado pelos produtores é o do tipo meio poroso-exaustor (“Pad-Fan”). Neste, a água é aplicada ao meio poroso pela parte superior enquanto o ar atravessa o meio poroso succionado, por ventiladores instalados no lado oposto da casa de vegetação. O calor é removido do ar para que a água se evapore, o ar é, então, resfriado e a umidade do ar aumentada. A temperatura de bulbo úmido do ar de entrada no meio poroso é um fator limitante na quantidade de resfriamento que pode ser alcançado. O resfriador evaporativo funciona melhor quando a umidade relativa do ar externo é baixa. O aumento máximo da temperatura ao longo da casa de vegetação deve ser de 3 a 4oC. Ar úmido e frio entra na casa de vegetação, enquanto ar quente sai pelas aberturas das janelas e venezianas.
+
+            1. Umidaderelativa
+O controle de umidade relativa numa casa de vegetação é requerido para prevenir doenças associadas com alto nível de umidade. Umidade relativa ideal deve estar sempre abaixo de 85%. Um método de desumidificação do ar é baseado no sistema de refrigeração, que resfria o ar e condensa a água contida neste ar, reduzindo, portanto, a umidade relativa. A tecnologia básica para reduzir a umidade relativa em casas de vegetação consiste em aquecer o
+ar de entrada, através de um sistema de ventilação por exaustão, para retirar o ar aquecido e úmido.
+Controladores de umidade podem ser eletromecânicos ou eletrônicos. Os controladores de umidade eletromecânicos usam um material higroscópico e cuja faixa de operação varia com o conteúdo de água no ar. A precisão deste tipo de sensor pode ser de 5%, entretanto, reduzindo para 10% quando a umidade relativa é maior ou igual a 90%.
+
+
