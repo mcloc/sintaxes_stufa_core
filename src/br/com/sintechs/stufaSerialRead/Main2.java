@@ -2,12 +2,11 @@ package br.com.sintechs.stufaSerialRead;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
-import com.fazecast.jSerialComm.SerialPort;
+import arduino.Arduino;
 
-public class Main {
+public class Main2 {
 	
 	static Logger _log = Logger.getGlobal();
 	static final String SHM_ADDRESS_READ = "/dev/shm/serial2arduinoRead";
@@ -20,19 +19,24 @@ public class Main {
 		checkSHMFiles();
 		
 		
-		SerialPort comPort = SerialPort.getCommPorts()[0];
-		comPort.setBaudRate(500000);
-		comPort.openPort();
-		comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
-		InputStream in = comPort.getInputStream();
-		try
-		{
-		   for (int j = 0; j < 1000; ++j)
-		      System.out.print((char)in.read());
-		   in.close();
-		} catch (Exception e) { e.printStackTrace(); }
+//		MessageQueue msgQueue = new MessageQueue(new ArrayList<String>());
+//		MessageReaderThread writer = new MessageReaderThread(SHM_ADDRESS_READ, SHM_ADDRESS_READ_LOCK, SHM_ADDRESS_WRITE_LOCK, msgQueue );
+//		Runtime.getRuntime().addShutdownHook(writer);
+//		writer.start();
+//		
 		
-		comPort.closePort();
+		Arduino arduinoSerial = new Arduino("/dev/ttyUSB0", 500000);
+		arduinoSerial.openConnection();
+		while(true) {
+			////////////////////// TO READ FROM ARDUINO AND SEND TO PHONE //////////////
+			try {
+			String readed = arduinoSerial.serialRead();
+			System.out.println(readed);
+			Thread.sleep(50);
+			} catch (Exception e) {
+				arduinoSerial.closeConnection();
+			}
+		} // END of While(true)
 		
 		
 	}
