@@ -41,7 +41,7 @@ public class Main {
 				while (comPort.bytesAvailable() > 0) {
 					byte[] readBuffer = new byte[comPort.bytesAvailable()];
 					int totalReaded = comPort.readBytes(readBuffer, comPort.bytesAvailable());
-					 System.out.println("total buffer: " + totalReaded);
+//					 System.out.println("total buffer: " + totalReaded);
 					if (totalReaded != readBuffer.length)
 						throw new Exception("total lido diferente do disponivel");
 					String s = new String(readBuffer, "UTF-8");
@@ -49,6 +49,7 @@ public class Main {
 					if(s.contains("\n"))  {
 						data.append(s); 
 						System.out.println("string: " + data);
+						writeInSHMFile(data.toString());
 						data = new StringBuilder();
 						break;
 						//throw new Exception("tem \\n ");
