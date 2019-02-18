@@ -1,11 +1,8 @@
 package br.com.sintechs.stufaSerialRead;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.fazecast.jSerialComm.SerialPort;
@@ -19,6 +16,7 @@ public class Main {
 	static final String SHM_ADDRESS_WRITE_LOCK = "/dev/shm/serial2arduinoWriteLock";
 
 	static public void main(String[] args) throws Exception {
+		_log.log(Level.INFO, "Starting Arduino Serial Reader...");
 		SerialPort comPort = SerialPort.getCommPorts()[0];
 		comPort.openPort();
 		comPort.setBaudRate(57600);
@@ -29,15 +27,14 @@ public class Main {
 				comPort.openPort();
 				comPort.setBaudRate(57600);
 			} else {
-				throw new Exception("port is closed, check TIMEOUT");
+				throw new Exception("port is closed, check TIMEOUT, ha, there is no Timeout on this lib");
 			}
 			break;
 		}
-
+		_log.log(Level.INFO, "Communications started...");
 		try {
 			StringBuilder data = new StringBuilder();
 			while (true) {
-				
 				while (comPort.bytesAvailable() > 0) {
 					byte[] readBuffer = new byte[comPort.bytesAvailable()];
 					int totalReaded = comPort.readBytes(readBuffer, comPort.bytesAvailable());
@@ -46,27 +43,29 @@ public class Main {
 						throw new Exception("total lido diferente do disponivel");
 					String s = new String(readBuffer, "UTF-8");
 					
-					if(s.contains("\n"))  {
+					if(s.contains("\n") || s.contains("\r") || s.contains("\t"))  {
+						s.replace("\n", "");
+						s.replace("\r", "");
+						s.replace("\t", "");
+						s.replaceAll("\\r$", "");
 						data.append(s); 
-						System.out.println("string: " + data);
+//						System.out.println("string: " + data);
 						writeInSHMFile(data.toString());
+						data.setLength(0);
 						data = new StringBuilder();
 						break;
 						//throw new Exception("tem \\n ");
 					}
-//					s.replace("\n", "");
-//					s.replace("\r", "");
-//					s.replace("\t", "");
+
 					data.append(s); 
 					
-				}
+				} // END of while(communication in)
 				if(data.length() == 0)
 					data = new StringBuilder();
-				else {
-//					System.out.println(data);
-//					writeInSHMFile(data.toString());
-				}
-			}
+				
+				Thread.sleep(20);
+			} // END of while(true)
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -74,57 +73,21 @@ public class Main {
 	}
 
 	private static void writeInSHMFile(String s) {
-		 try {
-			 try (FileChannel outChan = new FileOutputStream(SHM_ADDRESS_READ, true).getChannel()) {
-			      outChan.truncate(0);
-			    }
-	            Files.write(Paths.get(SHM_ADDRESS_READ), s.getBytes());
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+		try (FileOutputStream file = new FileOutputStream(SHM_ADDRESS_READ, false)) {
+//			file.write(("").getBytes());
+			file.getChannel().position(0);
+			s.replace("\n", "");
+			s.replace("\r", "");
+			s.replace("\t", "");
+			s.replaceAll("\\r$", "");
+			byte[] bytes = s.getBytes();
+			// will trim the last 2 bytes because it is ^M
+			byte[] tmp = new byte[bytes.length-2];
+			System.arraycopy(bytes, 0, tmp, 0, bytes.length-2);
+			file.write(tmp);
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
-	private static void checkSHMFiles() throws Exception {
-		File bufferSerial = new File(SHM_ADDRESS_READ);
-		boolean exists = bufferSerial.exists();
-		if (!exists)
-			try {
-				bufferSerial.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		bufferSerial = new File(SHM_ADDRESS_WRITE);
-		exists = bufferSerial.exists();
-		if (!exists)
-			try {
-				bufferSerial.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new Exception(e);
-			}
-		bufferSerial = new File(SHM_ADDRESS_READ_LOCK);
-		exists = bufferSerial.exists();
-		if (!exists)
-			try {
-				bufferSerial.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new Exception(e);
-			}
-		bufferSerial = new File(SHM_ADDRESS_WRITE_LOCK);
-		exists = bufferSerial.exists();
-		if (!exists)
-			try {
-				bufferSerial.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new Exception(e);
-			}
-
-	}
-
 }
