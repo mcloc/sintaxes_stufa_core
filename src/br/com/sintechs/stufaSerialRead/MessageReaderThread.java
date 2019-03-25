@@ -66,7 +66,7 @@ public class MessageReaderThread extends Thread implements Runnable {
 			// _log.info(""+messageQueue.getMessageQueue().size());
 			// _log.info(messageQueue.getMessage());
 			// DEBUG
-			Thread.sleep(200);
+			Thread.sleep(100);
 			// ArrayList<String> x = messageQueue.getMessageQueue();
 			// resetReader();
 			// _log.info(messageQueue.getMessage());

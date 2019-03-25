@@ -24,7 +24,7 @@ public class Main {
 		
 		
 		MessageQueue msgQueue = new MessageQueue(new ArrayList<String>());
-		Arduino arduinoSerial = new Arduino("/dev/ttyUSB0", 9600);
+		Arduino arduinoSerial = new Arduino("/dev/ttyUSB0", 115200);
 		arduinoSerial.openConnection();
 		MessageReaderThread reader = new MessageReaderThread(SHM_ADDRESS_READ, SHM_ADDRESS_READ_LOCK, SHM_ADDRESS_WRITE_LOCK, msgQueue );
 		Runtime.getRuntime().addShutdownHook(reader);

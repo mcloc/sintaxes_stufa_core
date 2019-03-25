@@ -19,13 +19,13 @@ public class Main {
 		_log.log(Level.INFO, "Starting Arduino Serial Reader...");
 		SerialPort comPort = SerialPort.getCommPorts()[0];
 		comPort.openPort();
-		comPort.setBaudRate(57600);
+		comPort.setBaudRate(115200);
 
 		while (comPort.bytesAvailable() == -1) {
 			if (!comPort.isOpen()) {
 				comPort.closePort();
 				comPort.openPort();
-				comPort.setBaudRate(57600);
+				comPort.setBaudRate(115200);
 			} else {
 				throw new Exception("port is closed, check TIMEOUT, ha, there is no Timeout on this lib");
 			}
@@ -37,10 +37,16 @@ public class Main {
 			while (true) {
 				while (comPort.bytesAvailable() > 0) {
 					byte[] readBuffer = new byte[comPort.bytesAvailable()];
-					int totalReaded = comPort.readBytes(readBuffer, comPort.bytesAvailable());
+					try {
+						int totalReaded = comPort.readBytes(readBuffer, comPort.bytesAvailable());
+						if (totalReaded != readBuffer.length)
+							throw new Exception("total readed diferen of avaliable");
+					} catch (ArrayIndexOutOfBoundsException e) {
+						_log.warning("index out of bound on readBytes (-1) returned, it's a comm problem");
+						break;
+					}
 //					 System.out.println("total buffer: " + totalReaded);
-					if (totalReaded != readBuffer.length)
-						throw new Exception("total lido diferente do disponivel");
+					
 					String s = new String(readBuffer, "UTF-8");
 					
 					if(s.contains("\n") || s.contains("\r") || s.contains("\t"))  {
