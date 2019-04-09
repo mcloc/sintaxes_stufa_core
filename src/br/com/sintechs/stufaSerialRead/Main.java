@@ -17,6 +17,13 @@ public class Main {
 
 	static public void main(String[] args) throws Exception {
 		_log.log(Level.INFO, "Starting Arduino Serial Reader...");
+		
+		SerialPort[] conn = SerialPort.getCommPorts();
+		
+		if(conn == null || conn.length == 0 ) {
+			throw new Exception("No serial port found...");
+		}
+		
 		SerialPort comPort = SerialPort.getCommPorts()[0];
 		comPort.openPort();
 		comPort.setBaudRate(115200);
