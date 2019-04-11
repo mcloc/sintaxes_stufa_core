@@ -14,17 +14,52 @@ public class Main {
 	static final String SHM_ADDRESS_WRITE = "/dev/shm/serial2arduinoWrite";
 	static final String SHM_ADDRESS_READ_LOCK = "/dev/shm/serial2arduinoReadLock";
 	static final String SHM_ADDRESS_WRITE_LOCK = "/dev/shm/serial2arduinoWriteLock";
-
+	static boolean firstRun = true;
+	
 	static public void main(String[] args) throws Exception {
 		_log.log(Level.INFO, "Starting Arduino Serial Reader...");
 		
-		SerialPort[] conn = SerialPort.getCommPorts();
+		SerialPort[] conn = null;
+		SerialPort comPort = null;
+		boolean searchingPorts = true;
 		
-		if(conn == null || conn.length == 0 ) {
-			throw new Exception("No serial port found...");
+		
+		while(searchingPorts) {
+			
+			conn = SerialPort.getCommPorts();
+			if(conn == null || conn.length <= 0 ) {
+				if(firstRun) {
+					_log.log(Level.WARNING, "No ports were found. Check if the device is connected...");
+					firstRun = false;
+				}
+				else
+					_log.log(Level.FINER, "No ports were found. Check if the device is connected...");
+				
+				Thread.sleep(2000);
+				continue;
+			}
+			
+			for(int i=0;i< conn.length;i++) {
+				comPort = SerialPort.getCommPorts()[i];
+				if(comPort.getSystemPortName().equals("ttyUSB0")) {
+					_log.log(Level.INFO, "Device connected and found on: " + comPort.getSystemPortName());
+					searchingPorts = false;
+					break;
+				}
+			}
+
+			if(!searchingPorts)
+				break;
+			
+			if(firstRun) {
+				_log.log(Level.WARNING, "USB Device connected found but not ttyUSB0: " + comPort.getSystemPortName());
+				firstRun = false;
+			} else 
+				_log.log(Level.FINEST, "USB Device connected found but not ttyUSB0: " + comPort.getSystemPortName());
+			
+			Thread.sleep(2000);
 		}
 		
-		SerialPort comPort = SerialPort.getCommPorts()[0];
 		comPort.openPort();
 		comPort.setBaudRate(115200);
 
@@ -83,6 +118,24 @@ public class Main {
 			e.printStackTrace();
 		}
 		comPort.closePort();
+	}
+
+	private static boolean openPorts(SerialPort[] conn) throws InterruptedException {
+		conn = SerialPort.getCommPorts();
+		if(conn == null || conn.length <= 0 ) {
+			if(firstRun) {
+				_log.log(Level.WARNING, "No ports were found. Check if the device is connected...");
+				firstRun = false;
+			}
+			else
+				_log.log(Level.FINER, "No ports were found. Check if the device is connected...");
+			
+			Thread.sleep(2000);
+			return false;
+		}
+		
+		return true;
+		
 	}
 
 	private static void writeInSHMFile(String s) {
