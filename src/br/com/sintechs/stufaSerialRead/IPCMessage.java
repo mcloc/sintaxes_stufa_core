@@ -1,6 +1,5 @@
 package br.com.sintechs.stufaSerialRead;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,11 @@ public class IPCMessage {
 	
 	public IPCMessage(String raw_message) {
 		this.raw = raw_message;
-		decodeMessage();
+		try {
+			decodeMessage();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	private void decodeMessage() {
@@ -28,6 +31,10 @@ public class IPCMessage {
 //		JsonObject object = (JsonObject) parser.parse(raw);
 		Gson gson = new Gson();
 		IPCMessage x = gson.fromJson(raw, this.getClass());
+		this.commandArgs = x.getCommandArgs();
+		this.commandMethod = x.getCommandMethod();
+		x = null;
+		
 	}
 
 	public String getCommandMethod() {
@@ -36,10 +43,10 @@ public class IPCMessage {
 	public void setCommandMethod(String commandMethod) {
 		this.commandMethod = commandMethod;
 	}
-	public List<HashMap<String, String>> getCommandArgs() {
+	public List<Map<String, String>> getCommandArgs() {
 		return commandArgs;
 	}
-	public void setCommandArgs(List<HashMap<String, String>> commandArgs) {
+	public void setCommandArgs(List<Map<String, String>> commandArgs) {
 		this.commandArgs = commandArgs;
 	}
 	

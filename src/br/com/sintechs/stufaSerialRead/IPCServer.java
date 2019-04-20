@@ -40,10 +40,12 @@ public class IPCServer {
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				String inputLine;
 				while ((inputLine = in.readLine()) != null) {
-					if ("\n".equals(inputLine)) {
+					if (inputLine.contains("\u0004")) {
 						out.println("bye");
 						break;
 					}
+					inputLine.replace("\n", "");
+					System.out.println("raw: " + inputLine);
 					messagesList.add(new IPCMessage(inputLine));
 //					out.println(inputLine);
 				}
