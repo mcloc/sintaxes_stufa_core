@@ -2,12 +2,21 @@ package br.com.sintechs.stufaSerialRead;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.Gson;
+
+/**
+ * IPCMessage raw example:
+		{"commandMethod":"wrtitePort", "commandArgs":[{"LED#1":"true"}]}
+ * @author mcloc
+ *
+ */
 public class IPCMessage {
 	
 	private String commandMethod;
 	private String raw;
-	protected List<HashMap<String,String>> commandArgs;
+	protected List<Map<String,String>> commandArgs;
 	
 	public IPCMessage(String raw_message) {
 		this.raw = raw_message;
@@ -15,8 +24,10 @@ public class IPCMessage {
 	}
 	
 	private void decodeMessage() {
-		// TODO Auto-generated method stub
-		
+//		JsonParser parser = new JsonParser();
+//		JsonObject object = (JsonObject) parser.parse(raw);
+		Gson gson = new Gson();
+		IPCMessage x = gson.fromJson(raw, this.getClass());
 	}
 
 	public String getCommandMethod() {
