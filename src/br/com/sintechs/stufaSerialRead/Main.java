@@ -54,7 +54,7 @@ public class Main {
 				if (!comPort.isOpen()) {
 					comPort.closePort();
 					comPort.openPort();
-					comPort.setBaudRate(115200);
+					comPort.setBaudRate(globalProperties.getBAUD_RATE());
 					_log.log(Level.INFO, "Communications restarted...");
 				} else {
 					comPort.closePort();
@@ -95,6 +95,8 @@ public class Main {
 					s.replaceAll("\\r$", "");
 					data.append(s); 
 					writeInSHMFile(data.toString());
+					RESTClient client = new RESTClient(data.toString(), _log);
+					client.postSampling();
 					data.setLength(0);
 					data = new StringBuilder();
 					Thread.sleep(20);
