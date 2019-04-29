@@ -26,7 +26,7 @@ public class RESTClient {
 
 		try {
 
-		    HttpPost request = new HttpPost("http://admin.sintechs.com.br:888/api/storeSampling");
+		    HttpPost request = new HttpPost("http://admin.sintechs.com.br:8888/api/storeSampling");
 		    StringEntity requestEntity = new StringEntity(
 		    		json,
 		    	    ContentType.APPLICATION_JSON);
