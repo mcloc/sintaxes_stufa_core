@@ -46,6 +46,9 @@ public class Main {
 			} catch (ArrayIndexOutOfBoundsException e) {
 				_log.log(Level.SEVERE, e.getMessage());
 				comPort.closePort();
+			} catch (Exception e) {
+				_log.log(Level.SEVERE, e.getMessage());
+				comPort.closePort();
 			}
 			
 			//bytesAvaliable() == -1 when nothing available or the communication has ceased (like unplugged device)
@@ -161,7 +164,7 @@ public class Main {
 	}
 
 
-	private static void writeInSHMFile(String s) {
+	private static void writeInSHMFile(String s) throws Exception {
 		try (FileOutputStream file = new FileOutputStream(globalProperties.getSHM_ADDRESS_READ(), false)) {
 //			file.write(("").getBytes());
 			file.getChannel().position(0);
@@ -170,6 +173,9 @@ public class Main {
 			s.replace("\t", "");
 			s.replaceAll("\\r$", "");
 			byte[] bytes = s.getBytes();
+			
+			if(bytes.length <= 2)
+				throw new Exception("message is corrupted: " + s);
 			// will trim the last 2 bytes because it is ^M
 			byte[] tmp = new byte[bytes.length-2];
 			System.arraycopy(bytes, 0, tmp, 0, bytes.length-2);
