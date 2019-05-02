@@ -1,4 +1,4 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa.ipc;
 
 import java.util.List;
 import java.util.Map;

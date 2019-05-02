@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>stufaSerialRead</groupId>
-  <artifactId>stufaSerialRead</artifactId>
-  <version>0.1</version>
-  <name>stufaSerialComm</name>
+  <groupId>br.com.sintechs</groupId>
+  <artifactId>stufa</artifactId>
+  <version>0.2</version>
+  <name>stufa Java Controller</name>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -33,7 +33,7 @@
         </descriptorRefs>
 	    <archive>
 	    <manifest>
-		  <mainClass>br.com.sintechs.stufaSerialRead.Main</mainClass>
+		  <mainClass>br.com.sintechs.stufa.Main</mainClass>
 	    </manifest>
 	  </archive>
 	</configuration>
@@ -43,7 +43,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>br.com.sintechs.stufaSerialRead.Main</mainClass>
+            <mainClass>br.com.sintechs.stufa.Main</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>
@@ -81,7 +81,9 @@
   </dependencies>
   
   
-  <description>Handle  the serial communication between Arduino and x86 archtecture</description>
+  <description>Handle  the serial communication between Arduino and x86 archtecture
+IPC Messages
+Drools expert System</description>
   <organization>
   	<name>SinTechs</name>
   </organization>

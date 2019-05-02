@@ -1,9 +1,11 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa.ipc;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import br.com.sintechs.stufa.GlobalProperties;
 
 public class IPCHandler extends Thread {
 	

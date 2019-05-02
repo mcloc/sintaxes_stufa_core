@@ -1,4 +1,4 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa.serial;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,27 +7,24 @@ import java.util.logging.Logger;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-public class Main {
+import br.com.sintechs.stufa.GlobalProperties;
+import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
+import br.com.sintechs.stufa.rest.RESTClient;
 
-	static Logger _log = Logger.getGlobal();
-	static GlobalProperties globalProperties = new GlobalProperties();
-	static IPCWriteInterrupt writeInterrupt = new IPCWriteInterrupt();
-
+public class SerialComm {
+	
+	private GlobalProperties globalProperties;
+	private Logger _log;
+	private IPCWriteInterrupt writeInterrupt;
 	static boolean firstRun = true;
 	
-	static public void main(String[] args) throws Exception {
-		_log.log(Level.INFO, "Starting Arduino Serial Reader...");
-		
-		//Start IPCHandler Thread
-		IPCHandler ipc = new IPCHandler(globalProperties, _log,writeInterrupt);
-		ipc.start();
-		
-		
-		//Never returns
-		startSerialCommunication();
+	public SerialComm(GlobalProperties globalProperties, Logger _log, IPCWriteInterrupt writeInterrupt) {
+		this.globalProperties = globalProperties;
+		this._log = _log;
+		this.writeInterrupt = writeInterrupt;
 	}
-	
-	private static void startSerialCommunication() throws Exception {
+
+	protected void startSerialCommunication() throws Exception {
 		StringBuilder data_readed = new StringBuilder();
 		SerialPort comPort;
 		comPort = waitForPortConnection();
@@ -70,7 +67,7 @@ public class Main {
 	}
 
 	//TODO: refactor to event listener
-	private static void wrtiteDataToPort(SerialPort comPort, String message) throws Exception {
+	private  void wrtiteDataToPort(SerialPort comPort, String message) throws Exception {
 		byte[] writeBuffer = message.getBytes("UTF-8");
 		if(writeBuffer.length <= 0)
 			throw new Exception("IPCWriteInterrupt message has lenght 0");
@@ -83,7 +80,7 @@ public class Main {
 
 
 	//TODO: refactor to event listener
-	private static void readDataFromPort(SerialPort comPort, StringBuilder data) throws Exception {
+	private  void readDataFromPort(SerialPort comPort, StringBuilder data) throws Exception {
 			while (comPort.bytesAvailable() > 0) {
 				byte[] readBuffer = new byte[comPort.bytesAvailable()];
 				int totalReaded = comPort.readBytes(readBuffer, comPort.bytesAvailable());
@@ -98,7 +95,7 @@ public class Main {
 					s.replaceAll("\\r$", "");
 					data.append(s); 
 					writeInSHMFile(data.toString());
-					RESTClient client = new RESTClient(data.toString(), _log);
+					RESTClient client = new RESTClient(data.toString(), _log, globalProperties);
 					client.postSampling();
 					data.setLength(0);
 					data = new StringBuilder();
@@ -116,7 +113,7 @@ public class Main {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	private static SerialPort waitForPortConnection() throws InterruptedException {
+	private  SerialPort waitForPortConnection() throws InterruptedException {
 		SerialPort[] conn = null;
 		SerialPort comPort = null;
 		boolean searchingPorts = true;
@@ -164,7 +161,7 @@ public class Main {
 	}
 
 
-	private static void writeInSHMFile(String s) throws Exception {
+	private  void writeInSHMFile(String s) throws Exception {
 		try (FileOutputStream file = new FileOutputStream(globalProperties.getSHM_ADDRESS_READ(), false)) {
 //			file.write(("").getBytes());
 			file.getChannel().position(0);
@@ -185,4 +182,5 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
+
 }

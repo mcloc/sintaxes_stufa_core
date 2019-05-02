@@ -1,4 +1,4 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa;
 
 public class GlobalProperties {
 	
@@ -8,8 +8,22 @@ public class GlobalProperties {
 	private String SHM_ADDRESS_WRITE_LOCK = "/dev/shm/serial2arduinoWriteLock";
 	private Integer BAUD_RATE = 115200;
 	private Integer IPC_SERVER_PORT = 1932;
+	private String REST_API_SERVER = "http://admin.sintechs.com.br:888/";
+	private String REST_API_STORE_SAMPLING_URL = REST_API_SERVER+"api/storeSampling";
 	
 	
+	public String getREST_API_SERVER() {
+		return REST_API_SERVER;
+	}
+	public void setREST_API_SERVER(String rEST_API_SERVER) {
+		REST_API_SERVER = rEST_API_SERVER;
+	}
+	public String getREST_API_STORE_SAMPLING_URL() {
+		return REST_API_STORE_SAMPLING_URL;
+	}
+	public void setREST_API_STORE_SAMPLING_URL(String rEST_API_STORE_SAMPLING_URL) {
+		REST_API_STORE_SAMPLING_URL = rEST_API_STORE_SAMPLING_URL;
+	}
 	public String getSHM_ADDRESS_READ() {
 		return SHM_ADDRESS_READ;
 	}

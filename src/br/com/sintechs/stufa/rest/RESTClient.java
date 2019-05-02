@@ -1,4 +1,4 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa.rest;
 
 import java.util.logging.Logger;
 
@@ -11,14 +11,18 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import br.com.sintechs.stufa.GlobalProperties;
+
 public class RESTClient {
 	
-	String json;
-	Logger _log;
+	private String json;
+	private Logger _log;
+	private GlobalProperties globalProperties;
 	
-	public RESTClient(String json, Logger _log) {
+	public RESTClient(String json, Logger _log, GlobalProperties globalProperties) {
 		this.json = json;
 		this._log = _log;
+		this.globalProperties = globalProperties;
 	}
 	
 	public void postSampling() {
@@ -26,7 +30,7 @@ public class RESTClient {
 
 		try {
 
-		    HttpPost request = new HttpPost("http://admin.sintechs.com.br:8888/api/storeSampling");
+		    HttpPost request = new HttpPost(globalProperties.getREST_API_STORE_SAMPLING_URL());
 		    StringEntity requestEntity = new StringEntity(
 		    		json,
 		    	    ContentType.APPLICATION_JSON);
@@ -40,9 +44,7 @@ public class RESTClient {
 		    //handle response here...
 
 		}catch (Exception ex) {
-
-		    //handle exception here
-
+		    _log.severe(ex.getMessage());
 		} finally {
 		    //Deprecated
 		    //httpClient.getConnectionManager().shutdown(); 

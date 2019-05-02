@@ -1,4 +1,4 @@
-package br.com.sintechs.stufaSerialRead;
+package br.com.sintechs.stufa.ipc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
