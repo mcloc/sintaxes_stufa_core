@@ -1,0 +1,9 @@
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.drools.org/xsd/kmodule">
+
+    <kbase name="rules" equalsBehavior="equality" eventProcessingMode="stream" packages="rules">
+        <ksession name="ksession-rules" default="true" type="stateful" clockType="pseudo">
+        	<fileLogger file="drools.log" threaded="true" interval="10"/>
+        </ksession>
+    </kbase>
+</kmodule>
