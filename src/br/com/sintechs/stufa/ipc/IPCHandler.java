@@ -3,7 +3,9 @@ package br.com.sintechs.stufa.ipc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
 
@@ -13,13 +15,12 @@ public class IPCHandler extends Thread {
 	protected GlobalProperties globalProperties;
 	protected IPCWriteInterrupt ipcWriteInterrupt;
 	private List<IPCMessage> messagesList = new ArrayList<IPCMessage>();
-	private Logger _log;
+    private static final Logger LOGGER = LoggerFactory.getLogger(IPCHandler.class);
+
 	
-	
-	public IPCHandler(GlobalProperties globalProperties, Logger _log, IPCWriteInterrupt writeInterrupt) {
+	public IPCHandler(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt) {
 		this.globalProperties = globalProperties;
 		this.ipcWriteInterrupt = writeInterrupt;
-		this._log = _log;
 	}
 
 	public void run() {
@@ -27,9 +28,9 @@ public class IPCHandler extends Thread {
 		try {
 			ipcServer.start(globalProperties.getIPC_SERVER_PORT(), messagesList);
 		} catch (IOException e) {
-			_log.severe(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
-		_log.info("Thread IPCHandler started...");
+		LOGGER.info("Thread IPCHandler started...");
 	}
 
 }

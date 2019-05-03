@@ -2,8 +2,9 @@ package br.com.sintechs.stufa.serial;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fazecast.jSerialComm.SerialPort;
 
@@ -12,15 +13,13 @@ import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.rest.RESTClient;
 
 public class SerialComm {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SerialComm.class);
 	private GlobalProperties globalProperties;
-	private Logger _log;
 	private IPCWriteInterrupt writeInterrupt;
 	static boolean firstRun = true;
 	
-	public SerialComm(GlobalProperties globalProperties, Logger _log, IPCWriteInterrupt writeInterrupt) {
+	public SerialComm(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt) {
 		this.globalProperties = globalProperties;
-		this._log = _log;
 		this.writeInterrupt = writeInterrupt;
 	}
 
@@ -30,7 +29,7 @@ public class SerialComm {
 		comPort = waitForPortConnection();
 		comPort.openPort();
 		comPort.setBaudRate(globalProperties.getBAUD_RATE());
-		_log.log(Level.INFO, "Communications started...");
+		LOGGER.info("Communications started...");
 		
 		while(true) {
 			try {
@@ -41,10 +40,10 @@ public class SerialComm {
 				// READ Data from SerialPort TODO: refactor this to event listener
 				readDataFromPort(comPort, data_readed);
 			} catch (ArrayIndexOutOfBoundsException e) {
-				_log.log(Level.SEVERE, e.getMessage());
+				LOGGER.error(e.getMessage());
 				comPort.closePort();
 			} catch (Exception e) {
-				_log.log(Level.SEVERE, e.getMessage());
+				LOGGER.error(e.getMessage());
 				comPort.closePort();
 			}
 			
@@ -55,10 +54,10 @@ public class SerialComm {
 					comPort.closePort();
 					comPort.openPort();
 					comPort.setBaudRate(globalProperties.getBAUD_RATE());
-					_log.log(Level.INFO, "Communications restarted...");
+					LOGGER.info("Communications restarted...");
 				} else {
 					comPort.closePort();
-					_log.log(Level.SEVERE, "Communication lost, maybe device was disconected, waiting for port ttyUSB0 show up again...");
+					LOGGER.error("Communication lost, maybe device was disconected, waiting for port ttyUSB0 show up again...");
 					comPort = waitForPortConnection();
 				}
 			}
@@ -95,7 +94,7 @@ public class SerialComm {
 					s.replaceAll("\\r$", "");
 					data.append(s); 
 					writeInSHMFile(data.toString());
-					RESTClient client = new RESTClient(data.toString(), _log, globalProperties);
+					RESTClient client = new RESTClient(data.toString(), globalProperties);
 					client.postSampling();
 					data.setLength(0);
 					data = new StringBuilder();
@@ -123,11 +122,11 @@ public class SerialComm {
 			conn = SerialPort.getCommPorts();
 			if(conn == null || conn.length <= 0 ) {
 				if(firstRun) {
-					_log.log(Level.WARNING, "No ports were found. Check if the device is connected...");
+					LOGGER.warn("No ports were found. Check if the device is connected...");
 					firstRun = false;
 				}
 				else
-					_log.log(Level.FINER, "No ports were found. Check if the device is connected...");
+					LOGGER.debug("No ports were found. Check if the device is connected...");
 				
 				Thread.sleep(500);
 				continue;
@@ -139,7 +138,7 @@ public class SerialComm {
 				//On Raspberry PI There are serial ports available besides ttyUSB0
 				//So keep looking for ttyUSB0 since we plugging arduino with pi by USB Cable
 				if(comPort.getSystemPortName().equals("ttyUSB0")) {
-					_log.log(Level.INFO, "Device connected and found on: " + comPort.getSystemPortName());
+					LOGGER.info("Device connected and found on: " + comPort.getSystemPortName());
 					searchingPorts = false;
 					break;
 				}
@@ -150,10 +149,10 @@ public class SerialComm {
 				break;
 			
 			if(firstRun) {
-				_log.log(Level.WARNING, "USB Device connected found but not ttyUSB0: " + comPort.getSystemPortName());
+				LOGGER.warn("USB Device connected found but not ttyUSB0: " + comPort.getSystemPortName());
 				firstRun = false;
 			} else 
-				_log.log(Level.FINEST, "USB Device connected found but not ttyUSB0: " + comPort.getSystemPortName());
+				LOGGER.debug("USB Device connected found but not ttyUSB0: " + comPort.getSystemPortName());
 			
 			Thread.sleep(500);
 		}

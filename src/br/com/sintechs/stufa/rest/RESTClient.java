@@ -1,6 +1,5 @@
 package br.com.sintechs.stufa.rest;
 
-import java.util.logging.Logger;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -10,18 +9,19 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
+import br.com.sintechs.stufa.serial.SerialComm;
 
 public class RESTClient {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RESTClient.class);
 	private String json;
-	private Logger _log;
 	private GlobalProperties globalProperties;
 	
-	public RESTClient(String json, Logger _log, GlobalProperties globalProperties) {
+	public RESTClient(String json, GlobalProperties globalProperties) {
 		this.json = json;
-		this._log = _log;
 		this.globalProperties = globalProperties;
 	}
 	
@@ -36,15 +36,15 @@ public class RESTClient {
 		    	    ContentType.APPLICATION_JSON);
 		    request.setEntity(requestEntity);
 		    
-		    _log.info("Posting REST storeSampling");
+		    LOGGER.info("Posting REST storeSampling");
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
-	    	_log.info(responseString);
+		    LOGGER.info(responseString);
 		    //handle response here...
 
 		}catch (Exception ex) {
-		    _log.severe(ex.getMessage());
+			LOGGER.error(ex.getMessage());
 		} finally {
 		    //Deprecated
 		    //httpClient.getConnectionManager().shutdown(); 

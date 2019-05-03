@@ -1,26 +1,26 @@
 package br.com.sintechs.stufa.drools;
 
-import java.util.logging.Logger;
 
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.EntryPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
+import br.com.sintechs.stufa.rest.RESTClient;
 
 public class ExpertSystemHandler extends Thread{
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExpertSystemHandler.class);
 	private GlobalProperties globalProperties;
-	private Logger _log;
 	private IPCWriteInterrupt writeInterrupt;
 	private KieSession kieSession;
 	private EntryPoint samplingStream;
 
-	public ExpertSystemHandler(GlobalProperties globalProperties, Logger _log,
-			IPCWriteInterrupt writeInterrupt) {
+	public ExpertSystemHandler(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt) {
 		this.globalProperties = globalProperties;
-		this._log = _log;
 		this.writeInterrupt = writeInterrupt;
 	}
 	
@@ -28,7 +28,7 @@ public class ExpertSystemHandler extends Thread{
 	public void run() {
 		while(true) {
 			try {
-				_log.info("drools: Initialize KIE.");
+				LOGGER.info("Initialize KIE.");
 				if(kieSession instanceof KieSession)
 					kieSession.dispose();
 				
@@ -37,11 +37,12 @@ public class ExpertSystemHandler extends Thread{
 				KieContainer kieContainer = kieServices.getKieClasspathContainer();
 		
 				// Initializing KieSession.
-				_log.info("drools: Creating KieSession.");
+				LOGGER.info("Creating KieSession.");
 				 kieSession = kieContainer.newKieSession("ksession-rules");
+				 kieSession.addEventListener(new DebugEventListener());
 				 samplingStream = kieSession.getEntryPoint( "StufaSampingStream" );
 			} catch (Exception e ) {
-				_log.severe(e.getMessage());
+				LOGGER.error(e.getMessage());
 				if(kieSession != null)
 				kieSession.dispose();
 				continue;
