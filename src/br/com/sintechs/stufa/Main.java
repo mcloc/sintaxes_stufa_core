@@ -24,12 +24,15 @@ public class Main {
 		IPCHandler ipc = new IPCHandler(globalProperties, writeInterrupt);
 		ipc.start();
 		
-		//Start SerialCommunicationHnalder Thread
-		SerialCommunicationHandler serial = new SerialCommunicationHandler(globalProperties, writeInterrupt);
-		serial.start();
-		
+		//Start Drools Thread
 		ExpertSystemHandler es = new ExpertSystemHandler(globalProperties, writeInterrupt);
 		es.start();
+		
+		//Start SerialCommunicationHnalder Thread
+		SerialCommunicationHandler serial = new SerialCommunicationHandler(globalProperties, writeInterrupt, es);
+		serial.start();
+		
+
 	}
 	
 

@@ -1,6 +1,8 @@
 package br.com.sintechs.stufa.drools;
 
 
+import java.math.BigInteger;
+
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -10,7 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
-import br.com.sintechs.stufa.rest.RESTClient;
+import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.sintechs.stufa.models.Utils;
 
 public class ExpertSystemHandler extends Thread{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExpertSystemHandler.class);
@@ -51,7 +54,8 @@ public class ExpertSystemHandler extends Thread{
 		}
 	}
 	
-//	public void addSampling(){
-//		samplingStream.insert(object);
-//	}
+	public synchronized void  addSampling(BigInteger sampling_id){
+		SintechsSampling sampling = Utils.getSampling(sampling_id);
+		samplingStream.insert(sampling);
+	}
 }

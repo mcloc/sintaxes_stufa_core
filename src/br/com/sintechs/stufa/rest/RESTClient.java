@@ -1,6 +1,8 @@
 package br.com.sintechs.stufa.rest;
 
 
+import java.math.BigInteger;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -25,7 +27,7 @@ public class RESTClient {
 		this.globalProperties = globalProperties;
 	}
 	
-	public void postSampling() {
+	public BigInteger postSampling() {
 		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
 
 		try {
@@ -41,7 +43,11 @@ public class RESTClient {
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
 		    LOGGER.info(responseString);
-		    //handle response here...
+		    //TODO: handle response here...
+		    //TODO: return sampling id
+		    
+		    return null;
+		    
 
 		}catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
@@ -49,6 +55,8 @@ public class RESTClient {
 		    //Deprecated
 		    //httpClient.getConnectionManager().shutdown(); 
 		}
+		
+		return null;
 	}
 
 }

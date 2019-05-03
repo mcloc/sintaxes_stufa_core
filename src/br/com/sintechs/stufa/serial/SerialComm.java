@@ -2,6 +2,7 @@ package br.com.sintechs.stufa.serial;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.fazecast.jSerialComm.SerialPort;
 
 import br.com.sintechs.stufa.GlobalProperties;
+import br.com.sintechs.stufa.drools.ExpertSystemHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.rest.RESTClient;
 
@@ -16,11 +18,13 @@ public class SerialComm {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SerialComm.class);
 	private GlobalProperties globalProperties;
 	private IPCWriteInterrupt writeInterrupt;
+	private ExpertSystemHandler drools;
 	static boolean firstRun = true;
 	
-	public SerialComm(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt) {
+	public SerialComm(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt, ExpertSystemHandler drools) {
 		this.globalProperties = globalProperties;
 		this.writeInterrupt = writeInterrupt;
+		this.drools = drools;
 	}
 
 	protected void startSerialCommunication() throws Exception {
@@ -95,7 +99,11 @@ public class SerialComm {
 					data.append(s); 
 					writeInSHMFile(data.toString());
 					RESTClient client = new RESTClient(data.toString(), globalProperties);
-					client.postSampling();
+					BigInteger sampling_id = client.postSampling();
+					if(sampling_id != null) {
+						drools.addSampling(sampling_id);
+					}
+						
 					data.setLength(0);
 					data = new StringBuilder();
 					Thread.sleep(20);
