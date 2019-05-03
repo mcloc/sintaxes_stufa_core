@@ -3,6 +3,7 @@ package br.com.sintechs.stufa;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import br.com.sintechs.stufa.drools.ExpertSystemHandler;
 import br.com.sintechs.stufa.ipc.IPCHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.serial.SerialCommunicationHandler;
@@ -23,6 +24,9 @@ public class Main {
 		//Start SerialCommunicationHnalder Thread
 		SerialCommunicationHandler serial = new SerialCommunicationHandler(globalProperties, _log,writeInterrupt);
 		serial.start();
+		
+		ExpertSystemHandler es = new ExpertSystemHandler(globalProperties, _log, writeInterrupt);
+		es.start();
 	}
 	
 

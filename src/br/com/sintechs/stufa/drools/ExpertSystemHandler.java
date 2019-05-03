@@ -24,20 +24,30 @@ public class ExpertSystemHandler extends Thread{
 		this.writeInterrupt = writeInterrupt;
 	}
 	
+	@Override
 	public void run() {
-		_log.info("drools: Initialize KIE.");
-//		KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
-//		config.setOption( EventProcessingOption.STREAM );
-		KieServices kieServices = KieServices.Factory.get();
-		// Load KieContainer from resources on classpath (i.e. kmodule.xml and rules).
-		KieContainer kieContainer = kieServices.getKieClasspathContainer();
-
-		// Initializing KieSession.
-		_log.info("drools: Creating KieSession.");
-		 kieSession = kieContainer.newKieSession();
-		 samplingStream = kieSession.getEntryPoint( "StufaSampingStream" );
-		 kieSession.fireUntilHalt();
-
+		while(true) {
+			try {
+				_log.info("drools: Initialize KIE.");
+				if(kieSession instanceof KieSession)
+					kieSession.dispose();
+				
+				KieServices kieServices = KieServices.Factory.get();
+				// Load KieContainer from resources on classpath (i.e. kmodule.xml and rules).
+				KieContainer kieContainer = kieServices.getKieClasspathContainer();
+		
+				// Initializing KieSession.
+				_log.info("drools: Creating KieSession.");
+				 kieSession = kieContainer.newKieSession("ksession-rules");
+				 samplingStream = kieSession.getEntryPoint( "StufaSampingStream" );
+			} catch (Exception e ) {
+				_log.severe(e.getMessage());
+				if(kieSession != null)
+				kieSession.dispose();
+				continue;
+			}
+			 kieSession.fireUntilHalt();
+		}
 	}
 	
 //	public void addSampling(){
