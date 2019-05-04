@@ -80,7 +80,8 @@ public class RESTClient {
 
 	
 	public synchronized SintechsSampling getSampling(BigInteger sampling_id) {
-		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		SintechsSampling sin_sampling = null;
 		try {
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SAMPLING_URL()+"/"+sampling_id);
 		    LOGGER.info("Posting GET getSampling : " + sampling_id);
@@ -90,32 +91,7 @@ public class RESTClient {
 		    
 		    JSONObject json_obj = new JSONObject(responseString);
 		    
-		    SintechsSampling sin_sampling = new SintechsSampling(json_obj);
-		    
-		    LOGGER.info(responseString);
-		    
-//	        // typecasting obj to JSONObject 
-//	        JSONObject jo = new JSONObject(responseString);
-//	        // getting firstName and lastName 
-//	        String status = jo.getString("status");
-//	        if(status.equals("OK")){
-//	        	JSONObject data = jo.getJSONObject("data");
-//	        	if(data == null)
-//	        		throw new Exception("no data found on response for storeSampling.");
-//	        	
-//	        	sampling_id = data.getBigInteger("sampling_id");
-//	        	LOGGER.info("sampling_id = " + sampling_id);
-//	        }else {
-//	        	throw new Exception("reponse for storeSampling is not OK. response: "+ status);
-//	        }
-//	         
-//		    LOGGER.debug(responseString);
-//		    //TODO: handle response here...
-//		    //TODO: return sampling id
-//		    
-//		   
-//			return sampling_id;
-		    
+		    sin_sampling = new SintechsSampling(json_obj);
 
 		}catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
@@ -124,7 +100,7 @@ public class RESTClient {
 		    //httpClient.getConnectionManager().shutdown(); 
 		}
 		
-		return null;
+		return sin_sampling;
 	}
 	
 	

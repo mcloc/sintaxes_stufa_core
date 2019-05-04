@@ -3,6 +3,7 @@ package br.com.sintechs.stufa.models;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class SintechsSamplingActuator {
@@ -17,11 +18,15 @@ public class SintechsSamplingActuator {
 	
 	public SintechsSamplingActuator(JSONObject sampling_actuator_obj) {
 		this.sampling_id = sampling_actuator_obj.getBigInteger("sampling_id");
-		this.active = sampling_actuator_obj.getBoolean("active");
+		this.active = "1".equals(sampling_actuator_obj.getString("active"));
 		this.activated_time = sampling_actuator_obj.getBigInteger("activated_time");
 		this.created_at = Timestamp.valueOf(sampling_actuator_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(sampling_actuator_obj.getString("updated_at"));
-		this.actuator = new SintechsActuator(sampling_actuator_obj.getJSONObject("actuator"));
+		
+		
+		JSONArray actuator_arr = sampling_actuator_obj.getJSONArray("actuator");
+		JSONObject actuator = (JSONObject) actuator_arr.get(0);
+		this.actuator = new SintechsActuator(actuator);
 	}
 	public BigInteger getSampling_id() {
 		return sampling_id;

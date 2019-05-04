@@ -13,7 +13,6 @@ public class SintechsActuator {
 	private String description;
 	private String model;
 	private boolean active;
-	private SintechsModule module;
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
@@ -25,8 +24,7 @@ public class SintechsActuator {
 		this.type = jsonObject.getString("type");
 		this.description = jsonObject.getString("description");
 		this.model = jsonObject.getString("model");
-		this.active = jsonObject.getBoolean("active");
-		this.module = new SintechsModule(jsonObject.getJSONObject("module"));
+		this.active = "1".equals(jsonObject.getString("active")); // LIXO Super POG
 		this.created_at = Timestamp.valueOf(jsonObject.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(jsonObject.getString("updated_at"));
 	}
@@ -65,12 +63,6 @@ public class SintechsActuator {
 	}
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-	public SintechsModule getModule() {
-		return module;
-	}
-	public void setModule(SintechsModule module) {
-		this.module = module;
 	}
 	public Timestamp getCreated_at() {
 		return created_at;

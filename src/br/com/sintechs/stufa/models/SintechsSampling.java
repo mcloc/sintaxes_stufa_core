@@ -28,8 +28,14 @@ public class SintechsSampling {
 		this.module_id = json_obj.getInt("module_id");
 		this.status = json_obj.getString("status");;
 		this.uptime = json_obj.getBigInteger("uptime");
-		this.error_code = json_obj.getString("error_code");;
-		this.error_msg = json_obj.getString("error_msg");
+//		
+//		Object error_code = json_obj.get("error_code");
+//		Object error_msg = json_obj.get("error_msg");
+		if(!json_obj.isNull("error_code"))
+			this.error_code =  json_obj.getString("error_code");
+		if(!json_obj.isNull("error_msg"))
+			this.error_msg = json_obj.getString("error_msg");
+		
 		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
 		this.samplingSensors = new ArrayList<SintechsSamplingSensor>();
