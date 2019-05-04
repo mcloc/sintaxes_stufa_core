@@ -55,6 +55,7 @@ public class ExpertSystemHandler extends Thread{
 	}
 	
 	public synchronized void  addSampling(SintechsSampling sampling){
+		LOGGER.info("inserting samping: "+sampling.getId()+" into EntryPoint");
 		samplingStream.insert(sampling);
 	}
 }
