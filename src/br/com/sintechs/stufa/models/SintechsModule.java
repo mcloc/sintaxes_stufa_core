@@ -2,6 +2,8 @@ package br.com.sintechs.stufa.models;
 
 import java.sql.Timestamp;
 
+import org.json.JSONObject;
+
 public class SintechsModule {
 	private Integer id;
 	private String name;
@@ -12,6 +14,9 @@ public class SintechsModule {
 	private Timestamp updated_at;
 	
 	
+	public SintechsModule(JSONObject jsonObject) {
+		// TODO Auto-generated constructor stub
+	}
 	public Integer getId() {
 		return id;
 	}

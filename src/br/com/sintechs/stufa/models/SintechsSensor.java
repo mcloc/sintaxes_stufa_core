@@ -3,6 +3,8 @@ package br.com.sintechs.stufa.models;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
+import org.json.JSONObject;
+
 public class SintechsSensor {
 	
 	private BigInteger id;
@@ -17,6 +19,18 @@ public class SintechsSensor {
 	
 	
 	
+	public SintechsSensor(JSONObject jsonObject) {
+		this.id = jsonObject.getBigInteger("id");
+		this.uuid = jsonObject.getString("uuid");
+		this.type = jsonObject.getString("type");
+		this.description = jsonObject.getString("description");
+		this.model = jsonObject.getString("model");
+		this.active = jsonObject.getBoolean("active");
+		this.module = new SintechsModule(jsonObject.getJSONObject("module"));
+		this.created_at = Timestamp.valueOf(jsonObject.getString("created_at"));
+		this.updated_at = Timestamp.valueOf(jsonObject.getString("updated_at"));
+		
+	}
 	public BigInteger getId() {
 		return id;
 	}

@@ -29,7 +29,7 @@ public class RESTClient {
 		this.globalProperties = globalProperties;
 	}
 	
-	public BigInteger postSampling() {
+	public synchronized BigInteger postSampling() {
 		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
 		 BigInteger sampling_id = null;
 		try {
@@ -79,7 +79,7 @@ public class RESTClient {
 	}
 
 	
-	public SintechsSampling getSampling(BigInteger sampling_id) {
+	public synchronized SintechsSampling getSampling(BigInteger sampling_id) {
 		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
 		try {
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SAMPLING_URL()+"/"+sampling_id);
@@ -87,6 +87,10 @@ public class RESTClient {
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    
+		    JSONObject json_obj = new JSONObject(responseString);
+		    
+		    SintechsSampling sin_sampling = new SintechsSampling(json_obj);
 		    
 		    LOGGER.info(responseString);
 		    

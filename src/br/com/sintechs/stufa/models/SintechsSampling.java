@@ -2,7 +2,11 @@ package br.com.sintechs.stufa.models;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class SintechsSampling {
 
@@ -17,6 +21,37 @@ public class SintechsSampling {
 	
 	private List<SintechsSamplingSensor> samplingSensors;
 	private List<SintechsSamplingActuator> samplingActuators;
+	
+	
+	public SintechsSampling(JSONObject json_obj) {
+		this.id = json_obj.getBigInteger("id");
+		this.module_id = json_obj.getInt("module_id");
+		this.status = json_obj.getString("status");;
+		this.uptime = json_obj.getBigInteger("uptime");
+		this.error_code = json_obj.getString("error_code");;
+		this.error_msg = json_obj.getString("error_msg");
+		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
+		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
+		this.samplingSensors = new ArrayList<SintechsSamplingSensor>();
+		this.samplingActuators = new ArrayList<SintechsSamplingActuator>();
+		
+		JSONArray sampling_sensors_arr = json_obj.getJSONArray("sampling_sensors");
+		JSONArray sampling_actuators_arr = json_obj.getJSONArray("sampling_actuators");
+		sampling_sensors_arr.forEach(sampling_sensor -> {
+			JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
+			SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj);
+			this.samplingSensors.add(sintechsSamplingSensor);
+			
+
+		});
+		
+		sampling_actuators_arr.forEach(sampling_actuator -> {
+			JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
+			SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(sampling_actuator_obj);
+			this.samplingActuators.add(sintechsSamplingActuator);
+		});
+	}
+	
 	
 	
 	public BigInteger getId() {
