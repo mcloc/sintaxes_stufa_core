@@ -12,6 +12,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.drools.ExpertSystemHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
+import br.com.sintechs.stufa.models.SintechsSampling;
 import br.com.sintechs.stufa.rest.RESTClient;
 
 public class SerialComm {
@@ -58,7 +59,7 @@ public class SerialComm {
 					comPort.closePort();
 					comPort.openPort();
 					comPort.setBaudRate(globalProperties.getBAUD_RATE());
-					LOGGER.info("Communications restarted...");
+					LOGGER.debug("Communications restarted...");
 				} else {
 					comPort.closePort();
 					LOGGER.error("Communication lost, maybe device was disconected, waiting for port ttyUSB0 show up again...");
@@ -101,7 +102,8 @@ public class SerialComm {
 					RESTClient client = new RESTClient(data.toString(), globalProperties);
 					BigInteger sampling_id = client.postSampling();
 					if(sampling_id != null) {
-						drools.addSampling(sampling_id);
+						SintechsSampling sampling = client.getSampling(sampling_id);
+						drools.addSampling(sampling);
 					}
 						
 					data.setLength(0);

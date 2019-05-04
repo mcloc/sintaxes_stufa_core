@@ -54,8 +54,7 @@ public class ExpertSystemHandler extends Thread{
 		}
 	}
 	
-	public synchronized void  addSampling(BigInteger sampling_id){
-		SintechsSampling sampling = Utils.getSampling(sampling_id);
+	public synchronized void  addSampling(SintechsSampling sampling){
 		samplingStream.insert(sampling);
 	}
 }

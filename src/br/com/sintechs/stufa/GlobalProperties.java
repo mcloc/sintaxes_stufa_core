@@ -1,5 +1,7 @@
 package br.com.sintechs.stufa;
 
+import java.net.URI;
+
 public class GlobalProperties {
 	
 	private String SHM_ADDRESS_READ = "/dev/shm/serial2arduinoRead";
@@ -8,8 +10,9 @@ public class GlobalProperties {
 	private String SHM_ADDRESS_WRITE_LOCK = "/dev/shm/serial2arduinoWriteLock";
 	private Integer BAUD_RATE = 115200;
 	private Integer IPC_SERVER_PORT = 1932;
-	private String REST_API_SERVER = "http://admin.sintechs.com.br:888/";
-	private String REST_API_STORE_SAMPLING_URL = REST_API_SERVER+"api/storeSampling";
+	private String REST_API_SERVER = "http://admin.sintechs.com.br:888";
+	private String REST_API_STORE_SAMPLING_URL = REST_API_SERVER+"/api/storeSampling";
+	private String REST_API_GET_SAMPLING_URL = REST_API_SERVER+"/api/getSampling";
 	
 	
 	public String getREST_API_SERVER() {
@@ -60,6 +63,13 @@ public class GlobalProperties {
 	public void setIPC_SERVER_PORT(Integer iPC_SERVER_PORT) {
 		IPC_SERVER_PORT = iPC_SERVER_PORT;
 	}
+	public String getREST_API_GET_SAMPLING_URL() {
+		return REST_API_GET_SAMPLING_URL;
+	}
+	public void setREST_API_GET_SAMPLING_URL(String rEST_API_GET_SAMPLING_URL) {
+		REST_API_GET_SAMPLING_URL = rEST_API_GET_SAMPLING_URL;
+	}
+
 
 	
 	
