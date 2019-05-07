@@ -1,12 +1,17 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
 import org.json.JSONObject;
 
-public class SintechsSensor {
+public class SintechsSensor   implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6103410780870304853L;
 	private BigInteger id;
 	private String uuid;
 	private String type;

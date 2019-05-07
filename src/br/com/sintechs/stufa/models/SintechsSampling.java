@@ -1,5 +1,6 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -8,8 +9,12 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class SintechsSampling {
+public class SintechsSampling implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2991985706566497971L;
 	private BigInteger id;
 	private int module_id;
 	private String status;

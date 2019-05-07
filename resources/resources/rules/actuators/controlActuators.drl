@@ -1,0 +1,26 @@
+//created on: 06/05/2019
+package resources.rules.actuators
+
+//list any import classes here.
+import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.sintechs.stufa.models.SintechsSamplingSensor;
+import br.com.sintechs.stufa.models.SintechsSamplingActuator;
+import br.com.sintechs.stufa.drools.DroolsActionHandler
+//declare any global variables here
+
+declare SintechsSampling 
+    @role( event )
+end
+
+
+rule "001-max-heat_index"
+dialect "mvel"
+    when
+    	eval(1 == 1)
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+        //SintechsSamplingSensor(measure_type == "heat_index" && value > 39) from $sensors_sampling
+    then
+    	//System.out.println("Ligar Solenoid #1");
+        DroolsActionHandler.addAlert("Ligar Solenoid #1");
+
+end

@@ -1,9 +1,15 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
-public class SintechsAlert {
+public class SintechsAlert  implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2280701067008673314L;
 	private BigInteger id;
 	private boolean readed;
 	private String message;

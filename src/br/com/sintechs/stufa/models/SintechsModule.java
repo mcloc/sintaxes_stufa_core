@@ -1,10 +1,15 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.json.JSONObject;
 
-public class SintechsModule {
+public class SintechsModule  implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6156684239253178520L;
 	private Integer id;
 	private String name;
 	private String description;

@@ -13,6 +13,13 @@
           <exclude>**/*.java</exclude>
         </excludes>
       </resource>
+      <resource>
+          <directory>resources</directory>
+          <includes>
+              <include>META-INF/kmodule.xml</include>
+          </includes>
+          <targetPath>.</targetPath>
+      </resource>
     </resources>
     <plugins>
       <plugin>
@@ -90,6 +97,19 @@
 	    <artifactId>drools-compiler</artifactId>
 	    <version>7.20.0.Final</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.kie/kie-api -->
+	<dependency>
+	    <groupId>org.kie</groupId>
+	    <artifactId>kie-api</artifactId>
+	    <version>7.20.0.Final</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.kie/kie-internal -->
+	<dependency>
+	    <groupId>org.kie</groupId>
+	    <artifactId>kie-internal</artifactId>
+	    <version>7.20.0.Final</version>
+	</dependency>
+	
 
 
 	<dependency>

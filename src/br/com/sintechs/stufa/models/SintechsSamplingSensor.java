@@ -1,17 +1,22 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class SintechsSamplingSensor {
+public class SintechsSamplingSensor  implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3262367160946774959L;
 	private BigInteger sampling_id;
 	private SintechsSensor sensor;
 	private String measure_type;
-	private String value;
+	private Float value;
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
@@ -19,7 +24,7 @@ public class SintechsSamplingSensor {
 	public SintechsSamplingSensor(JSONObject sampling_sensor_obj) {
 		this.sampling_id = sampling_sensor_obj.getBigInteger("sampling_id");
 		this.measure_type = sampling_sensor_obj.getString("sampling_id");
-		this.value = sampling_sensor_obj.getString("sampling_id");
+		this.value = sampling_sensor_obj.getFloat("sampling_id");
 		this.created_at = Timestamp.valueOf(sampling_sensor_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(sampling_sensor_obj.getString("updated_at"));
 		
@@ -59,10 +64,10 @@ public class SintechsSamplingSensor {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	public String getValue() {
+	public Float getValue() {
 		return value;
 	}
-	public void setValue(String value) {
+	public void setValue(Float value) {
 		this.value = value;
 	}
 	

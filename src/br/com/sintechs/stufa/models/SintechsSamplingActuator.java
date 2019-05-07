@@ -1,13 +1,18 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class SintechsSamplingActuator {
+public class SintechsSamplingActuator  implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3962325801608052778L;
 	private BigInteger sampling_id;
 	private SintechsActuator actuator;
 	private boolean active;

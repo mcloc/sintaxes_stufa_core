@@ -59,7 +59,7 @@ public class SerialComm {
 					comPort.closePort();
 					comPort.openPort();
 					comPort.setBaudRate(globalProperties.getBAUD_RATE());
-					LOGGER.debug("Communications restarted...");
+//					LOGGER.debug("Communications restarted...");
 				} else {
 					comPort.closePort();
 					LOGGER.error("Communication lost, maybe device was disconected, waiting for port ttyUSB0 show up again...");

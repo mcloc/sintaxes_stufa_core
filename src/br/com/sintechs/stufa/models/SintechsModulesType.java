@@ -1,8 +1,13 @@
 package br.com.sintechs.stufa.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class SintechsModulesType {
+public class SintechsModulesType  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4377273897590824796L;
 	private Integer id;
 	private String name;
 	private String description;
