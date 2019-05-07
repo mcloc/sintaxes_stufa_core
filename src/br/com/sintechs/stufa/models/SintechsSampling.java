@@ -8,7 +8,12 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.kie.api.definition.type.Duration;
+import org.kie.api.definition.type.Expires;
+import org.kie.api.definition.type.Role;
 
+@Role(Role.Type.EVENT)
+@Expires("10m")
 public class SintechsSampling implements Serializable {
 
 	/**
@@ -33,9 +38,6 @@ public class SintechsSampling implements Serializable {
 		this.module_id = json_obj.getInt("module_id");
 		this.status = json_obj.getString("status");;
 		this.uptime = json_obj.getBigInteger("uptime");
-//		
-//		Object error_code = json_obj.get("error_code");
-//		Object error_msg = json_obj.get("error_msg");
 		if(!json_obj.isNull("error_code"))
 			this.error_code =  json_obj.getString("error_code");
 		if(!json_obj.isNull("error_msg"))

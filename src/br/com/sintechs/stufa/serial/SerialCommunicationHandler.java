@@ -25,10 +25,21 @@ public class SerialCommunicationHandler extends Thread{
 	public void run() {
 		SerialComm serial = new SerialComm(globalProperties, writeInterrupt, drools);
 		
+		//Never returns, this is embedded system. Auto crash recovery
 		while(true) {
-		//Never returns
+		
 			try {
+				//This is commented for TEST reason asked by Tirelli's to check drools package bad behavior 
 				serial.startSerialCommunication();
+				
+				
+				//TEST: this call is a test since the serial communication can not be done outside of the arduino's board site
+//				serial.testDrools();
+				
+				//DEBUG: this will be removed after TESTING
+				Thread.sleep(1000);
+				
+				
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage());
 			}

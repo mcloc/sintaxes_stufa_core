@@ -3,6 +3,7 @@ package br.com.sintechs.stufa.serial;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,6 +191,13 @@ public class SerialComm {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// This is a TEST method to insert Event in the Drools Thread asked by Tirelli. 
+	// drools field is an instance of ExpertSystemHandler which is the Drools Handler Thread from the main class
+	public void testDrools() {
+		Random rand = new Random();
+		drools.addEvent(rand.nextInt(50));
 	}
 
 }
