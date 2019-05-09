@@ -34,10 +34,11 @@ dialect "mvel"
     	//eval(1 == 1)
 //        SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
 		SintechsSampling($sensors_sampling : samplingSensors) 
-        SintechsSamplingSensor(measure_type == "heat_index") from $sensors_sampling
+        $s : SintechsSamplingSensor(measure_type == "heat_index" && value > 29) from $sensors_sampling
     then
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
         drlActionHandler.addAlert("Turn On Solenoid #1");
+        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString());
 
 end

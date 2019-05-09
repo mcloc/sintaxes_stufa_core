@@ -1,8 +1,8 @@
 package br.com.sintechs.stufa.drools;
 
+import org.drools.core.WorkingMemoryEntryPoint;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
-import org.kie.api.cdi.KSession;
 import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -53,7 +53,7 @@ public class ExpertSystemHandler extends Thread {
 			kieSession.setGlobal("drlActionHandler", drlActionHandler);
 
 			samplingStream = kieSession.getEntryPoint("StufaSampingStream");
-			
+//			WorkingMemoryEntryPoint entrypoint = kieSession.getEntryPoint("my entry point");
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -68,13 +68,13 @@ public class ExpertSystemHandler extends Thread {
 //		 kieSession.fireAllRules();
 		
 		//FIXME: I think there's no need to create another thread.
-//		new Thread() {
-//
-//			@Override
-//			public void run() {
-//				kieSession.fireUntilHalt();
-//			}
-//		}.start();
+		new Thread() {
+
+			@Override
+			public void run() {
+				kieSession.fireUntilHalt();
+			}
+		}.start();
 
 		// } // Bracket of the while(true) auto crash recovery
 	}
@@ -84,9 +84,9 @@ public class ExpertSystemHandler extends Thread {
 	// Check the method below
 	public  synchronized void addSampling(SintechsSampling sampling) {
 		try {
-			LOGGER.info("inserting samping: " + sampling.getId() + " into EntryPoint");
+			LOGGER.info("inserting samping: " + sampling.getId() + " into KieSession");
 			kieSession.insert(sampling);
-			kieSession.fireAllRules();
+//			kieSession.fireAllRules();
 		} catch (Exception e) {
 			e.getStackTrace();
 			LOGGER.error(e.getMessage());

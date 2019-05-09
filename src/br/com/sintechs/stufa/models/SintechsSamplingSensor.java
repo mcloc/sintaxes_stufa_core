@@ -23,8 +23,8 @@ public class SintechsSamplingSensor  implements Serializable {
 	
 	public SintechsSamplingSensor(JSONObject sampling_sensor_obj) {
 		this.sampling_id = sampling_sensor_obj.getBigInteger("sampling_id");
-		this.measure_type = sampling_sensor_obj.getString("sampling_id");
-		this.value = sampling_sensor_obj.getFloat("sampling_id");
+		this.measure_type = sampling_sensor_obj.getString("measure_type");
+		this.value = sampling_sensor_obj.getFloat("value");
 		this.created_at = Timestamp.valueOf(sampling_sensor_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(sampling_sensor_obj.getString("updated_at"));
 		
