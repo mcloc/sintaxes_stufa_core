@@ -4,11 +4,12 @@ package resources.rules.actuators
 //list any import classes here.
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import br.com.sintechs.stufa.drools.DroolsActionHandler;
 import br.com.sintechs.stufa.models.SintechsSampling;
 import br.com.sintechs.stufa.models.SintechsSamplingSensor;
 import br.com.sintechs.stufa.models.SintechsSamplingActuator;
 import br.com.sintechs.stufa.models.SintechsSensor;
-import br.com.sintechs.stufa.drools.DroolsActionHandler;
+
 //declare any global variables here
 
 global br.com.sintechs.stufa.drools.DroolsActionHandler drlActionHandler;
@@ -22,6 +23,7 @@ declare SintechsSamplingSensor
  	sensor : SintechsSensor 
 	measure_type: String 
 	value: Float
+	rule_condition : Float
 	created_at : Timestamp 
 	updated_at : Timestamp 
 end
@@ -32,13 +34,14 @@ dialect "mvel"
     when
     	//This is for test propouse, the rule must fire with this eval
     	//eval(1 == 1)
-//        SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+		
 		SintechsSampling($sensors_sampling : samplingSensors) 
-        $s : SintechsSamplingSensor(measure_type == "heat_index" && value > 29) from $sensors_sampling
+        $s : SintechsSamplingSensor(measure_type == "heat_index" && value > rule_condition) from $sensors_sampling
     then
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
         drlActionHandler.addAlert("Turn On Solenoid #1");
-        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString());
+        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_HEAT_INDEX: " + $s.rule_condition.toString());
 
 end

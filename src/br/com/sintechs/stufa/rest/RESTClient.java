@@ -91,7 +91,7 @@ public class RESTClient {
 		    
 		    JSONObject json_obj = new JSONObject(responseString);
 		    
-		    sin_sampling = new SintechsSampling(json_obj);
+		    sin_sampling = new SintechsSampling(json_obj, globalProperties);
 
 		}catch (Exception ex) {
 			LOGGER.error(ex.getMessage());

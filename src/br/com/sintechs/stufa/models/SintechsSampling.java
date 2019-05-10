@@ -12,6 +12,8 @@ import org.kie.api.definition.type.Duration;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
+import br.com.sintechs.stufa.GlobalProperties;
+
 @Role(Role.Type.EVENT)
 @Expires("10m")
 public class SintechsSampling implements Serializable {
@@ -32,8 +34,11 @@ public class SintechsSampling implements Serializable {
 	private List<SintechsSamplingSensor> samplingSensors;
 	private List<SintechsSamplingActuator> samplingActuators;
 	
+	private GlobalProperties globalProperties;
 	
-	public SintechsSampling(JSONObject json_obj) {
+	
+	public SintechsSampling(JSONObject json_obj, GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
 		this.id = json_obj.getBigInteger("id");
 		this.module_id = json_obj.getInt("module_id");
 		this.status = json_obj.getString("status");;
@@ -52,7 +57,7 @@ public class SintechsSampling implements Serializable {
 		JSONArray sampling_actuators_arr = json_obj.getJSONArray("sampling_actuators");
 		sampling_sensors_arr.forEach(sampling_sensor -> {
 			JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
-			SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj);
+			SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj, globalProperties);
 			this.samplingSensors.add(sintechsSamplingSensor);
 			
 
