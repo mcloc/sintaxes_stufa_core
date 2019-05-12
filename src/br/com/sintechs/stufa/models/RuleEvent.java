@@ -10,8 +10,8 @@ import br.com.sintechs.stufa.GlobalProperties;
 public class RuleEvent {
 
 	private String rule_name;
-	private Object value;
-	private Object rule_condition;
+	private Float value;
+	private Float rule_condition;
 	private BigInteger sampling_id;
 	private BigInteger sampling_sensor_id;
 	private String cause_description;
@@ -22,7 +22,7 @@ public class RuleEvent {
 	private String sensor_uuid;
 	private String actuator_uuid;
 	
-	public RuleEvent(String rule_name, Object value, Object rule_condition, BigInteger sampling_id,
+	public RuleEvent(String rule_name, Float value, Float rule_condition, BigInteger sampling_id,
 			BigInteger sampling_sensor_id, String cause_description, String command, boolean command_value, String sensor_uuid,
 			String actuator_uuid) {
 		this.rule_name = rule_name;
@@ -38,8 +38,8 @@ public class RuleEvent {
 	}
 	public RuleEvent(JSONObject json_obj) {
 		this.rule_name = json_obj.getString("rule_name");
-		this.value = "1".equals(json_obj.getString("value"));
-		this.rule_condition = json_obj.get("rule_condition");
+		this.value = Float.parseFloat(json_obj.getString("value"));
+		this.rule_condition = Float.parseFloat(json_obj.getString("rule_condition"));
 		this.sampling_id = json_obj.getBigInteger("sampling_id");
 		this.sampling_sensor_id = json_obj.getBigInteger("sampling_sensor_id");
 		this.cause_description = json_obj.getString("cause_description");
@@ -56,16 +56,16 @@ public class RuleEvent {
 	public void setRule_name(String rule_name) {
 		this.rule_name = rule_name;
 	}
-	public Object getValue() {
+	public Float getValue() {
 		return value;
 	}
-	public void setValue(Object value) {
+	public void setValue(Float value) {
 		this.value = value;
 	}
-	public Object getRule_condition() {
+	public Float getRule_condition() {
 		return rule_condition;
 	}
-	public void setRule_condition(Object rule_condition) {
+	public void setRule_condition(Float rule_condition) {
 		this.rule_condition = rule_condition;
 	}
 	public BigInteger getSampling_id() {

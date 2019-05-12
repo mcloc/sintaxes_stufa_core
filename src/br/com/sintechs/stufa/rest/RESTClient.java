@@ -157,16 +157,18 @@ public class RESTClient {
 	public synchronized RuleEvent getLastEventForSensor(String sensor_uuid) {
 		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
 		RuleEvent ev = null;
+		JSONObject json_obj;
 		try {
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_LAST_SENSOR_EVENT_URL()+"/"+sensor_uuid);
 		    LOGGER.info("GET getLastSensorEvent: " + sensor_uuid);
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    if(responseString != null) {
+		    	json_obj = new JSONObject(responseString);
+		    	ev = new RuleEvent(json_obj);
+		    }
 		    
-		    JSONObject json_obj = new JSONObject(responseString);
-		    
-		    ev = new RuleEvent(json_obj);
 
 		}catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
