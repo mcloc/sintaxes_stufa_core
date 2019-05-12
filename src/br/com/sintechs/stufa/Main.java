@@ -3,10 +3,8 @@ package br.com.sintechs.stufa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 import br.com.sintechs.stufa.drools.ExpertSystemHandler;
-import br.com.sintechs.stufa.ipc.IPCHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.serial.SerialCommunicationHandler;
 

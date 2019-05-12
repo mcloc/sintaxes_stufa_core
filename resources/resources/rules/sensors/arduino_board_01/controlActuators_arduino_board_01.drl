@@ -1,5 +1,5 @@
 //created on: 06/05/2019
-package resources.rules.actuators
+package resources.rules.sensors.arduino_board_01
 
 //list any import classes here.
 import java.math.BigInteger;
@@ -29,7 +29,7 @@ declare SintechsSamplingSensor
 end
 
 
-rule "001-max-heat_index"
+rule "001-max-heat_index-arduino_board_01"
 dialect "mvel"
     when
     	//This is for test propouse, the rule must fire with this eval
@@ -45,7 +45,7 @@ dialect "mvel"
         drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_HEAT_INDEX: " + $s.rule_condition.toString());
 end
 
-rule "002-max-temperature"
+rule "002-max-temperature-arduino_board_01"
 dialect "mvel"
     when
     	//This is for test propouse, the rule must fire with this eval
@@ -61,7 +61,7 @@ dialect "mvel"
         drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_TEMPERATURE: " + $s.rule_condition.toString());
 end
 
-rule "003-min-humidity"
+rule "003-min-humidity-arduino_board_01"
 dialect "mvel"
     when
     	//This is for test propouse, the rule must fire with this eval

@@ -37,7 +37,7 @@ public class SerialCommunicationHandler extends Thread{
 //				serial.testDrools();
 				
 				//DEBUG: this will be removed after TESTING
-				Thread.sleep(1000);
+//				Thread.sleep(1000);
 				
 				
 			} catch (Exception e) {
