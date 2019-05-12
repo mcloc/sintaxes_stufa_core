@@ -41,7 +41,38 @@ dialect "mvel"
     then
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
-        drlActionHandler.addAlert("Turn On Solenoid #1");
+        drlActionHandler.addAlert("Turn On Solenoid #1 max_heat_index ");
         drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_HEAT_INDEX: " + $s.rule_condition.toString());
+end
 
+rule "002-max-temperature"
+dialect "mvel"
+    when
+    	//This is for test propouse, the rule must fire with this eval
+    	//eval(1 == 1)
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+		
+		SintechsSampling($sensors_sampling : samplingSensors) 
+        $s : SintechsSamplingSensor(measure_type == "temperature" && value > rule_condition) from $sensors_sampling
+    then
+    	//System.out.println("Ligar Solenoid #1");
+        //DroolsActionHandler.addAlert("Ligar Solenoid #1");
+        drlActionHandler.addAlert("Turn On Solenoid #1 max_temperature");
+        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_TEMPERATURE: " + $s.rule_condition.toString());
+end
+
+rule "003-min-humidity"
+dialect "mvel"
+    when
+    	//This is for test propouse, the rule must fire with this eval
+    	//eval(1 == 1)
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+		
+		SintechsSampling($sensors_sampling : samplingSensors) 
+        $s : SintechsSamplingSensor(measure_type == "humidity" && value < rule_condition) from $sensors_sampling
+    then
+    	//System.out.println("Ligar Solenoid #1");
+        //DroolsActionHandler.addAlert("Ligar Solenoid #1");
+        drlActionHandler.addAlert("Turn On Solenoid #1 mix_humidity");
+        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MIN_HUMIDITY: " + $s.rule_condition.toString());
 end
