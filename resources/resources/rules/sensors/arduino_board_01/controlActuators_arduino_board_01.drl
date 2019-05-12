@@ -9,6 +9,7 @@ import br.com.sintechs.stufa.models.SintechsSampling;
 import br.com.sintechs.stufa.models.SintechsSamplingSensor;
 import br.com.sintechs.stufa.models.SintechsSamplingActuator;
 import br.com.sintechs.stufa.models.SintechsSensor;
+import br.com.sintechs.stufa.models.RuleEvent;
 
 //declare any global variables here
 
@@ -39,10 +40,12 @@ dialect "mvel"
 		SintechsSampling($sensors_sampling : samplingSensors) 
         $s : SintechsSamplingSensor(measure_type == "heat_index" && value > rule_condition) from $sensors_sampling
     then
-    	//System.out.println("Ligar Solenoid #1");
-        //DroolsActionHandler.addAlert("Ligar Solenoid #1");
-        drlActionHandler.addAlert("Turn On Solenoid #1 max_heat_index ");
-        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_HEAT_INDEX: " + $s.rule_condition.toString());
+        RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
+			$s.id, "[arduino_board#1.DTH11#1] Sensação Térmica acima da condição empregada","solenoid_1", true, "DTH11#1");
+			
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+        }
 end
 
 rule "002-max-temperature-arduino_board_01"
@@ -57,8 +60,11 @@ dialect "mvel"
     then
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
-        drlActionHandler.addAlert("Turn On Solenoid #1 max_temperature");
-        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MAX_TEMPERATURE: " + $s.rule_condition.toString());
+        RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
+			$s.id, "[arduino_board#1.DTH11#1] Temperatura acima da condição empregada","solenoid_1", true, "DTH11#1");
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+        }
 end
 
 rule "003-min-humidity-arduino_board_01"
@@ -71,8 +77,65 @@ dialect "mvel"
 		SintechsSampling($sensors_sampling : samplingSensors) 
         $s : SintechsSamplingSensor(measure_type == "humidity" && value < rule_condition) from $sensors_sampling
     then
+         RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
+			$s.id, "[arduino_board#1.DTH11#1] Humidade abaixo da condição empregada","solenoid_1", true, "DTH11#1");
+			
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+	    }
+end
+
+rule "001-NOT-max-heat_index-arduino_board_01"
+dialect "mvel"
+    when
+    	//This is for test propouse, the rule must fire with this eval
+    	//eval(1 == 1)
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+		
+		SintechsSampling($sensors_sampling : samplingSensors) 
+        $s : SintechsSamplingSensor(measure_type == "heat_index" && value <= rule_condition) from $sensors_sampling
+    then
+    	
+        RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
+			$s.id, "[arduino_board#1.DTH11#1] Sensação Térmica abaixo da condição empregada","solenoid_1", false, "DTH11#1");
+			
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+        }
+end
+
+rule "002-NOT-max-temperature-arduino_board_01"
+dialect "mvel"
+    when
+    	//This is for test propouse, the rule must fire with this eval
+    	//eval(1 == 1)
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+		
+		SintechsSampling($sensors_sampling : samplingSensors) 
+        $s : SintechsSamplingSensor(measure_type == "temperature" && value <= rule_condition) from $sensors_sampling
+    then
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
-        drlActionHandler.addAlert("Turn On Solenoid #1 mix_humidity");
-        drlActionHandler.addAlert($s.measure_type + ": " + $s.value.toString() + " MIN_HUMIDITY: " + $s.rule_condition.toString());
+        RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
+			$s.id, "[arduino_board#1.DTH11#1] Temperatura abaixo da condição empregada","solenoid_1", false, "DTH11#1");
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+        }
+end
+
+rule "003-NOT-min-humidity-arduino_board_01"
+dialect "mvel"
+    when
+    	//This is for test propouse, the rule must fire with this eval
+    	//eval(1 == 1)
+        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
+		
+		SintechsSampling($sensors_sampling : samplingSensors) 
+        $s : SintechsSamplingSensor(measure_type == "humidity" && value >= rule_condition) from $sensors_sampling
+    then
+         RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
+			$s.id, "[arduino_board#1.DTH11#1] Humidade acima da condição empregada","solenoid_1", false, "DTH11#1");
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+        }
 end

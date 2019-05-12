@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
+import br.com.sintechs.stufa.models.RuleEvent;
 import br.com.sintechs.stufa.models.SintechsSampling;
 
 public class RESTClient {
@@ -29,6 +30,15 @@ public class RESTClient {
 		this.globalProperties = globalProperties;
 	}
 	
+	public RESTClient( GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
+	}
+
+//	public RESTClient(JSONObject json_obj, GlobalProperties globalProperties) {
+//		this.globalProperties = globalProperties;
+//		this.json_obj = json_obj;
+//	}
+
 	public synchronized BigInteger postSampling() {
 		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
 		 BigInteger sampling_id = null;
@@ -59,13 +69,54 @@ public class RESTClient {
 	        }else {
 	        	throw new Exception("reponse for storeSampling is not OK. response: "+ status);
 	        }
-	         
 		    LOGGER.debug(responseString);
-		    //TODO: handle response here...
-		    //TODO: return sampling id
-		    
 		   
 			return sampling_id;
+		    
+
+		}catch (Exception ex) {
+			LOGGER.error(ex.getMessage());
+		} finally {
+		    //Deprecated
+		    //httpClient.getConnectionManager().shutdown(); 
+		}
+		
+		return null;
+	}
+	
+	public synchronized BigInteger postRuleEvent(JSONObject json_obj) {
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
+		 BigInteger event_id = null;
+		try {
+
+		    HttpPost request = new HttpPost(globalProperties.getREST_API_STORE_RULE_EVENT_URL());
+		    StringEntity requestEntity = new StringEntity(
+		    		json_obj.toString(),
+		    	    ContentType.APPLICATION_JSON);
+		    request.setEntity(requestEntity);
+		    
+		    LOGGER.info("Posting REST storeRuleEvent");
+		    HttpResponse response = httpClient.execute(request);
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    
+	        // typecasting obj to JSONObject 
+	        JSONObject jo = new JSONObject(responseString);
+	        // getting firstName and lastName 
+	        String status = jo.getString("status");
+	        if(status.equals("OK")){
+	        	JSONObject data = jo.getJSONObject("data");
+	        	if(data == null)
+	        		throw new Exception("no data found on response for storeSampling.");
+	        	
+	        	event_id = data.getBigInteger("event_id");
+	        	LOGGER.info("event_id = " + event_id);
+	        }else {
+	        	throw new Exception("reponse for storeSampling is not OK. response: "+ status);
+	        }
+		    LOGGER.debug(responseString);
+		   
+			return event_id;
 		    
 
 		}catch (Exception ex) {
@@ -103,5 +154,27 @@ public class RESTClient {
 		return sin_sampling;
 	}
 	
-	
+	public synchronized RuleEvent getLastEventForSensor(String sensor_uuid) {
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		RuleEvent ev = null;
+		try {
+		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_LAST_SENSOR_EVENT_URL()+"/"+sensor_uuid);
+		    LOGGER.info("GET getLastSensorEvent: " + sensor_uuid);
+		    HttpResponse response = httpClient.execute(request);
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    
+		    JSONObject json_obj = new JSONObject(responseString);
+		    
+		    ev = new RuleEvent(json_obj);
+
+		}catch (Exception ex) {
+			LOGGER.error(ex.getMessage());
+		} finally {
+		    //Deprecated
+		    //httpClient.getConnectionManager().shutdown(); 
+		}
+		
+		return ev;
+	}
 }

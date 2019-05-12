@@ -14,7 +14,9 @@ public class GlobalProperties {
 	private Integer IPC_SERVER_PORT = 1932;
 	private String REST_API_SERVER = "http://admin.sintechs.com.br:888";
 	private String REST_API_STORE_SAMPLING_URL = REST_API_SERVER + "/api/storeSampling";
+	private String REST_API_STORE_RULE_EVENT_URL = REST_API_SERVER + "/api/storeRuleEvent";
 	private String REST_API_GET_SAMPLING_URL = REST_API_SERVER + "/api/getSampling";
+	private String REST_API_GET_LAST_SENSOR_EVENT_URL = REST_API_SERVER + "/api/getLastSensorEvent";
 	
 	/*
 	 * DRL CONSTANTS
@@ -137,6 +139,23 @@ public class GlobalProperties {
 	public void setDRL_CONSTANTS(Map<String, Map<String, String>> dRL_CONSTANTS) {
 		DRL_CONSTANTS = dRL_CONSTANTS;
 	}
+
+	public String getREST_API_STORE_RULE_EVENT_URL() {
+		return REST_API_STORE_RULE_EVENT_URL;
+	}
+
+	public void setREST_API_STORE_RULE_EVENT_URL(String rEST_API_STORE_RULE_EVENT_URL) {
+		REST_API_STORE_RULE_EVENT_URL = rEST_API_STORE_RULE_EVENT_URL;
+	}
+
+	public String getREST_API_GET_LAST_SENSOR_EVENT_URL() {
+		return REST_API_GET_LAST_SENSOR_EVENT_URL;
+	}
+
+	public void setREST_API_GET_LAST_SENSOR_EVENT_URL(String rEST_API_GET_LAST_SENSOR_EVENT_URL) {
+		REST_API_GET_LAST_SENSOR_EVENT_URL = rEST_API_GET_LAST_SENSOR_EVENT_URL;
+	}
+
 	
 
 }
