@@ -41,7 +41,7 @@ dialect "mvel"
         $s : SintechsSamplingSensor(measure_type == "heat_index" && value > rule_condition) from $sensors_sampling
     then
         RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
-			$s.id, "[arduino_board#1.DTH11#1] Sensação Térmica acima da condição empregada","solenoid_1", true, "DTH11#1");
+			$s.id, "[arduino_board#1.DTH11#1] Sensação Térmica acima da condição empregada","solenoid_1", true, "DTH11#1", "solenoid#1");
 			
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
@@ -61,7 +61,7 @@ dialect "mvel"
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
         RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
-			$s.id, "[arduino_board#1.DTH11#1] Temperatura acima da condição empregada","solenoid_1", true, "DTH11#1");
+			$s.id, "[arduino_board#1.DTH11#1] Temperatura acima da condição empregada","solenoid_1", true, "DTH11#1", "solenoid#1");
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
         }
@@ -78,7 +78,7 @@ dialect "mvel"
         $s : SintechsSamplingSensor(measure_type == "humidity" && value < rule_condition) from $sensors_sampling
     then
          RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
-			$s.id, "[arduino_board#1.DTH11#1] Humidade abaixo da condição empregada","solenoid_1", true, "DTH11#1");
+			$s.id, "[arduino_board#1.DTH11#1] Humidade abaixo da condição empregada","solenoid_1", true, "DTH11#1", "solenoid#1");
 			
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
@@ -97,7 +97,7 @@ dialect "mvel"
     then
     	
         RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
-			$s.id, "[arduino_board#1.DTH11#1] Sensação Térmica abaixo da condição empregada","solenoid_1", false, "DTH11#1");
+			$s.id, "[arduino_board#1.DTH11#1] Sensação Térmica abaixo da condição empregada","solenoid_1", false, "DTH11#1", "solenoid#1");
 			
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
@@ -117,7 +117,7 @@ dialect "mvel"
     	//System.out.println("Ligar Solenoid #1");
         //DroolsActionHandler.addAlert("Ligar Solenoid #1");
         RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
-			$s.id, "[arduino_board#1.DTH11#1] Temperatura abaixo da condição empregada","solenoid_1", false, "DTH11#1");
+			$s.id, "[arduino_board#1.DTH11#1] Temperatura abaixo da condição empregada","solenoid_1", false, "DTH11#1", "solenoid#1");
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
         }
@@ -134,7 +134,7 @@ dialect "mvel"
         $s : SintechsSamplingSensor(measure_type == "humidity" && value >= rule_condition) from $sensors_sampling
     then
          RuleEvent ev = new RuleEvent(drools.getRule().getName(), (Object) $s.value, (Object) $s.rule_condition, $.sampling_id,
-			$s.id, "[arduino_board#1.DTH11#1] Humidade acima da condição empregada","solenoid_1", false, "DTH11#1");
+			$s.id, "[arduino_board#1.DTH11#1] Humidade acima da condição empregada","solenoid_1", false, "DTH11#1", "solenoid#1");
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
         }

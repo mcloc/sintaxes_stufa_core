@@ -20,9 +20,11 @@ public class RuleEvent {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	private String sensor_uuid;
+	private String actuator_uuid;
 	
 	public RuleEvent(String rule_name, Object value, Object rule_condition, BigInteger sampling_id,
-			BigInteger sampling_sensor_id, String cause_description, String command, boolean command_value, String sensor_uuid) {
+			BigInteger sampling_sensor_id, String cause_description, String command, boolean command_value, String sensor_uuid,
+			String actuator_uuid) {
 		this.rule_name = rule_name;
 		this.value = value;
 		this.rule_condition = rule_condition;
@@ -32,6 +34,7 @@ public class RuleEvent {
 		this.command = command;
 		this.command_value = command_value;
 		this.sensor_uuid = sensor_uuid;
+		this.actuator_uuid = actuator_uuid;
 	}
 	public RuleEvent(JSONObject json_obj) {
 		this.rule_name = json_obj.getString("rule_name");
@@ -43,6 +46,7 @@ public class RuleEvent {
 		this.command = json_obj.getString("command");
 		this.command_value = "1".equals(json_obj.getString("command_value"));
 		this.sensor_uuid = json_obj.getString("sensor_uuid");
+		this.actuator_uuid = json_obj.getString("actuator_uuid");
 		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
 	}
@@ -117,6 +121,12 @@ public class RuleEvent {
 	}
 	public void setSensor_uuid(String sensor_uuid) {
 		this.sensor_uuid = sensor_uuid;
+	}
+	public String getActuator_uuid() {
+		return actuator_uuid;
+	}
+	public void setActuator_uuid(String actuator_uuid) {
+		this.actuator_uuid = actuator_uuid;
 	}
 	
 	
