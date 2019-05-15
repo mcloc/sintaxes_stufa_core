@@ -1,7 +1,6 @@
 package br.com.sintechs.stufa.rest;
 
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 
@@ -189,7 +188,7 @@ public class RESTClient {
 		try {
 			module_name =  URLEncoder.encode(module_name, "UTF-8");
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_ID_URL()+"/"+module_name);
-		    LOGGER.info("GET getLastSensorEvent: " + module_name);
+		    LOGGER.info("GET getModuleId: " + module_name);
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
@@ -217,5 +216,67 @@ public class RESTClient {
 		}
 		
 		return module_id;
+	}
+
+	public Integer getSensorId(String sensor_uuid) {
+		Integer sensor_id = null;
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		JSONObject json_obj;
+		try {
+			sensor_uuid =  URLEncoder.encode(sensor_uuid, "UTF-8");
+		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SENSOR_ID_URL()+"/"+sensor_uuid);
+		    LOGGER.info("GET getSensorId: " + sensor_uuid);
+		    HttpResponse response = httpClient.execute(request);
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    if(responseString != null) {
+		    	json_obj = new JSONObject(responseString);
+		    	
+		    	JSONObject data = null;
+		    	try {
+			    	data = json_obj.getJSONObject("data");
+			    	if(data == null) {
+			    		throw new Exception("data is NULL on getSensorId() for module: " + sensor_uuid);
+			    	}
+		    	} catch (Exception e) {
+		    		String error = json_obj.getString("error");
+		    		if(error != null )
+		    			throw new Exception("error on getSensorId() for module: " + error);
+	    		}
+		    	sensor_id = data.getInt("sensor_id");
+		    }
+		}catch (Exception ex) {
+			LOGGER.error(ex.getMessage());
+		} finally {
+		    //Deprecated
+		    //httpClient.getConnectionManager().shutdown(); 
+		}
+		
+		return sensor_id;
+	}
+	
+	public JSONObject getSensorByUUID(String sensor_uuid) {
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		JSONObject json_obj;
+		try {
+			sensor_uuid =  URLEncoder.encode(sensor_uuid, "UTF-8");
+		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SENSOR_BY_UUID_URL()+"/"+sensor_uuid);
+		    LOGGER.info("GET getSensorByUUID: " + sensor_uuid);
+		    HttpResponse response = httpClient.execute(request);
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    if(responseString != null) {
+		    	json_obj = new JSONObject(responseString);
+		    	
+		    	return json_obj;
+		    }
+		}catch (Exception ex) {
+			LOGGER.error(ex.getMessage());
+		} finally {
+		    //Deprecated
+		    //httpClient.getConnectionManager().shutdown(); 
+		}
+		
+		return null;
 	}
 }

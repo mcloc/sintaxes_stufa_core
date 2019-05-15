@@ -108,16 +108,17 @@ public class SerialComm {
 //					}
 					
 					String json = data.toString();
+
 					if(json == null)
 						throw new Exception("String json is null");
-					
 					JSONObject json_obj = new JSONObject(json);
+					
+					data.setLength(0);
+					data = new StringBuilder();
+					
 					SintechsSampling sampling = new SintechsSampling(json_obj, globalProperties);
 					drools.addSampling(sampling);
 					
-						
-					data.setLength(0);
-					data = new StringBuilder();
 					Thread.sleep(20);
 					return;
 				}

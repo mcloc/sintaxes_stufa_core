@@ -18,6 +18,8 @@ public class GlobalProperties {
 	private String REST_API_GET_SAMPLING_URL = REST_API_SERVER + "/api/getSampling";
 	private String REST_API_GET_LAST_SENSOR_EVENT_URL = REST_API_SERVER + "/api/getLastSensorEvent";
 	private String REST_API_GET_MODULE_ID_URL = REST_API_SERVER + "/api/getModuleId";
+	private String REST_API_GET_SENSOR_ID_URL = REST_API_SERVER + "/api/getSensorId";
+	private String REST_API_GET_SENSOR_BY_UUID_URL = REST_API_SERVER + "/api/getSensorByUUID";
 	
 	/*
 	 * DRL CONSTANTS
@@ -163,6 +165,22 @@ public class GlobalProperties {
 
 	public void setREST_API_GET_MODULE_ID_URL(String rEST_API_GET_MODULE_ID_URL) {
 		REST_API_GET_MODULE_ID_URL = rEST_API_GET_MODULE_ID_URL;
+	}
+
+	public String getREST_API_GET_SENSOR_ID_URL() {
+		return REST_API_GET_SENSOR_ID_URL;
+	}
+
+	public void setREST_API_GET_SENSOR_ID_URL(String rEST_API_GET_SENSOR_ID_URL) {
+		REST_API_GET_SENSOR_ID_URL = rEST_API_GET_SENSOR_ID_URL;
+	}
+
+	public String getREST_API_GET_SENSOR_BY_UUID_URL() {
+		return REST_API_GET_SENSOR_BY_UUID_URL;
+	}
+
+	public void setREST_API_GET_SENSOR_BY_UUID_URL(String rEST_API_GET_SENSOR_BY_UUID_URL) {
+		REST_API_GET_SENSOR_BY_UUID_URL = rEST_API_GET_SENSOR_BY_UUID_URL;
 	}
 
 	

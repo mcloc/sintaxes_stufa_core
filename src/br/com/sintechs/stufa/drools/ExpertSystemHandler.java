@@ -87,7 +87,7 @@ public class ExpertSystemHandler extends Thread {
 	// Check the method below
 	public synchronized void addSampling(SintechsSampling sampling) {
 		try {
-			LOGGER.info("inserting samping: " + sampling.getId() + " into KieSession");
+			LOGGER.info("inserting samping: " + sampling.getHashCode() + " into KieSession");
 			kieSession.insert(sampling);
 		} catch (Exception e) {
 			e.getStackTrace();

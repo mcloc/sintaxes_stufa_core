@@ -34,6 +34,10 @@ public class SintechsSensor   implements Serializable{
 		this.updated_at = Timestamp.valueOf(jsonObject.getString("updated_at"));
 		
 	}
+	public SintechsSensor() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public BigInteger getId() {
 		return id;
 	}

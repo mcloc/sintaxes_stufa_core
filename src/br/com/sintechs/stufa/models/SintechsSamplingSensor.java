@@ -6,11 +6,13 @@ import java.sql.Timestamp;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
 
 public class SintechsSamplingSensor  implements Serializable {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SintechsSamplingSensor.class);
 	/**
 	 * 
 	 */
@@ -27,7 +29,15 @@ public class SintechsSamplingSensor  implements Serializable {
 	
 	
 	public SintechsSamplingSensor(JSONObject sampling_sensor_obj, GlobalProperties globalProperties) {
-		this.sampling_id = sampling_sensor_obj.getBigInteger("sampling_id");
+		boolean NEW_OBJECT = false;
+		try {
+			this.sampling_id = sampling_sensor_obj.getBigInteger("sampling_id");
+		} catch (Exception e) {
+			NEW_OBJECT = true;
+			LOGGER.debug("new object, it ins't on DB yet");
+		}
+		
+		
 		this.measure_type = sampling_sensor_obj.getString("measure_type");
 		this.value = sampling_sensor_obj.getFloat("value");
 		this.created_at = Timestamp.valueOf(sampling_sensor_obj.getString("created_at"));
@@ -51,6 +61,12 @@ public class SintechsSamplingSensor  implements Serializable {
 		
 		
 	}
+	
+	public SintechsSamplingSensor() {
+		
+	}
+	
+	
 	public BigInteger getSampling_id() {
 		return sampling_id;
 	}
