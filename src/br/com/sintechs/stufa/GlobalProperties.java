@@ -30,8 +30,8 @@ public class GlobalProperties {
 	private Map<String, String> MIN_HUMIDITY = new HashMap<String, String>();
 
 	public GlobalProperties() {
-		this.MAX_HEAT_INDEX.put("DHT11#1", "25");
-		this.MAX_TEMPERATURE.put("DHT11#1", "24");
+		this.MAX_HEAT_INDEX.put("DHT11#1", "23");
+		this.MAX_TEMPERATURE.put("DHT11#1", "22");
 		this.MIN_HUMIDITY.put("DHT11#1", "98");
 		
 		this.DRL_CONSTANTS.put("MAX_HEAT_INDEX", MAX_HEAT_INDEX);

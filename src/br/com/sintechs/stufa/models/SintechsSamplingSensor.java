@@ -24,11 +24,13 @@ public class SintechsSamplingSensor  implements Serializable {
 	private Float value;
 	private Timestamp created_at;
 	private Timestamp updated_at;
-	
 	private Float rule_condition;
+	
+	private GlobalProperties globalProperties;
 	
 	
 	public SintechsSamplingSensor(JSONObject sampling_sensor_obj, GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
 		boolean NEW_OBJECT = false;
 		try {
 			this.sampling_id = sampling_sensor_obj.getBigInteger("sampling_id");
@@ -62,8 +64,8 @@ public class SintechsSamplingSensor  implements Serializable {
 		
 	}
 	
-	public SintechsSamplingSensor() {
-		
+	public SintechsSamplingSensor( GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
 	}
 	
 	
@@ -118,6 +120,21 @@ public class SintechsSamplingSensor  implements Serializable {
 //	public void setSensor_id(BigInteger sensor_id) {
 //		this.sensor_id = sensor_id;
 //	}
+
+	public void setRule_condition(String measure_type) {
+		switch(measure_type) {
+		case "heat_index":
+			this.rule_condition = Float.parseFloat(globalProperties.getDRL_CONSTANTS().get("MAX_HEAT_INDEX").get(this.sensor.getUuid()));
+			break;
+		case "temperature":
+			this.rule_condition = Float.parseFloat(globalProperties.getDRL_CONSTANTS().get("MAX_TEMPERATURE").get(this.sensor.getUuid()));
+			break;
+		case "humidity":
+			this.rule_condition = Float.parseFloat(globalProperties.getDRL_CONSTANTS().get("MIN_HUMIDITY").get(this.sensor.getUuid()));
+			break;
+		}
+		
+	}
 	
 	
 	

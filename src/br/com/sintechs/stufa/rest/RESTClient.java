@@ -161,11 +161,12 @@ public class RESTClient {
 		JSONObject json_obj;
 		try {
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_LAST_SENSOR_EVENT_URL()+"/"+sensor_uuid);
-		    LOGGER.info("GET getLastSensorEvent: " + sensor_uuid);
+		    LOGGER.debug("GET getLastSensorEvent: " + sensor_uuid);
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
 		    if(responseString != null) {
+		    	//TODO: check response
 		    	json_obj = new JSONObject(responseString);
 		    	ev = new RuleEvent(json_obj);
 		    }
@@ -188,7 +189,7 @@ public class RESTClient {
 		try {
 			module_name =  URLEncoder.encode(module_name, "UTF-8");
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_ID_URL()+"/"+module_name);
-		    LOGGER.info("GET getModuleId: " + module_name);
+		    LOGGER.debug("GET getModuleId: " + module_name);
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
@@ -225,7 +226,7 @@ public class RESTClient {
 		try {
 			sensor_uuid =  URLEncoder.encode(sensor_uuid, "UTF-8");
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SENSOR_ID_URL()+"/"+sensor_uuid);
-		    LOGGER.info("GET getSensorId: " + sensor_uuid);
+		    LOGGER.debug("GET getSensorId: " + sensor_uuid);
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
@@ -261,7 +262,7 @@ public class RESTClient {
 		try {
 			sensor_uuid =  URLEncoder.encode(sensor_uuid, "UTF-8");
 		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SENSOR_BY_UUID_URL()+"/"+sensor_uuid);
-		    LOGGER.info("GET getSensorByUUID: " + sensor_uuid);
+		    LOGGER.debug("GET getSensorByUUID: " + sensor_uuid);
 		    HttpResponse response = httpClient.execute(request);
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");

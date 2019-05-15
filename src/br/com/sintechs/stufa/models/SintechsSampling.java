@@ -105,7 +105,7 @@ public class SintechsSampling implements Serializable {
 			sampling_sensors_arr.forEach(sampling_sensor -> {
 				JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
 				
-				SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor();
+				SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(globalProperties);
 				RESTClient client = new RESTClient(globalProperties);
 				JSONObject sensor_json_obj = client.getSensorByUUID(sampling_sensor_obj.getString("uuid"));
 				
@@ -125,7 +125,7 @@ public class SintechsSampling implements Serializable {
 					}
 					sintechsSamplingSensor.setMeasure_type(names[0]);
 					sintechsSamplingSensor.setValue(sensor_obj.getFloat(names[0]));
-					
+					sintechsSamplingSensor.setRule_condition(names[0]);
 					this.samplingSensors.add(sintechsSamplingSensor);
 				});
 			});

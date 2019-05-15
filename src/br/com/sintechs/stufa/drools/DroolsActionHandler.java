@@ -21,6 +21,9 @@ public class DroolsActionHandler {
 		RESTClient rClient = new RESTClient(globalProperties);
 		RuleEvent last_event = rClient.getLastEventForSensor(ev.getSensor_uuid());
 		
+		if(last_event == null)
+			return true;
+		
 		if(last_event.getValue() == ev.getValue())
 			return false;
 		
