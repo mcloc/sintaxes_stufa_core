@@ -23,13 +23,12 @@ public class RuleEvent {
 	private String actuator_uuid;
 	
 	public RuleEvent(String rule_name, Float value, Float rule_condition, BigInteger sampling_id,
-			BigInteger sampling_sensor_id, String cause_description, String command, boolean command_value, String sensor_uuid,
+			String cause_description, String command, boolean command_value, String sensor_uuid,
 			String actuator_uuid) {
 		this.rule_name = rule_name;
 		this.value = value;
 		this.rule_condition = rule_condition;
 		this.sampling_id = sampling_id;
-		this.sampling_sensor_id = sampling_sensor_id;
 		this.cause_description = cause_description;
 		this.command = command;
 		this.command_value = command_value;

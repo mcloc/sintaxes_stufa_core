@@ -16,6 +16,7 @@ public class SintechsSamplingSensor  implements Serializable {
 	 */
 	private static final long serialVersionUID = 3262367160946774959L;
 	private BigInteger sampling_id;
+//	private BigInteger sensor_id;
 	private SintechsSensor sensor;
 	private String measure_type;
 	private Float value;
@@ -95,6 +96,12 @@ public class SintechsSamplingSensor  implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+//	public BigInteger getSensor_id() {
+//		return sensor_id;
+//	}
+//	public void setSensor_id(BigInteger sensor_id) {
+//		this.sensor_id = sensor_id;
+//	}
 	
 	
 	

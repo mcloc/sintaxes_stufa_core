@@ -49,7 +49,7 @@ public class ExpertSystemHandler extends Thread {
 				kieSession.addEventListener(new DebugEventListener());
 
 				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
-				DroolsActionHandler drlActionHandler = new DroolsActionHandler();
+				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties);
 				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
 //				samplingStream = kieSession.getEntryPoint("StufaSampingStream");

@@ -1,7 +1,9 @@
 package br.com.sintechs.stufa.rest;
 
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -178,5 +180,42 @@ public class RESTClient {
 		}
 		
 		return ev;
+	}
+	
+	public synchronized int getModuleId(String module_name) {
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		Integer module_id = null;
+		JSONObject json_obj;
+		try {
+			module_name =  URLEncoder.encode(module_name, "UTF-8");
+		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_ID_URL()+"/"+module_name);
+		    LOGGER.info("GET getLastSensorEvent: " + module_name);
+		    HttpResponse response = httpClient.execute(request);
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    if(responseString != null) {
+		    	json_obj = new JSONObject(responseString);
+		    	
+		    	JSONObject data = null;
+		    	try {
+			    	data = json_obj.getJSONObject("data");
+			    	if(data == null) {
+			    		throw new Exception("data is NULL on getModuleId() for module: " + module_name);
+			    	}
+		    	} catch (Exception e) {
+		    		String error = json_obj.getString("error");
+		    		if(error != null )
+		    			throw new Exception("error on getModuleId() for module: " + error);
+	    		}
+		    	module_id = data.getInt("module_id");
+		    }
+		}catch (Exception ex) {
+			LOGGER.error(ex.getMessage());
+		} finally {
+		    //Deprecated
+		    //httpClient.getConnectionManager().shutdown(); 
+		}
+		
+		return module_id;
 	}
 }

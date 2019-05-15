@@ -8,16 +8,20 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.kie.api.definition.type.Duration;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
+import br.com.sintechs.stufa.rest.RESTClient;
 
 @Role(Role.Type.EVENT)
 @Expires("10m")
 public class SintechsSampling implements Serializable {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SintechsSampling.class);
+	
 	/**
 	 * 
 	 */
@@ -39,35 +43,71 @@ public class SintechsSampling implements Serializable {
 	
 	public SintechsSampling(JSONObject json_obj, GlobalProperties globalProperties) {
 		this.globalProperties = globalProperties;
-		this.id = json_obj.getBigInteger("id");
-		this.module_id = json_obj.getInt("module_id");
-		this.status = json_obj.getString("status");;
+		boolean NEW_OBJECT = false;
+		try {
+			this.id = json_obj.getBigInteger("id");
+		} catch (Exception e ) {
+			NEW_OBJECT = true;
+			LOGGER.debug("new object, it ins't on DB yet");
+		}
+		
+		if(NEW_OBJECT ) {
+			RESTClient client = new RESTClient(globalProperties);
+			int module_id = client.getModuleId(json_obj.getString("module_name"));
+			this.module_id = module_id;
+		} else {
+			this.module_id = json_obj.getInt("module_id"); 
+		}
+		this.status = json_obj.getString("status");
 		this.uptime = json_obj.getBigInteger("uptime");
 		if(!json_obj.isNull("error_code"))
 			this.error_code =  json_obj.getString("error_code");
 		if(!json_obj.isNull("error_msg"))
 			this.error_msg = json_obj.getString("error_msg");
 		
-		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
-		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
+		if(! NEW_OBJECT ) {
+			this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
+			this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
+		} 
+			
+			
 		this.samplingSensors = new ArrayList<SintechsSamplingSensor>();
 		this.samplingActuators = new ArrayList<SintechsSamplingActuator>();
 		
-		JSONArray sampling_sensors_arr = json_obj.getJSONArray("sampling_sensors");
-		JSONArray sampling_actuators_arr = json_obj.getJSONArray("sampling_actuators");
-		sampling_sensors_arr.forEach(sampling_sensor -> {
-			JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
-			SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj, globalProperties);
-			this.samplingSensors.add(sintechsSamplingSensor);
-			
-
-		});
 		
-		sampling_actuators_arr.forEach(sampling_actuator -> {
-			JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
-			SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(sampling_actuator_obj);
-			this.samplingActuators.add(sintechsSamplingActuator);
-		});
+		if(! NEW_OBJECT) {
+			JSONArray sampling_sensors_arr = json_obj.getJSONArray("sampling_sensors");
+			JSONArray sampling_actuators_arr = json_obj.getJSONArray("sampling_actuators");
+			sampling_sensors_arr.forEach(sampling_sensor -> {
+				JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
+				SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj, globalProperties);
+				this.samplingSensors.add(sintechsSamplingSensor);
+				
+	
+			});
+			
+			sampling_actuators_arr.forEach(sampling_actuator -> {
+				JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
+				SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(sampling_actuator_obj);
+				this.samplingActuators.add(sintechsSamplingActuator);
+			});
+		} else {
+			JSONArray sampling_sensors_arr = json_obj.getJSONArray("sensors");
+			JSONArray sampling_actuators_arr = json_obj.getJSONArray("actuators");
+			sampling_sensors_arr.forEach(sampling_sensor -> {
+				JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
+				SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj, globalProperties);
+				this.samplingSensors.add(sintechsSamplingSensor);
+				
+	
+			});
+			
+			sampling_actuators_arr.forEach(sampling_actuator -> {
+				JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
+				SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(sampling_actuator_obj);
+				this.samplingActuators.add(sintechsSamplingActuator);
+			});
+		}
 	}
 	
 	

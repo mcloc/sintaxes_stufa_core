@@ -3,8 +3,8 @@ package br.com.sintechs.stufa.serial;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Random;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,12 +100,21 @@ public class SerialComm {
 					s.replaceAll("\\r$", "");
 					data.append(s); 
 					writeInSHMFile(data.toString());
-					RESTClient client = new RESTClient(data.toString(), globalProperties);
-					BigInteger sampling_id = client.postSampling();
-					if(sampling_id != null) {
-						SintechsSampling sampling = client.getSampling(sampling_id);
-						drools.addSampling(sampling);
-					}
+//					RESTClient client = new RESTClient(data.toString(), globalProperties);
+//					BigInteger sampling_id = client.postSampling();
+//					if(sampling_id != null) {
+//						SintechsSampling sampling = client.getSampling(sampling_id);
+//						drools.addSampling(sampling);
+//					}
+					
+					String json = data.toString();
+					if(json == null)
+						throw new Exception("String json is null");
+					
+					JSONObject json_obj = new JSONObject(json);
+					SintechsSampling sampling = new SintechsSampling(json_obj, globalProperties);
+					drools.addSampling(sampling);
+					
 						
 					data.setLength(0);
 					data = new StringBuilder();
