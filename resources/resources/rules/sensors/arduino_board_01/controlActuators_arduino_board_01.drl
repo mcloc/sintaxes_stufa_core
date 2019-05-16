@@ -38,9 +38,9 @@ dialect "mvel"
         //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
 		
 		$sampling: SintechsSampling($sensors_sampling : samplingSensors) 
-        $s : SintechsSamplingSensor(measure_type == "heat_index" && value > rule_condition) from $sensors_sampling
+        $sampling_sensor : SintechsSamplingSensor(measure_type == "heat_index" && value > rule_condition) from $sensors_sampling
     then
-        RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $s.value, $s.rule_condition, $s.sampling_id,
+        RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
 			"[arduino_board#1.DTH11#1] Sensação Térmica acima da condição empregada",
 			"solenoid_1", true, "DTH11#1", "solenoid#1");
 			

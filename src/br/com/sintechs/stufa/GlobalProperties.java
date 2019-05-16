@@ -20,6 +20,7 @@ public class GlobalProperties {
 	private String REST_API_GET_MODULE_ID_URL = REST_API_SERVER + "/api/getModuleId";
 	private String REST_API_GET_SENSOR_ID_URL = REST_API_SERVER + "/api/getSensorId";
 	private String REST_API_GET_SENSOR_BY_UUID_URL = REST_API_SERVER + "/api/getSensorByUUID";
+	private String REST_API_GET_ACTUATOR_BY_UUID_URL = REST_API_SERVER + "/api/getActuatorByUUID";
 	
 	/*
 	 * DRL CONSTANTS
@@ -181,6 +182,14 @@ public class GlobalProperties {
 
 	public void setREST_API_GET_SENSOR_BY_UUID_URL(String rEST_API_GET_SENSOR_BY_UUID_URL) {
 		REST_API_GET_SENSOR_BY_UUID_URL = rEST_API_GET_SENSOR_BY_UUID_URL;
+	}
+
+	public String getREST_API_GET_ACTUATOR_BY_UUID_URL() {
+		return REST_API_GET_ACTUATOR_BY_UUID_URL;
+	}
+
+	public void setREST_API_GET_ACTUATOR_BY_UUID_URL(String rEST_API_GET_ACTUATOR_BY_UUID_URL) {
+		REST_API_GET_ACTUATOR_BY_UUID_URL = rEST_API_GET_ACTUATOR_BY_UUID_URL;
 	}
 
 	

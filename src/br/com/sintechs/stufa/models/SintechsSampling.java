@@ -62,6 +62,7 @@ public class SintechsSampling implements Serializable {
 		}
 		this.status = json_obj.getString("status");
 		this.uptime = json_obj.getBigInteger("uptime");
+		
 		if (!json_obj.isNull("error_code"))
 			this.error_code = json_obj.getString("error_code");
 		if (!json_obj.isNull("error_msg"))
@@ -75,7 +76,7 @@ public class SintechsSampling implements Serializable {
 			long time = date.getTime();
 			
 			this.created_at = new Timestamp(time);
-			this.updated_at = new Timestamp(time);
+			this.updated_at = created_at;
 		}
 		
 		JSONObject data_obj = json_obj.getJSONObject("data");
@@ -83,13 +84,13 @@ public class SintechsSampling implements Serializable {
 		this.samplingSensors = new ArrayList<SintechsSamplingSensor>();
 		this.samplingActuators = new ArrayList<SintechsSamplingActuator>();
 
+		// IF this is a already existent object
 		if (!NEW_OBJECT) {
 			JSONArray sampling_sensors_arr = json_obj.getJSONArray("sampling_sensors");
 			JSONArray sampling_actuators_arr = json_obj.getJSONArray("sampling_actuators");
 			sampling_sensors_arr.forEach(sampling_sensor -> {
 				JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
-				SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj,
-						globalProperties);
+				SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(sampling_sensor_obj, globalProperties);
 				this.samplingSensors.add(sintechsSamplingSensor);
 
 			});
@@ -99,9 +100,11 @@ public class SintechsSampling implements Serializable {
 				SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(sampling_actuator_obj);
 				this.samplingActuators.add(sintechsSamplingActuator);
 			});
-		} else {
+		} else { // New object which is not yet on database
 			JSONArray sampling_sensors_arr = data_obj.getJSONArray("sensors");
 			JSONArray sampling_actuators_arr = data_obj.getJSONArray("actuators");
+			
+			//Loop for each sensor of the module (arduino_board)
 			sampling_sensors_arr.forEach(sampling_sensor -> {
 				JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
 				
@@ -109,15 +112,19 @@ public class SintechsSampling implements Serializable {
 				RESTClient client = new RESTClient(globalProperties);
 				JSONObject sensor_json_obj = client.getSensorByUUID(sampling_sensor_obj.getString("uuid"));
 				
+				//TODO: check for errors
 				SintechsSensor sintechs_sensor = new SintechsSensor(sensor_json_obj.getJSONObject("data"));
 				
 				sintechsSamplingSensor.setSensor(sintechs_sensor);
-				sintechsSamplingSensor.setCreated_at(created_at);
-				sintechsSamplingSensor.setUpdated_at(updated_at);
+				sintechsSamplingSensor.setCreated_at(this.created_at);
+				sintechsSamplingSensor.setUpdated_at(this.updated_at);
 				
+				//Loop for one sensor values, for sensors which have multiple return values
 				JSONArray sensor_arr = sampling_sensor_obj.getJSONArray("value");
 				sensor_arr.forEach(sensor -> {
 					JSONObject sensor_obj = (JSONObject) sensor;
+					
+					//Sensor value name (humidity, temperature, heat_index) for example on the same sensor
 					String[] names = sensor_obj.getNames(sensor_obj);
 					
 					if(names.length != 1) {
@@ -130,12 +137,15 @@ public class SintechsSampling implements Serializable {
 				});
 			});
 
+			//TODO: hidrate the sampling actuator
 //			sampling_actuators_arr.forEach(sampling_actuator -> {
 //				JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
 //				SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(sampling_actuator_obj);
 //				this.samplingActuators.add(sintechsSamplingActuator);
 //			});
 		}
+		
+		//Get a unique hashCode for this sampling
 		this.setHashCode(this.hashCode());
 	}
 
@@ -225,6 +235,14 @@ public class SintechsSampling implements Serializable {
 
 	public void setHashCode(int sha1) {
 		this.hashCode = sha1;
+	}
+
+	public GlobalProperties getGlobalProperties() {
+		return globalProperties;
+	}
+
+	public void setGlobalProperties(GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
 	}
 
 }

@@ -116,6 +116,7 @@ public class SerialComm {
 					data.setLength(0);
 					data = new StringBuilder();
 					
+					//Create Sampling with data readed from arduino_board 
 					SintechsSampling sampling = new SintechsSampling(json_obj, globalProperties);
 					drools.addSampling(sampling);
 					

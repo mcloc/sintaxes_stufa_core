@@ -280,4 +280,29 @@ public class RESTClient {
 		
 		return null;
 	}
+
+	public JSONObject getActuatorByUUID(String actuator_uuid) {
+		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+		JSONObject json_obj;
+		try {
+			actuator_uuid =  URLEncoder.encode(actuator_uuid, "UTF-8");
+		    HttpGet request = new HttpGet(globalProperties.getREST_API_GET_ACTUATOR_BY_UUID_URL()+"/"+actuator_uuid);
+		    LOGGER.debug("GET getActuatorByUUID: " + actuator_uuid);
+		    HttpResponse response = httpClient.execute(request);
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    if(responseString != null) {
+		    	json_obj = new JSONObject(responseString);
+		    	
+		    	return json_obj;
+		    }
+		}catch (Exception ex) {
+			LOGGER.error(ex.getMessage());
+		} finally {
+		    //Deprecated
+		    //httpClient.getConnectionManager().shutdown(); 
+		}
+		
+		return null;
+	}
 }

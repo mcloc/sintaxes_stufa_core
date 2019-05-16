@@ -28,7 +28,11 @@ public class SintechsSamplingSensor  implements Serializable {
 	
 	private GlobalProperties globalProperties;
 	
-	
+	/**
+	 * Hidrate with json returned from database
+	 * @param sampling_sensor_obj
+	 * @param globalProperties
+	 */
 	public SintechsSamplingSensor(JSONObject sampling_sensor_obj, GlobalProperties globalProperties) {
 		this.globalProperties = globalProperties;
 		boolean NEW_OBJECT = false;
@@ -42,6 +46,7 @@ public class SintechsSamplingSensor  implements Serializable {
 		
 		this.measure_type = sampling_sensor_obj.getString("measure_type");
 		this.value = sampling_sensor_obj.getFloat("value");
+		
 		this.created_at = Timestamp.valueOf(sampling_sensor_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(sampling_sensor_obj.getString("updated_at"));
 		
@@ -49,6 +54,8 @@ public class SintechsSamplingSensor  implements Serializable {
 		JSONObject sensor = (JSONObject) sensor_arr.get(0);
 		
 		this.sensor = new SintechsSensor(sensor);
+		
+		//This is not came from database because rule_condition values can be changed in runtime, so it gets the latest rule_condition value
 		switch(this.measure_type) {
 		case "heat_index":
 			this.rule_condition = Float.parseFloat(globalProperties.getDRL_CONSTANTS().get("MAX_HEAT_INDEX").get(this.sensor.getUuid()));

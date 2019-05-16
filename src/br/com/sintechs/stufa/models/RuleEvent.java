@@ -2,10 +2,10 @@ package br.com.sintechs.stufa.models;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
-
-import br.com.sintechs.stufa.GlobalProperties;
 
 public class RuleEvent {
 
@@ -21,20 +21,49 @@ public class RuleEvent {
 	private Timestamp updated_at;
 	private String sensor_uuid;
 	private String actuator_uuid;
+	private SintechsSamplingActuator samplingActuator;
+	private SintechsSampling sampling;
 	
-	public RuleEvent(String rule_name, Float value, Float rule_condition, BigInteger sampling_id,
+	
+	/**
+	 * Hidrate Event wich is not yet on database
+	 * @param rule_name
+	 * @param value
+	 * @param rule_condition
+	 * @param sampling_id
+	 * @param cause_description
+	 * @param command
+	 * @param command_value
+	 * @param sensor_uuid
+	 * @param actuator_uuid
+	 */
+	public RuleEvent(String rule_name, SintechsSampling sampling, SintechsSamplingSensor samplingSensor,
 			String cause_description, String command, boolean command_value, String sensor_uuid,
 			String actuator_uuid) {
+		this.sampling = sampling;
 		this.rule_name = rule_name;
-		this.value = value;
-		this.rule_condition = rule_condition;
-		this.sampling_id = sampling_id;
+		this.value = samplingSensor.getValue();
+		this.rule_condition = samplingSensor.getRule_condition();
+		
+		if(sampling.getId() != null)
+			this.sampling_id = sampling.getId();
+		
 		this.cause_description = cause_description;
 		this.command = command;
 		this.command_value = command_value;
-		this.sensor_uuid = sensor_uuid;
+		this.sensor_uuid = samplingSensor.getSensor().getUuid();
 		this.actuator_uuid = actuator_uuid;
+		
+		samplingActuator = new SintechsSamplingActuator(actuator_uuid, command_value, sampling.getCreated_at(), sampling.getGlobalProperties());
+		List<SintechsSamplingActuator> samplingActuatorList = new ArrayList<SintechsSamplingActuator>();
+		samplingActuatorList.add(samplingActuator);
+		this.sampling.setSamplingActuators(samplingActuatorList);
 	}
+	
+	/**
+	 * Hidrate from json returned from database
+	 * @param json_obj
+	 */
 	public RuleEvent(JSONObject json_obj) {
 		this.rule_name = json_obj.getString("rule_name");
 		this.value = Float.parseFloat(json_obj.getString("value"));
@@ -48,6 +77,8 @@ public class RuleEvent {
 		this.actuator_uuid = json_obj.getString("actuator_uuid");
 		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
+		
+		
 	}
 	public String getRule_name() {
 		return rule_name;
@@ -126,6 +157,14 @@ public class RuleEvent {
 	}
 	public void setActuator_uuid(String actuator_uuid) {
 		this.actuator_uuid = actuator_uuid;
+	}
+
+	public SintechsSamplingActuator getSamplingActuator() {
+		return samplingActuator;
+	}
+
+	public void setSamplingActuator(SintechsSamplingActuator samplingActuator) {
+		this.samplingActuator = samplingActuator;
 	}
 	
 	

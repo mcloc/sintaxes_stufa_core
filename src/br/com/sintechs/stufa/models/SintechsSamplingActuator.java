@@ -7,6 +7,9 @@ import java.sql.Timestamp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import br.com.sintechs.stufa.GlobalProperties;
+import br.com.sintechs.stufa.rest.RESTClient;
+
 public class SintechsSamplingActuator  implements Serializable {
 	
 	/**
@@ -20,7 +23,10 @@ public class SintechsSamplingActuator  implements Serializable {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
-	
+	/**
+	 * Hidrate SamplingActuator from json retrived from database
+	 * @param sampling_actuator_obj
+	 */
 	public SintechsSamplingActuator(JSONObject sampling_actuator_obj) {
 		this.sampling_id = sampling_actuator_obj.getBigInteger("sampling_id");
 		this.active = "1".equals(sampling_actuator_obj.getString("active"));
@@ -33,6 +39,28 @@ public class SintechsSamplingActuator  implements Serializable {
 		JSONObject actuator = (JSONObject) actuator_arr.get(0);
 		this.actuator = new SintechsActuator(actuator);
 	}
+	
+	/**
+	 * Hidrate new SamplingActuator from Event 
+	 * @param actuator_uuid
+	 * @param command_value
+	 * @param globalProperties 
+	 * @param timestamp 
+	 */
+	public SintechsSamplingActuator(String actuator_uuid, boolean command_value, Timestamp created_at, GlobalProperties globalProperties) {
+		this.active = command_value;
+		this.activated_time = new BigInteger("0");
+		this.created_at = created_at;
+		this.updated_at = created_at;
+		
+		RESTClient client = new RESTClient(globalProperties);
+		JSONObject actuator_json_obj = client.getActuatorByUUID(actuator_uuid);
+		
+		//TODO: check for errors
+		SintechsActuator sintechs_actuator = new SintechsActuator(actuator_json_obj.getJSONObject("data"));
+		this.actuator = sintechs_actuator;
+	}
+
 	public BigInteger getSampling_id() {
 		return sampling_id;
 	}
@@ -69,7 +97,7 @@ public class SintechsSamplingActuator  implements Serializable {
 	public void setActivated_time(BigInteger activated_time) {
 		this.activated_time = activated_time;
 	}
-	
+
 	
 	
 }

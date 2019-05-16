@@ -17,6 +17,7 @@ public class SintechsSensor   implements Serializable{
 	private String type;
 	private String description;
 	private String model;
+	private BigInteger module_id;
 	private boolean active;
 	private Timestamp created_at;
 	private Timestamp updated_at;
@@ -29,6 +30,7 @@ public class SintechsSensor   implements Serializable{
 		this.type = jsonObject.getString("type");
 		this.description = jsonObject.getString("description");
 		this.model = jsonObject.getString("model");
+		this.module_id = jsonObject.getBigInteger("module_id");
 		this.active = "1".equals(jsonObject.getString("active")); // LIXO Super POG
 		this.created_at = Timestamp.valueOf(jsonObject.getString("created_at"));
 		this.updated_at = Timestamp.valueOf(jsonObject.getString("updated_at"));
@@ -86,7 +88,12 @@ public class SintechsSensor   implements Serializable{
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	
+	public BigInteger getModule_id() {
+		return module_id;
+	}
+	public void setModule_id(BigInteger module_id) {
+		this.module_id = module_id;
+	}	
 	
 	
 }
