@@ -1,5 +1,5 @@
 //created on: 06/05/2019
-package resources.rules.sensors.arduino_board_01
+package resources.rules.boards.arduino_001
 
 //list any import classes here.
 import java.math.BigInteger;
@@ -20,6 +20,7 @@ declare SintechsSampling
 end
 
 declare SintechsSamplingSensor 
+	hashCode: int
  	sampling_id : BigInteger
  	sensor : SintechsSensor 
 	measure_type: String 
@@ -30,15 +31,22 @@ declare SintechsSamplingSensor
 end
 
 
-rule "001-max-heat_index-arduino_board_01"
+rule "001-DHT11#1"
 dialect "mvel"
+no-loop true
     when
     	//This is for test propouse, the rule must fire with this eval
     	//eval(1 == 1)
         //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
 		
 		$sampling: SintechsSampling($sensors_sampling : samplingSensors) 
-        $sampling_sensor : SintechsSamplingSensor(measure_type == "heat_index" && value > rule_condition) from $sensors_sampling
+        $sampling_sensor : SintechsSamplingSensor(
+        	(sensor.uuid == "DHT11#1") && (
+	        	(measure_type == "heat_index" && value > rule_condition) ||
+	        	(measure_type == "temperature" && value > rule_condition) ||
+	        	(measure_type == "humidity" && value < rule_condition)
+	        ) 
+        ) from $sensors_sampling
     then
         RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
 			"[arduino_board#1.DTH11#1] Sensação Térmica acima da condição empregada",
