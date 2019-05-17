@@ -1,19 +1,13 @@
 package br.com.sintechs.stufa.models;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONObject;
 
 public class RuleEvent {
 
+	private String rule_package;
 	private String rule_name;
 	private Float value;
 	private Float rule_condition;
-	private BigInteger sampling_id;
-	private BigInteger sampling_sensor_id;
 	private String cause_description;
 	private String command;
 	private boolean command_value;
@@ -21,7 +15,6 @@ public class RuleEvent {
 	private Timestamp updated_at;
 	private String sensor_uuid;
 	private String actuator_uuid;
-	private SintechsSamplingActuator samplingActuator;
 	private SintechsSampling sampling;
 	
 	
@@ -40,49 +33,143 @@ public class RuleEvent {
 	public RuleEvent(String rule_name, SintechsSampling sampling, SintechsSamplingSensor samplingSensor,
 			String cause_description, String command, boolean command_value, String sensor_uuid,
 			String actuator_uuid) {
+		
+		
 		this.sampling = sampling;
 		this.rule_name = rule_name;
 		this.value = samplingSensor.getValue();
 		this.rule_condition = samplingSensor.getRule_condition();
-		
-		if(sampling.getId() != null)
-			this.sampling_id = sampling.getId();
-		
 		this.cause_description = cause_description;
 		this.command = command;
 		this.command_value = command_value;
 		this.sensor_uuid = samplingSensor.getSensor().getUuid();
 		this.actuator_uuid = actuator_uuid;
 		
-		samplingActuator = new SintechsSamplingActuator(actuator_uuid, command_value, sampling.getCreated_at(), sampling.getGlobalProperties());
-		List<SintechsSamplingActuator> samplingActuatorList = new ArrayList<SintechsSamplingActuator>();
-		samplingActuatorList.add(samplingActuator);
-		this.sampling.setSamplingActuators(samplingActuatorList);
+		
+//		samplingActuator = new SintechsSamplingActuator(actuator_uuid, command_value, sampling.getCreated_at(), sampling.getGlobalProperties());
+//		List<SintechsSamplingActuator> samplingActuatorList = new ArrayList<SintechsSamplingActuator>();
+//		samplingActuatorList.add(samplingActuator);
+//		this.sampling.setSamplingActuators(samplingActuatorList);
 	}
 	
+
 	/**
 	 * Hidrate from json returned from database
 	 * @param json_obj
 	 */
-	public RuleEvent(JSONObject json_obj) {
-		this.rule_name = json_obj.getString("rule_name");
-		this.value = Float.parseFloat(json_obj.getString("value"));
-		this.rule_condition = Float.parseFloat(json_obj.getString("rule_condition"));
-		this.sampling_id = json_obj.getBigInteger("sampling_id");
-		this.sampling_sensor_id = json_obj.getBigInteger("sampling_sensor_id");
-		this.cause_description = json_obj.getString("cause_description");
-		this.command = json_obj.getString("command");
-		this.command_value = "1".equals(json_obj.getString("command_value"));
-		this.sensor_uuid = json_obj.getString("sensor_uuid");
-		this.actuator_uuid = json_obj.getString("actuator_uuid");
-		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
-		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
-		
-		
-	}
+//	public RuleEvent(JSONObject json_obj) {
+//		this.rule_name = json_obj.getString("rule_name");
+//		this.value = Float.parseFloat(json_obj.getString("value"));
+//		this.rule_condition = Float.parseFloat(json_obj.getString("rule_condition"));
+//		this.sampling_id = json_obj.getBigInteger("sampling_id");
+//		this.sampling_sensor_id = json_obj.getBigInteger("sampling_sensor_id");
+//		this.cause_description = json_obj.getString("cause_description");
+//		this.command = json_obj.getString("command");
+//		this.command_value = "1".equals(json_obj.getString("command_value"));
+//		this.sensor_uuid = json_obj.getString("sensor_uuid");
+//		this.actuator_uuid = json_obj.getString("actuator_uuid");
+//		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
+//		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
+//	}
+	
+	
+	
+	
+	
+	
 	public String getRule_name() {
 		return rule_name;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((actuator_uuid == null) ? 0 : actuator_uuid.hashCode());
+		result = prime * result + ((cause_description == null) ? 0 : cause_description.hashCode());
+		result = prime * result + ((command == null) ? 0 : command.hashCode());
+		result = prime * result + (command_value ? 1231 : 1237);
+		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
+		result = prime * result + ((rule_condition == null) ? 0 : rule_condition.hashCode());
+		result = prime * result + ((rule_name == null) ? 0 : rule_name.hashCode());
+		result = prime * result + ((rule_package == null) ? 0 : rule_package.hashCode());
+		result = prime * result + ((sampling == null) ? 0 : sampling.hashCode());
+		result = prime * result + ((sensor_uuid == null) ? 0 : sensor_uuid.hashCode());
+		result = prime * result + ((updated_at == null) ? 0 : updated_at.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RuleEvent other = (RuleEvent) obj;
+		if (actuator_uuid == null) {
+			if (other.actuator_uuid != null)
+				return false;
+		} else if (!actuator_uuid.equals(other.actuator_uuid))
+			return false;
+		if (cause_description == null) {
+			if (other.cause_description != null)
+				return false;
+		} else if (!cause_description.equals(other.cause_description))
+			return false;
+		if (command == null) {
+			if (other.command != null)
+				return false;
+		} else if (!command.equals(other.command))
+			return false;
+		if (command_value != other.command_value)
+			return false;
+		if (created_at == null) {
+			if (other.created_at != null)
+				return false;
+		} else if (!created_at.equals(other.created_at))
+			return false;
+		if (rule_condition == null) {
+			if (other.rule_condition != null)
+				return false;
+		} else if (!rule_condition.equals(other.rule_condition))
+			return false;
+		if (rule_name == null) {
+			if (other.rule_name != null)
+				return false;
+		} else if (!rule_name.equals(other.rule_name))
+			return false;
+		if (rule_package == null) {
+			if (other.rule_package != null)
+				return false;
+		} else if (!rule_package.equals(other.rule_package))
+			return false;
+		if (sampling == null) {
+			if (other.sampling != null)
+				return false;
+		} else if (!sampling.equals(other.sampling))
+			return false;
+		if (sensor_uuid == null) {
+			if (other.sensor_uuid != null)
+				return false;
+		} else if (!sensor_uuid.equals(other.sensor_uuid))
+			return false;
+		if (updated_at == null) {
+			if (other.updated_at != null)
+				return false;
+		} else if (!updated_at.equals(other.updated_at))
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
+
 	public void setRule_name(String rule_name) {
 		this.rule_name = rule_name;
 	}
@@ -97,18 +184,6 @@ public class RuleEvent {
 	}
 	public void setRule_condition(Float rule_condition) {
 		this.rule_condition = rule_condition;
-	}
-	public BigInteger getSampling_id() {
-		return sampling_id;
-	}
-	public void setSampling_id(BigInteger sampling_id) {
-		this.sampling_id = sampling_id;
-	}
-	public BigInteger getSampling_sensor_id() {
-		return sampling_sensor_id;
-	}
-	public void setSampling_sensor_id(BigInteger sampling_sensor_id) {
-		this.sampling_sensor_id = sampling_sensor_id;
 	}
 	public String getDescription_cause() {
 		return cause_description;
@@ -159,12 +234,20 @@ public class RuleEvent {
 		this.actuator_uuid = actuator_uuid;
 	}
 
-	public SintechsSamplingActuator getSamplingActuator() {
-		return samplingActuator;
+	public String getRule_package() {
+		return rule_package;
 	}
 
-	public void setSamplingActuator(SintechsSamplingActuator samplingActuator) {
-		this.samplingActuator = samplingActuator;
+	public void setRule_package(String rule_package) {
+		this.rule_package = rule_package;
+	}
+
+	public SintechsSampling getSampling() {
+		return sampling;
+	}
+
+	public void setSampling(SintechsSampling sampling) {
+		this.sampling = sampling;
 	}
 	
 	

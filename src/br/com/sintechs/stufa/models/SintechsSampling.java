@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.codec.digest.Sha2Crypt;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kie.api.definition.type.Expires;
@@ -28,7 +27,6 @@ public class SintechsSampling implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2991985706566497971L;
-	private int hashCode;
 	private BigInteger id;
 	private int module_id;
 	private String status;
@@ -146,8 +144,95 @@ public class SintechsSampling implements Serializable {
 		}
 		
 		//Get a unique hashCode for this sampling
-		this.setHashCode(this.hashCode());
 	}
+	
+	
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
+		result = prime * result + ((error_code == null) ? 0 : error_code.hashCode());
+		result = prime * result + ((error_msg == null) ? 0 : error_msg.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + module_id;
+		result = prime * result + ((samplingActuators == null) ? 0 : samplingActuators.hashCode());
+		result = prime * result + ((samplingSensors == null) ? 0 : samplingSensors.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((updated_at == null) ? 0 : updated_at.hashCode());
+		result = prime * result + ((uptime == null) ? 0 : uptime.hashCode());
+		return result;
+	}
+
+
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SintechsSampling other = (SintechsSampling) obj;
+		if (created_at == null) {
+			if (other.created_at != null)
+				return false;
+		} else if (!created_at.equals(other.created_at))
+			return false;
+		if (error_code == null) {
+			if (other.error_code != null)
+				return false;
+		} else if (!error_code.equals(other.error_code))
+			return false;
+		if (error_msg == null) {
+			if (other.error_msg != null)
+				return false;
+		} else if (!error_msg.equals(other.error_msg))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (module_id != other.module_id)
+			return false;
+		if (samplingActuators == null) {
+			if (other.samplingActuators != null)
+				return false;
+		} else if (!samplingActuators.equals(other.samplingActuators))
+			return false;
+		if (samplingSensors == null) {
+			if (other.samplingSensors != null)
+				return false;
+		} else if (!samplingSensors.equals(other.samplingSensors))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
+		if (updated_at == null) {
+			if (other.updated_at != null)
+				return false;
+		} else if (!updated_at.equals(other.updated_at))
+			return false;
+		if (uptime == null) {
+			if (other.uptime != null)
+				return false;
+		} else if (!uptime.equals(other.uptime))
+			return false;
+		return true;
+	}
+
+
+
+
 
 	public BigInteger getId() {
 		return id;
@@ -227,14 +312,6 @@ public class SintechsSampling implements Serializable {
 
 	public void setSamplingActuators(List<SintechsSamplingActuator> samplingActuators) {
 		this.samplingActuators = samplingActuators;
-	}
-
-	public int getHashCode() {
-		return hashCode;
-	}
-
-	public void setHashCode(int sha1) {
-		this.hashCode = sha1;
 	}
 
 	public GlobalProperties getGlobalProperties() {

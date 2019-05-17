@@ -1,6 +1,6 @@
 <kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.drools.org/xsd/kmodule">
-    <kbase name="rules" equalsBehavior="equality" eventProcessingMode="stream" default="true" packages="resources.rules.sensors.arduino_board_01">
+    <kbase name="rules" equalsBehavior="equality" eventProcessingMode="stream" default="true" packages="resources.rules.handlers, resources.rules.boards.arduino_001">
         <ksession name="ksession-rules" default="true" type="stateful" clockType="pseudo">
 <!--         	<fileLogger file="/var/log/sintechs/drools" threaded="true" interval="10"/> -->
         </ksession>

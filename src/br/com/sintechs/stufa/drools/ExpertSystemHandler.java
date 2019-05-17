@@ -52,6 +52,9 @@ public class ExpertSystemHandler extends Thread {
 				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties);
 				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
+				EventHandler eventHandler = new EventHandler();
+				kieSession.insert(eventHandler);
+				
 //				samplingStream = kieSession.getEntryPoint("StufaSampingStream");
 				// WorkingMemoryEntryPoint entryPoint = kieSession.getEntryPoint("my entry point");
 
@@ -87,7 +90,7 @@ public class ExpertSystemHandler extends Thread {
 	// Check the method below
 	public synchronized void addSampling(SintechsSampling sampling) {
 		try {
-			LOGGER.info("inserting samping: " + sampling.getHashCode() + " into KieSession");
+			LOGGER.info("inserting samping: " + sampling.hashCode() + " into KieSession");
 			kieSession.insert(sampling);
 		} catch (Exception e) {
 			e.getStackTrace();

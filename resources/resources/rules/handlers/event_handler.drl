@@ -1,0 +1,48 @@
+//created on: 06/05/2019
+package resources.rules.handlers
+
+//list any import classes here.
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import br.com.sintechs.stufa.drools.DroolsActionHandler;
+import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.sintechs.stufa.models.SintechsSamplingSensor;
+import br.com.sintechs.stufa.models.SintechsSamplingActuator;
+import br.com.sintechs.stufa.models.SintechsSensor;
+import br.com.sintechs.stufa.models.RuleEvent;
+
+//declare any global variables here
+
+global br.com.sintechs.stufa.drools.DroolsActionHandler drlActionHandler;
+
+declare RuleEvent 
+    @role( event )
+end
+
+declare RuleEvent 
+	  rule_package:String
+	  rule_name:String
+	  value:Float
+	  rule_condition:Float
+	  cause_description:String
+	  command:String
+	  command_value:boolean
+	  created_at:Timestamp
+	  updated_at:Timestamp
+	  sensor_uuid:String
+	  actuator_uuid:String
+	  sampling:SintechsSampling
+end
+
+
+rule "001-dispatch_event" salience 10
+dialect "mvel"
+    when
+    	$eventHandler : EventHandler($events_map : ruleEvents)
+    	$ev : RuleEvent($) from $events
+    then
+			
+		if(drlActionHandler.checkPreviousEvent(ev)) {
+	        drlActionHandler.dispatchEvent(ev);
+        }
+end

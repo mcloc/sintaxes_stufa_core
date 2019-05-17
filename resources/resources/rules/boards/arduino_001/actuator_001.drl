@@ -38,7 +38,7 @@ no-loop true
     	//This is for test propouse, the rule must fire with this eval
     	//eval(1 == 1)
         //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
-		
+		$eventHandler : EventHandler()
 		$sampling: SintechsSampling($sensors_sampling : samplingSensors) 
         $sampling_sensor : SintechsSamplingSensor(
         	(sensor.uuid == "DHT11#1") && (
@@ -49,12 +49,10 @@ no-loop true
         ) from $sensors_sampling
     then
         RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_board#1.DTH11#1] Sensação Térmica acima da condição empregada",
+			"[arduino_board#1.DTH11#1] Sensação "+sampling_sensor.measure_type+" ativou condição empregada",
 			"solenoid_1", true, "DTH11#1", "solenoid#1");
-			
-		if(drlActionHandler.checkPreviousEvent(ev)) {
-	        drlActionHandler.dispatchEvent(ev);
-        }
+		$eventHandler.addRuleEvent($sampling, ev);
+		modify($eventHandler);	
 end
 /*
 rule "002-max-temperature-arduino_board_01"
