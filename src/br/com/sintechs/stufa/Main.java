@@ -24,8 +24,9 @@ public class Main {
 		
 		//Start Drools Thread
 		ExpertSystemHandler es = new ExpertSystemHandler(globalProperties, writeInterrupt);
-		es.start();
+		es.run();
 		
+		Thread.sleep(800);
 		// :: TO DROOLS COMMUNITY :: 
 		// THIS SERIALCOMM THREAD IN THE REAL EMBEDDED APP IS AIM TO GET DATA FROM ARDUINO ON SERIAL PORT
 		// AND HIDRATE SINTECHSSAMPLING POJO AND ADD IT AS EVENT ON DROOLS CEP ENTRYPOINT

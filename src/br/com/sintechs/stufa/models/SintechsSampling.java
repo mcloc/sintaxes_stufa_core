@@ -168,6 +168,9 @@ public class SintechsSampling implements Serializable {
 	}
 
 
+	public int getHashCode() {
+		return this.hashCode();
+	}
 
 
 

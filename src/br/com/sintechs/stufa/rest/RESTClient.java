@@ -168,7 +168,7 @@ public class RESTClient {
 		    if(responseString != null) {
 		    	//TODO: check response
 		    	json_obj = new JSONObject(responseString);
-		    	ev = new RuleEvent(json_obj);
+//		    	ev = new RuleEvent(json_obj);
 		    }
 		    
 

@@ -35,7 +35,7 @@ declare RuleEvent
 end
 
 
-rule "001-dispatch_event" salience 10
+/*rule "001-dispatch_event" salience 10
 dialect "mvel"
     when
     	$eventHandler : EventHandler($events_map : ruleEvents)
@@ -45,4 +45,4 @@ dialect "mvel"
 		if(drlActionHandler.checkPreviousEvent(ev)) {
 	        drlActionHandler.dispatchEvent(ev);
         }
-end
+end*/

@@ -108,6 +108,10 @@ public class SerialComm {
 //					}
 					
 					String json = data.toString();
+//					String json = "{\"module_name\":\"arduino_climatization_board#1\",\"data\":{\"sensors\":[{\"uuid\":\"DHT11#1\",\"value\":[{" + 
+//							"\"humidity\":80},{\"temperature\":23.4},{\"heat_index\":23.8842}]}],\"actuators\":[{\"uuid" + 
+//							"d\":\"solenoid#1\",\"value\":{\"active\":\"false\",\"activated_time\":1}}]},\"status\":\"OK\"," + 
+//							"uptime\":0,\"error_code\":\"\",\"error_msg\":\"\"}";
 
 					if(json == null)
 						throw new Exception("String json is null");
