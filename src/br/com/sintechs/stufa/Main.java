@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.drools.ExpertSystemHandler;
+import br.com.sintechs.stufa.ipc.IPCHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
-import br.com.sintechs.stufa.serial.SerialCommunicationHandler;
 
 public class Main {
 
@@ -26,27 +26,14 @@ public class Main {
 		ExpertSystemHandler es = new ExpertSystemHandler(globalProperties, writeInterrupt);
 		es.run();
 		
-		Thread.sleep(800);
-		// :: TO DROOLS COMMUNITY :: 
-		// THIS SERIALCOMM THREAD IN THE REAL EMBEDDED APP IS AIM TO GET DATA FROM ARDUINO ON SERIAL PORT
-		// AND HIDRATE SINTECHSSAMPLING POJO AND ADD IT AS EVENT ON DROOLS CEP ENTRYPOINT
-		// AS YOU'LL SEE IN THIS SERIALCOMM CLASS WE'VE CHANGED THE REAL SERIALREAD AND IMPLEMENTED A 
-		// EVENT TEST OF INSERTING INTO ENTRYPOINT AN EVENT WITH A RANDOM NUMBER
-		//
-		// THE PROBLEM: WE HAVING AN EXCEPTION CAUGHT IN DROOLSACTIONHANDLER CLASS DURING INSERTING ANY KIND OF EVENT
-		// AFTER THE FIREFUNTILHAL() IS CALLED;
-		//
-		// THE DRL FILE IS ALSON CHANGED FOR TESTING PROPOUSE WITH AND  eval(1 == 1) SO IT COULD ALWAYS FIRE WHEN 
-		// A NEW EVENT IS INSERTED. BUT THE RULE IS NOT FIREDED, AND THE entryPoint.insert(random_number) CAUSES THE
-		// EXCEPTION.
-		//
-		// THE EXCEPTION: HAS NO MESSAGE OR STACKTRACE [[  ExpertSystemHandler.addEvent(random_int) ]]
-		//
-		// 
-		//
+		Thread.sleep(200);
+		
+		IPCHandler ipc = new IPCHandler(globalProperties, writeInterrupt);
+		
+		
 		//Start SerialCommunicationHnalder Thread
-		SerialCommunicationHandler serial = new SerialCommunicationHandler(globalProperties, writeInterrupt, es);
-		serial.start();
+//		SerialCommunicationHandler serial = new SerialCommunicationHandler(globalProperties, writeInterrupt, es);
+//		serial.start();
 		
 
 	}
