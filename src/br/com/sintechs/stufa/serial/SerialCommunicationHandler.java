@@ -47,8 +47,8 @@ public class SerialCommunicationHandler extends Thread{
 					throw new Exception("String json is null");
 				JSONObject json_obj = new JSONObject(json);
 				//Create Sampling with data readed from arduino_board 
-				SintechsSampling sampling = new SintechsSampling(json_obj, globalProperties);
-				drools.addSampling(sampling);
+//				SintechsSampling sampling = new SintechsSampling(json_obj, globalProperties);
+//				drools.addSampling(sampling);
 				
 				Thread.sleep(800);
 				continue;

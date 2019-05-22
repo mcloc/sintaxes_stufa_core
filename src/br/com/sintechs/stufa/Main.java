@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import br.com.sintechs.stufa.drools.ExpertSystemHandler;
 import br.com.sintechs.stufa.ipc.IPCHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
+import br.com.sintechs.stufa.modules.ModulesHandler;
 
 public class Main {
 
@@ -28,8 +29,10 @@ public class Main {
 		
 		Thread.sleep(200);
 		
-		IPCHandler ipc = new IPCHandler(globalProperties, writeInterrupt);
+//		IPCHandler ipc = new IPCHandler(globalProperties, writeInterrupt);
 		
+		ModulesHandler mh = new ModulesHandler(globalProperties, writeInterrupt, es);
+		mh.start();
 		
 		//Start SerialCommunicationHnalder Thread
 //		SerialCommunicationHandler serial = new SerialCommunicationHandler(globalProperties, writeInterrupt, es);

@@ -334,7 +334,7 @@ public class RESTClient {
 		HttpClient httpClient = HttpClientBuilder.create().build(); // Use this instead
 		SintechsSampling sampling = null;
 		try {
-			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_SAPMLING_URL());
+			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_SAPMLING_URL()+"/"+ URLEncoder.encode(module.getName(), "UTF-8"));
 			LOGGER.info("GETing Modules : ");
 			HttpResponse response = httpClient.execute(request);
 			HttpEntity entity = response.getEntity();

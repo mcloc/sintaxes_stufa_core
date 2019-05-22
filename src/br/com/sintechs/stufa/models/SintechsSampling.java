@@ -22,12 +22,11 @@ import br.com.sintechs.stufa.rest.RESTClient;
 public class SintechsSampling implements Serializable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SintechsSampling.class);
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2991985706566497971L;
-	private BigInteger id;
+	private Timestamp uuid;
 	private SintechsModule module;
 	private String status;
 	private BigInteger uptime;
@@ -40,6 +39,7 @@ public class SintechsSampling implements Serializable {
 	private List<SintechsSamplingActuator> samplingActuators;
 
 	private GlobalProperties globalProperties;
+	
 
 	public SintechsSampling() {
 
@@ -48,6 +48,11 @@ public class SintechsSampling implements Serializable {
 	public static SintechsSampling hidrateFromModule(JSONObject json_obj, SintechsModule module,
 			GlobalProperties globalProperties) throws Exception {
 		SintechsSampling sampling = new SintechsSampling();
+		Date date = new Date();
+		long time = date.getTime();
+		sampling.uuid = new Timestamp(time);
+		sampling.created_at = sampling.uuid;
+		sampling.updated_at = sampling.created_at;
 		sampling.globalProperties = globalProperties;
 		sampling.module = module;
 		sampling.status = json_obj.getString("status");
@@ -58,11 +63,7 @@ public class SintechsSampling implements Serializable {
 		if (!json_obj.isNull("error_msg"))
 			sampling.error_msg = json_obj.getString("error_msg");
 
-		Date date = new Date();
-		long time = date.getTime();
 
-		sampling.created_at = new Timestamp(time);
-		sampling.updated_at = sampling.created_at;
 
 		JSONObject data_obj = json_obj.getJSONObject("data");
 
@@ -120,15 +121,6 @@ public class SintechsSampling implements Serializable {
 		 });
 
 		return sampling;
-	}
-
-
-	public BigInteger getId() {
-		return id;
-	}
-
-	public void setId(BigInteger id) {
-		this.id = id;
 	}
 
 	public String getStatus() {
@@ -203,6 +195,22 @@ public class SintechsSampling implements Serializable {
 		this.globalProperties = globalProperties;
 	}
 
+	public Timestamp getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(Timestamp uuid) {
+		this.uuid = uuid;
+	}
+
+	public SintechsModule getModule() {
+		return module;
+	}
+
+	public void setModule(SintechsModule module) {
+		this.module = module;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -210,13 +218,13 @@ public class SintechsSampling implements Serializable {
 		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
 		result = prime * result + ((error_code == null) ? 0 : error_code.hashCode());
 		result = prime * result + ((error_msg == null) ? 0 : error_msg.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((module == null) ? 0 : module.hashCode());
 		result = prime * result + ((samplingActuators == null) ? 0 : samplingActuators.hashCode());
 		result = prime * result + ((samplingSensors == null) ? 0 : samplingSensors.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((updated_at == null) ? 0 : updated_at.hashCode());
 		result = prime * result + ((uptime == null) ? 0 : uptime.hashCode());
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
 		return result;
 	}
 
@@ -243,11 +251,6 @@ public class SintechsSampling implements Serializable {
 			if (other.error_msg != null)
 				return false;
 		} else if (!error_msg.equals(other.error_msg))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (module == null) {
 			if (other.module != null)
@@ -279,7 +282,13 @@ public class SintechsSampling implements Serializable {
 				return false;
 		} else if (!uptime.equals(other.uptime))
 			return false;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
 		return true;
 	}
+
 
 }

@@ -1,5 +1,7 @@
 package br.com.sintechs.stufa.drools;
 
+import java.util.List;
+
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
@@ -34,8 +36,10 @@ public class ExpertSystemHandler extends Thread {
 //		while (true) {
 			try {
 				LOGGER.info("Initialize KIE.");
-				if (kieSession instanceof KieSession)
+				if (kieSession instanceof KieSession) {
 					kieSession.dispose();
+					kieSession.halt();
+				}
 
 				KieServices kieServices = KieServices.Factory.get();
 				// Load KieContainer from resources on classpath (i.e. kmodule.xml and rules).
@@ -90,8 +94,17 @@ public class ExpertSystemHandler extends Thread {
 	public synchronized void addSampling(SintechsSampling sampling) {
 		try {
 			LOGGER.info("inserting samping: " + sampling.hashCode() + " into KieSession");
-//			kieSession.insert(sampling);
 			samplingStream.insert(sampling);
+		} catch (Exception e) {
+			e.getStackTrace();
+			LOGGER.error(e.getMessage());
+		}
+	}
+
+	public void addSamplingList(List<SintechsSampling> samplingList) {
+		try {
+			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
+			samplingStream.insert(samplingList);
 		} catch (Exception e) {
 			e.getStackTrace();
 			LOGGER.error(e.getMessage());
