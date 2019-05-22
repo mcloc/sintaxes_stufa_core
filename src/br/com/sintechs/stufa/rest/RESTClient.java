@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.models.RuleEvent;
+import br.com.sintechs.stufa.models.SintechsActuator;
 import br.com.sintechs.stufa.models.SintechsModule;
 import br.com.sintechs.stufa.models.SintechsSampling;
 import br.com.sintechs.stufa.models.SintechsSensor;
@@ -278,9 +279,10 @@ public class RESTClient {
 		return null;
 	}
 
-	public JSONObject getActuatorByUUID(String actuator_uuid) {
+	public SintechsActuator getActuatorByUUID(String actuator_uuid, SintechsModule module) {
 		HttpClient httpClient = HttpClientBuilder.create().build(); // Use this instead
 		JSONObject json_obj;
+		SintechsActuator actuator = null;
 		try {
 			actuator_uuid = URLEncoder.encode(actuator_uuid, "UTF-8");
 			HttpGet request = new HttpGet(
@@ -292,7 +294,8 @@ public class RESTClient {
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
 
-				return json_obj;
+				actuator = SintechsActuator.hidrateFromModule(json_obj, module, globalProperties);
+				return actuator;
 			}
 		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
@@ -301,7 +304,7 @@ public class RESTClient {
 			// httpClient.getConnectionManager().shutdown();
 		}
 
-		return null;
+		return actuator;
 	}
 
 	public synchronized List<SintechsModule> getModules() {

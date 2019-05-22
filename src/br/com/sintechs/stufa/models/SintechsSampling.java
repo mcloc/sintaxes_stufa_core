@@ -101,12 +101,23 @@ public class SintechsSampling implements Serializable {
 		});
 
 		// TODO: hidrate the sampling actuator
-		// sampling_actuators_arr.forEach(sampling_actuator -> {
-		// JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
-		// SintechsSamplingActuator sintechsSamplingActuator = new
-		// SintechsSamplingActuator(sampling_actuator_obj);
-		// sampling.samplingActuators.add(sintechsSamplingActuator);
-		// });
+		 sampling_actuators_arr.forEach(sampling_actuator -> {
+			 JSONObject sampling_actuator_obj = (JSONObject) sampling_actuator;
+			 RESTClient client = new RESTClient(globalProperties);
+				SintechsActuator actuator = client.getActuatorByUUID(sampling_actuator_obj.getString("uuid"), module);
+				SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(globalProperties);
+				sintechsSamplingActuator.setActuator(actuator);
+				sintechsSamplingActuator.setCreated_at(sampling.created_at);
+				sintechsSamplingActuator.setUpdated_at(sampling.updated_at);
+				// Loop for one actuator values, for actuators which have multiple return values, this will happen ONCE per parent LOOP
+				JSONArray actuator_arr = sampling_actuator_obj.getJSONArray("value");
+				actuator_arr.forEach(actuator_values -> {
+					JSONObject actuator_obj = (JSONObject) actuator_values;
+					sintechsSamplingActuator.setActive(actuator_obj.getBoolean("active"));
+					sintechsSamplingActuator.setActivated_time(new BigInteger("0"));
+					sampling.samplingActuators.add(sintechsSamplingActuator);
+				});
+		 });
 
 		return sampling;
 	}

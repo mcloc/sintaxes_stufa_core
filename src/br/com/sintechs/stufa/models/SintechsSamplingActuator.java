@@ -22,23 +22,24 @@ public class SintechsSamplingActuator  implements Serializable {
 	private BigInteger activated_time;
 	private Timestamp created_at;
 	private Timestamp updated_at;
+	private GlobalProperties globalProperties;
 	
 	/**
 	 * Hidrate SamplingActuator from json retrived from database
 	 * @param sampling_actuator_obj
 	 */
-	public SintechsSamplingActuator(JSONObject sampling_actuator_obj) {
-		this.sampling_id = sampling_actuator_obj.getBigInteger("sampling_id");
-		this.active = "1".equals(sampling_actuator_obj.getString("active"));
-		this.activated_time = sampling_actuator_obj.getBigInteger("activated_time");
-		this.created_at = Timestamp.valueOf(sampling_actuator_obj.getString("created_at"));
-		this.updated_at = Timestamp.valueOf(sampling_actuator_obj.getString("updated_at"));
-		
-		
-		JSONArray actuator_arr = sampling_actuator_obj.getJSONArray("actuator");
-		JSONObject actuator = (JSONObject) actuator_arr.get(0);
-		this.actuator = new SintechsActuator(actuator);
-	}
+//	public SintechsSamplingActuator(JSONObject sampling_actuator_obj) {
+//		this.sampling_id = sampling_actuator_obj.getBigInteger("sampling_id");
+//		this.active = "1".equals(sampling_actuator_obj.getString("active"));
+//		this.activated_time = sampling_actuator_obj.getBigInteger("activated_time");
+//		this.created_at = Timestamp.valueOf(sampling_actuator_obj.getString("created_at"));
+//		this.updated_at = Timestamp.valueOf(sampling_actuator_obj.getString("updated_at"));
+//		
+//		
+//		JSONArray actuator_arr = sampling_actuator_obj.getJSONArray("actuator");
+//		JSONObject actuator = (JSONObject) actuator_arr.get(0);
+//		this.actuator = new SintechsActuator(actuator);
+//	}
 	
 	/**
 	 * Hidrate new SamplingActuator from Event 
@@ -47,18 +48,22 @@ public class SintechsSamplingActuator  implements Serializable {
 	 * @param globalProperties 
 	 * @param timestamp 
 	 */
-	public SintechsSamplingActuator(String actuator_uuid, boolean command_value, Timestamp created_at, GlobalProperties globalProperties) {
-		this.active = command_value;
-		this.activated_time = new BigInteger("0");
-		this.created_at = created_at;
-		this.updated_at = created_at;
-		
-		RESTClient client = new RESTClient(globalProperties);
-		JSONObject actuator_json_obj = client.getActuatorByUUID(actuator_uuid);
-		
-		//TODO: check for errors
-		SintechsActuator sintechs_actuator = new SintechsActuator(actuator_json_obj.getJSONObject("data"));
-		this.actuator = sintechs_actuator;
+//	public SintechsSamplingActuator(String actuator_uuid, boolean command_value, Timestamp created_at, GlobalProperties globalProperties) {
+//		this.active = command_value;
+//		this.activated_time = new BigInteger("0");
+//		this.created_at = created_at;
+//		this.updated_at = created_at;
+//		
+//		RESTClient client = new RESTClient(globalProperties);
+//		JSONObject actuator_json_obj = client.getActuatorByUUID(actuator_uuid);
+//		
+//		//TODO: check for errors
+//		SintechsActuator sintechs_actuator = new SintechsActuator(actuator_json_obj.getJSONObject("data"));
+//		this.actuator = sintechs_actuator;
+//	}
+
+	public SintechsSamplingActuator(GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
 	}
 
 	public BigInteger getSampling_id() {
