@@ -50,11 +50,13 @@ public class ModulesHandler extends Thread {
 						continue;
 					
 					SintechsSampling sampling = client.getModuleSampling(module);
+					LOGGER.info("Adding sampling: " + sampling.getUuid());
 					samplingList.add(sampling);
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
 				}
 				
+				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
 				drools.addSamplingList(samplingList);
 
 				

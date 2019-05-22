@@ -1,9 +1,13 @@
 package br.com.sintechs.stufa.models;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.sintechs.stufa.GlobalProperties;
@@ -13,7 +17,7 @@ public class SintechsModule  implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6156684239253178520L;
-	private Integer id;
+	private BigInteger id;
 	private String name;
 	private String description;
 	private boolean enabled;
@@ -22,14 +26,12 @@ public class SintechsModule  implements Serializable {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
+
 	
-	public SintechsModule(JSONObject jsonObject) {
-		// TODO Auto-generated constructor stub
-	}
-	public Integer getId() {
+	public BigInteger getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -68,9 +70,38 @@ public class SintechsModule  implements Serializable {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	public static List<SintechsModule> hidrateMultiple(JSONObject json_obj, GlobalProperties globalProperties) {
-		// TODO Auto-generated method stub
-		return null;
+	public static List<SintechsModule> hidrateMultiple(JSONObject json_obj, GlobalProperties globalProperties) throws JSONException, Exception {
+		if (!json_obj.isNull("error_code"))
+			throw new Exception ("json error: " + json_obj.getString("error_code"));
+		if (!json_obj.isNull("error_msg"))
+			throw new Exception ("json error: " + json_obj.getString("error_msg"));
+
+		
+		List<SintechsModule> modules_list = new ArrayList<SintechsModule>();
+		
+		JSONArray data_arr = json_obj.getJSONArray("data");
+		// Loop for each sensor of the module (arduino_board)
+		data_arr.forEach(data -> {
+			
+			SintechsModule module = new SintechsModule();
+			
+			JSONObject data_module_obj = (JSONObject) data;
+			module.setId(data_module_obj.getBigInteger("id"));
+			module.setName(data_module_obj.getString("name"));
+			module.setDescription(data_module_obj.getString("description"));
+			module.setActive("1".equals(data_module_obj.getString("active")));
+			module.setEnabled("1".equals(data_module_obj.getString("enabled")));
+			
+			JSONObject data_module_type = data_module_obj.getJSONObject("module_type");
+			SintechsModulesType module_type = SintechsModulesType.hidratefromJson(data_module_type);
+			module.setModule_type(module_type);
+			module.setCreated_at(Timestamp.valueOf( data_module_obj.getString("created_at")));
+			module.setUpdated_at(Timestamp.valueOf( data_module_obj.getString("updated_at")));
+			
+			modules_list.add(module);
+		});
+		
+		return modules_list;
 	}
 	public boolean isActive() {
 		return active;

@@ -91,9 +91,11 @@ public class SintechsSampling implements Serializable {
 				// sensor
 				String[] names = JSONObject.getNames(sensor_obj);
 
-				if (names.length != 1) {
+				if (names.length >= 1) {
 					throw new RuntimeException("'value' from sensor_obj has no measure_type");
 				}
+				
+//				for(String sensor_name : names) {
 				sintechsSamplingSensor.setMeasure_type(names[0]);
 				sintechsSamplingSensor.setValue(sensor_obj.getFloat(names[0]));
 				sintechsSamplingSensor.setRule_condition(names[0]);

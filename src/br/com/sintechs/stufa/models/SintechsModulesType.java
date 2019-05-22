@@ -3,6 +3,8 @@ package br.com.sintechs.stufa.models;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import org.json.JSONObject;
+
 public class SintechsModulesType  implements Serializable{
 	/**
 	 * 
@@ -90,6 +92,16 @@ public class SintechsModulesType  implements Serializable{
 		} else if (!updated_at.equals(other.updated_at))
 			return false;
 		return true;
+	}
+	public static SintechsModulesType hidratefromJson(JSONObject data_module_type) {
+		SintechsModulesType mod_type = new SintechsModulesType();
+		mod_type.setId(data_module_type.getInt("id"));
+		mod_type.setName(data_module_type.getString("name"));
+		mod_type.setDescription(data_module_type.getString("description"));
+		mod_type.setCreated_at(Timestamp.valueOf( data_module_type.getString("created_at")));
+		mod_type.setUpdated_at(Timestamp.valueOf( data_module_type.getString("updated_at")));
+		
+		return mod_type;
 	}
 	
 	
