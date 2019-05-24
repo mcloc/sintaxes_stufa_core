@@ -35,7 +35,7 @@ public class ModulesHandler extends Thread {
 
 	public void run() {
 		
-		while(true) {
+//		while(true) {
 			LOGGER.info("Starting ModulesHandler...");
 			try {
 				
@@ -65,11 +65,11 @@ public class ModulesHandler extends Thread {
 				
 				Thread.sleep(2000);	
 			} catch (Exception e) {
-				LOGGER.error(e.getMessage());
+				LOGGER.error("error on module: "+e.getMessage());
 			}
 			
 			
-		}
+//		}
 
 		
 	}

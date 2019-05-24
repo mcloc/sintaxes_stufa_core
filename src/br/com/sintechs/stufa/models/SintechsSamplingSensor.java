@@ -17,7 +17,7 @@ public class SintechsSamplingSensor  implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3262367160946774959L;
-	private BigInteger sampling_id;
+	private Timestamp sampling_uuid;
 	private SintechsSensor sensor;
 	private String measure_type;
 	private Float value;
@@ -32,12 +32,22 @@ public class SintechsSamplingSensor  implements Serializable {
 	}
 	
 	
-	public BigInteger getSampling_id() {
-		return sampling_id;
+
+
+	public Timestamp getSampling_uuid() {
+		return sampling_uuid;
 	}
-	public void setSampling_id(BigInteger sampling_id) {
-		this.sampling_id = sampling_id;
+
+
+
+
+	public void setSampling_uuid(Timestamp sampling_uuid) {
+		this.sampling_uuid = sampling_uuid;
 	}
+
+
+
+
 	public SintechsSensor getSensor() {
 		return sensor;
 	}
@@ -77,12 +87,75 @@ public class SintechsSamplingSensor  implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-//	public BigInteger getSensor_id() {
-//		return sensor_id;
-//	}
-//	public void setSensor_id(BigInteger sensor_id) {
-//		this.sensor_id = sensor_id;
-//	}
+
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
+		result = prime * result + ((measure_type == null) ? 0 : measure_type.hashCode());
+		result = prime * result + ((rule_condition == null) ? 0 : rule_condition.hashCode());
+		result = prime * result + ((sampling_uuid == null) ? 0 : sampling_uuid.hashCode());
+		result = prime * result + ((sensor == null) ? 0 : sensor.hashCode());
+		result = prime * result + ((updated_at == null) ? 0 : updated_at.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SintechsSamplingSensor other = (SintechsSamplingSensor) obj;
+		if (created_at == null) {
+			if (other.created_at != null)
+				return false;
+		} else if (!created_at.equals(other.created_at))
+			return false;
+		if (measure_type == null) {
+			if (other.measure_type != null)
+				return false;
+		} else if (!measure_type.equals(other.measure_type))
+			return false;
+		if (rule_condition == null) {
+			if (other.rule_condition != null)
+				return false;
+		} else if (!rule_condition.equals(other.rule_condition))
+			return false;
+		if (sampling_uuid == null) {
+			if (other.sampling_uuid != null)
+				return false;
+		} else if (!sampling_uuid.equals(other.sampling_uuid))
+			return false;
+		if (sensor == null) {
+			if (other.sensor != null)
+				return false;
+		} else if (!sensor.equals(other.sensor))
+			return false;
+		if (updated_at == null) {
+			if (other.updated_at != null)
+				return false;
+		} else if (!updated_at.equals(other.updated_at))
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
+
+
 
 	public void setRule_condition(String measure_type) {
 		switch(measure_type) {

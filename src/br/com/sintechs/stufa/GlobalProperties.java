@@ -40,9 +40,65 @@ public class GlobalProperties {
 	private Map<String, String> MIN_HUMIDITY = new HashMap<String, String>();
 
 	public GlobalProperties() {
-		this.MAX_HEAT_INDEX.put("DHT11#1", "23");
-		this.MAX_TEMPERATURE.put("DHT11#1", "22");
-		this.MIN_HUMIDITY.put("DHT11#1", "98");
+		this.MAX_HEAT_INDEX.put("DHT11#1", "27");
+		this.MAX_TEMPERATURE.put("DHT11#1", "26");
+		this.MIN_HUMIDITY.put("DHT11#1", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#2", "27");
+		this.MAX_TEMPERATURE.put("DHT11#2", "26");
+		this.MIN_HUMIDITY.put("DHT11#2", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#3", "27");
+		this.MAX_TEMPERATURE.put("DHT11#3", "26");
+		this.MIN_HUMIDITY.put("DHT11#3", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#4", "27");
+		this.MAX_TEMPERATURE.put("DHT11#4", "26");
+		this.MIN_HUMIDITY.put("DHT11#4", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#5", "27");
+		this.MAX_TEMPERATURE.put("DHT11#5", "26");
+		this.MIN_HUMIDITY.put("DHT11#5", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#6", "27");
+		this.MAX_TEMPERATURE.put("DHT11#6", "26");
+		this.MIN_HUMIDITY.put("DHT11#6", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#7", "27");
+		this.MAX_TEMPERATURE.put("DHT11#7", "26");
+		this.MIN_HUMIDITY.put("DHT11#7", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#8", "27");
+		this.MAX_TEMPERATURE.put("DHT11#8", "26");
+		this.MIN_HUMIDITY.put("DHT11#8", "77");
+		this.MAX_HEAT_INDEX.put("DHT11#9", "27");
+		this.MAX_TEMPERATURE.put("DHT11#9", "26");
+		this.MIN_HUMIDITY.put("DHT11#9", "77");
+		
+		this.MAX_HEAT_INDEX.put("DHT21#1", "27");
+		this.MAX_TEMPERATURE.put("DHT21#1", "26");
+		this.MIN_HUMIDITY.put("DHT21#1", "77");
+		
+		this.MIN_HUMIDITY.put("LM393#1", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#1", "23");
+		this.MIN_HUMIDITY.put("LM393#2", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#2", "23");
+		this.MIN_HUMIDITY.put("LM393#3", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#3", "23");
+		this.MIN_HUMIDITY.put("LM393#4", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#4", "23");
+		this.MIN_HUMIDITY.put("LM393#5", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#5", "23");
+		this.MIN_HUMIDITY.put("LM393#6", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#6", "23");
+		this.MIN_HUMIDITY.put("LM393#7", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#7", "23");
+		this.MIN_HUMIDITY.put("LM393#8", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#8", "23");
+		this.MIN_HUMIDITY.put("LM393#9", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#9", "23");
+		this.MIN_HUMIDITY.put("LM393#10", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#10", "23");
+		this.MIN_HUMIDITY.put("LM393#11", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#11", "23");
+		this.MIN_HUMIDITY.put("LM393#11", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#11", "23");
+		this.MIN_HUMIDITY.put("LM393#12", "86");
+		this.MAX_TEMPERATURE.put("Ds18b20#12", "23");		
+		
 		
 		this.DRL_CONSTANTS.put("MAX_HEAT_INDEX", MAX_HEAT_INDEX);
 		this.DRL_CONSTANTS.put("MAX_TEMPERATURE", MAX_TEMPERATURE);

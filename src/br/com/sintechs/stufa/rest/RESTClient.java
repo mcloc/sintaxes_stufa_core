@@ -266,7 +266,7 @@ public class RESTClient {
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
 
-				sensor = SintechsSensor.hidrateFromModule(json_obj, module, globalProperties);
+				sensor = SintechsSensor.hidrateFromModule(json_obj.getJSONObject("data"), module, globalProperties);
 				return sensor;
 			}
 		} catch (Exception ex) {
@@ -294,7 +294,7 @@ public class RESTClient {
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
 
-				actuator = SintechsActuator.hidrateFromModule(json_obj, module, globalProperties);
+				actuator = SintechsActuator.hidrateFromModule(json_obj.getJSONObject("data"), module, globalProperties);
 				return actuator;
 			}
 		} catch (Exception ex) {
@@ -312,13 +312,13 @@ public class RESTClient {
 		List<SintechsModule> modules = new ArrayList<SintechsModule>();
 		try {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_ACTIVE_MODULES_URL());
-			LOGGER.info("GETing Modules : ");
 			HttpResponse response = httpClient.execute(request);
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			JSONObject json_obj = new JSONObject(responseString);
 
 			modules = SintechsModule.hidrateMultiple(json_obj, globalProperties);
+			LOGGER.info("GETing Active Modules: "+modules.size()+ " found");
 
 		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
@@ -335,7 +335,7 @@ public class RESTClient {
 		SintechsSampling sampling = null;
 		try {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_SAPMLING_URL()+"/"+ URLEncoder.encode(module.getName(), "UTF-8"));
-			LOGGER.info("GETing Modules : ");
+			LOGGER.info("GETing Modules : "  + module.getName());
 			HttpResponse response = httpClient.execute(request);
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");

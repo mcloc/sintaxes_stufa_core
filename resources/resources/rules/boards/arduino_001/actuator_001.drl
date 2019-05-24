@@ -20,7 +20,7 @@ declare SintechsSampling
 end
 
 declare SintechsSamplingSensor 
- 	sampling_id : BigInteger
+ 	sampling_uuid : Timestamp
  	sensor : SintechsSensor 
 	measure_type: String 
 	value: Float

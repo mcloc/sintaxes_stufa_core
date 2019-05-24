@@ -78,10 +78,7 @@ public class SintechsSampling implements Serializable {
 			JSONObject sampling_sensor_obj = (JSONObject) sampling_sensor;
 			RESTClient client = new RESTClient(globalProperties);
 			SintechsSensor sensor = client.getSensorByUUID(sampling_sensor_obj.getString("uuid"), module);
-			SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(globalProperties);
-			sintechsSamplingSensor.setSensor(sensor);
-			sintechsSamplingSensor.setCreated_at(sampling.created_at);
-			sintechsSamplingSensor.setUpdated_at(sampling.updated_at);
+			LOGGER.info("module: "+module.getName()+ " sensor: " + sensor.getUuid());
 			// Loop for one sensor values, for sensors which have multiple return values, this will happen ONCE per parent LOOP
 			JSONArray sensor_arr = sampling_sensor_obj.getJSONArray("value");
 			sensor_arr.forEach(sensor_values -> {
@@ -91,15 +88,23 @@ public class SintechsSampling implements Serializable {
 				// sensor
 				String[] names = JSONObject.getNames(sensor_obj);
 
-				if (names.length >= 1) {
+				if (names.length < 1) {
 					throw new RuntimeException("'value' from sensor_obj has no measure_type");
 				}
 				
-//				for(String sensor_name : names) {
-				sintechsSamplingSensor.setMeasure_type(names[0]);
-				sintechsSamplingSensor.setValue(sensor_obj.getFloat(names[0]));
-				sintechsSamplingSensor.setRule_condition(names[0]);
-				sampling.samplingSensors.add(sintechsSamplingSensor);
+				for(String sensor_name : names) {
+					LOGGER.info("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name);
+					SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(globalProperties);
+					sintechsSamplingSensor.setSensor(sensor);
+					sintechsSamplingSensor.setCreated_at(sampling.created_at);
+					sintechsSamplingSensor.setUpdated_at(sampling.updated_at);
+					sintechsSamplingSensor.setMeasure_type(sensor_name);
+					sintechsSamplingSensor.setValue(sensor_obj.getFloat(sensor_name));
+					sintechsSamplingSensor.setRule_condition(sensor_name);
+					sintechsSamplingSensor.setSampling_uuid(sampling.getUuid());
+					LOGGER.info("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name + "SamplingSensor UUID: " + sintechsSamplingSensor.getSampling_uuid());
+					sampling.samplingSensors.add(sintechsSamplingSensor);
+				}
 			});
 		});
 
