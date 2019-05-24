@@ -55,11 +55,23 @@ public class RESTClient {
 
 			LOGGER.info("Posting REST storeSampling");
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
-
+			EntityUtils.consume(entity);
 			// typecasting obj to JSONObject
 			JSONObject jo = new JSONObject(responseString);
+			request.completed();
+			request.releaseConnection();
 			// getting firstName and lastName
 			String status = jo.getString("status");
 			if (status.equals("OK")) {
@@ -97,11 +109,22 @@ public class RESTClient {
 
 			LOGGER.info("Posting REST storeRuleEvent");
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
-
+			EntityUtils.consume(entity);
 			// typecasting obj to JSONObject
 			JSONObject jo = new JSONObject(responseString);
+			request.completed();
+			request.releaseConnection();
 			// getting firstName and lastName
 			String status = jo.getString("status");
 			if (status.equals("OK")) {
@@ -160,11 +183,23 @@ public class RESTClient {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_LAST_SENSOR_EVENT_URL() + "/" + sensor_uuid);
 			LOGGER.debug("GET getLastSensorEvent: " + sensor_uuid);
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			if (responseString != null) {
 				// TODO: check response
 				json_obj = new JSONObject(responseString);
+				request.completed();
+				request.releaseConnection();
 				// ev = new RuleEvent(json_obj);
 			}
 
@@ -187,11 +222,22 @@ public class RESTClient {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_ID_URL() + "/" + module_name);
 			LOGGER.debug("GET getModuleId: " + module_name);
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
-
+				request.completed();
+				request.releaseConnection();
 				JSONObject data = null;
 				try {
 					data = json_obj.getJSONObject("data");
@@ -215,7 +261,7 @@ public class RESTClient {
 		return module_id;
 	}
 
-	public Integer getSensorId(String sensor_uuid) {
+	public synchronized  Integer getSensorId(String sensor_uuid) {
 		Integer sensor_id = null;
 		HttpClient httpClient = HttpClientBuilder.create().build(); // Use this instead
 		JSONObject json_obj;
@@ -224,11 +270,22 @@ public class RESTClient {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SENSOR_ID_URL() + "/" + sensor_uuid);
 			LOGGER.debug("GET getSensorId: " + sensor_uuid);
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
-
+				request.completed();
+				request.releaseConnection();
 				JSONObject data = null;
 				try {
 					data = json_obj.getJSONObject("data");
@@ -252,7 +309,7 @@ public class RESTClient {
 		return sensor_id;
 	}
 
-	public SintechsSensor getSensorByUUID(String sensor_uuid, SintechsModule module) {
+	public synchronized  SintechsSensor getSensorByUUID(String sensor_uuid, SintechsModule module) {
 		HttpClient httpClient = HttpClientBuilder.create().build(); // Use this instead
 		JSONObject json_obj;
 		SintechsSensor sensor = null;
@@ -261,11 +318,22 @@ public class RESTClient {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_SENSOR_BY_UUID_URL() + "/" + sensor_uuid);
 			LOGGER.debug("GET getSensorByUUID: " + sensor_uuid);
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
-
+				request.completed();
+				request.releaseConnection();
 				sensor = SintechsSensor.hidrateFromModule(json_obj.getJSONObject("data"), module, globalProperties);
 				return sensor;
 			}
@@ -279,7 +347,7 @@ public class RESTClient {
 		return null;
 	}
 
-	public SintechsActuator getActuatorByUUID(String actuator_uuid, SintechsModule module) {
+	public synchronized  SintechsActuator getActuatorByUUID(String actuator_uuid, SintechsModule module) {
 		HttpClient httpClient = HttpClientBuilder.create().build(); // Use this instead
 		JSONObject json_obj;
 		SintechsActuator actuator = null;
@@ -289,17 +357,29 @@ public class RESTClient {
 					globalProperties.getREST_API_GET_ACTUATOR_BY_UUID_URL() + "/" + actuator_uuid);
 			LOGGER.debug("GET getActuatorByUUID: " + actuator_uuid);
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			if (responseString != null) {
 				json_obj = new JSONObject(responseString);
-
+				request.completed();
+				request.releaseConnection();
 				actuator = SintechsActuator.hidrateFromModule(json_obj.getJSONObject("data"), module, globalProperties);
 				return actuator;
 			}
 		} catch (Exception ex) {
 			LOGGER.error(ex.getMessage());
 		} finally {
+			
 			// Deprecated
 			// httpClient.getConnectionManager().shutdown();
 		}
@@ -313,10 +393,21 @@ public class RESTClient {
 		try {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_ACTIVE_MODULES_URL());
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			JSONObject json_obj = new JSONObject(responseString);
-
+			request.completed();
+			request.releaseConnection();
 			modules = SintechsModule.hidrateMultiple(json_obj, globalProperties);
 			LOGGER.info("GETing Active Modules: "+modules.size()+ " found");
 
@@ -330,16 +421,28 @@ public class RESTClient {
 		return modules;
 	}
 
-	public SintechsSampling getModuleSampling(SintechsModule module) {
+	public synchronized SintechsSampling getModuleSampling(SintechsModule module) {
 		HttpClient httpClient = HttpClientBuilder.create().build(); // Use this instead
 		SintechsSampling sampling = null;
 		try {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_MODULE_SAPMLING_URL()+"/"+ URLEncoder.encode(module.getName(), "UTF-8"));
 			LOGGER.info("GETing Modules : "  + module.getName());
 			HttpResponse response = httpClient.execute(request);
+			while(response.getStatusLine().getStatusCode() == 429) {
+				HttpEntity entity = response.getEntity();
+				EntityUtils.consume(entity);
+				request.completed();
+				request.releaseConnection();
+				Thread.sleep(globalProperties.getREST_429_SLEEP());
+				response = httpClient.execute(request);
+			}
+			Thread.sleep(globalProperties.getREST_RESPONSE_SLEEP());
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
+			EntityUtils.consume(entity);
 			JSONObject json_obj = new JSONObject(responseString);
+			request.completed();
+			request.releaseConnection();
 
 			sampling = SintechsSampling.hidrateFromModule(json_obj, module, globalProperties);
 

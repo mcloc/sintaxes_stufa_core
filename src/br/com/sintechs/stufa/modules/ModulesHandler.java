@@ -35,7 +35,7 @@ public class ModulesHandler extends Thread {
 
 	public void run() {
 		
-//		while(true) {
+		while(true) {
 			LOGGER.info("Starting ModulesHandler...");
 			try {
 				
@@ -45,6 +45,7 @@ public class ModulesHandler extends Thread {
 				
 				List<SintechsSampling> samplingList = new ArrayList<SintechsSampling>();
 				for (SintechsModule module : modules) {
+					Thread.sleep(globalProperties.getREST_MODULE_SLEEP());	
 					//TODO: check for enabled modules and LOG why there're unabled
 					if(!module.isEnabled())
 						continue;
@@ -54,24 +55,17 @@ public class ModulesHandler extends Thread {
 					samplingList.add(sampling);
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
+					Thread.sleep(500);
 				}
 				
 				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
 				drools.addSamplingList(samplingList);
-
 				
 				
-				
-				
-				Thread.sleep(2000);	
 			} catch (Exception e) {
 				LOGGER.error("error on module: "+e.getMessage());
 			}
-			
-			
-//		}
-
-		
+		}
 	}
 
 }

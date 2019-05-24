@@ -12,6 +12,9 @@ public class GlobalProperties {
 	private String SHM_ADDRESS_WRITE_LOCK = "/dev/shm/serial2arduinoWriteLock";
 	private Integer BAUD_RATE = 115200;
 	private Integer IPC_SERVER_PORT = 1932;
+	private Integer REST_RESPONSE_SLEEP = 600;
+	private Integer REST_429_SLEEP = 4500;
+	private Integer REST_MODULE_SLEEP = 2500;
 	private String REST_API_SERVER = "http://admin.sintechs.com.br:888";
 	private String REST_API_STORE_SAMPLING_URL = REST_API_SERVER + "/api/storeSampling";
 	private String REST_API_STORE_RULE_EVENT_URL = REST_API_SERVER + "/api/storeRuleEvent";
@@ -271,6 +274,30 @@ public class GlobalProperties {
 
 	public void setREST_API_GET_MODULE_SAPMLING_URL(String rEST_API_GET_MODULE_SAPMLING_URL) {
 		REST_API_GET_MODULE_SAPMLING_URL = rEST_API_GET_MODULE_SAPMLING_URL;
+	}
+
+	public Integer getREST_RESPONSE_SLEEP() {
+		return REST_RESPONSE_SLEEP;
+	}
+
+	public void setREST_RESPONSE_SLEEP(Integer rEST_RESPONSE_SLEEP) {
+		REST_RESPONSE_SLEEP = rEST_RESPONSE_SLEEP;
+	}
+
+	public Integer getREST_429_SLEEP() {
+		return REST_429_SLEEP;
+	}
+
+	public void setREST_429_SLEEP(Integer rEST_409_SLEEP) {
+		REST_429_SLEEP = rEST_409_SLEEP;
+	}
+
+	public Integer getREST_MODULE_SLEEP() {
+		return REST_MODULE_SLEEP;
+	}
+
+	public void setREST_MODULE_SLEEP(Integer rEST_MODULE_SLEEP) {
+		REST_MODULE_SLEEP = rEST_MODULE_SLEEP;
 	}
 
 	
