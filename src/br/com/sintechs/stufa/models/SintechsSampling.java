@@ -93,7 +93,7 @@ public class SintechsSampling implements Serializable {
 				}
 				
 				for(String sensor_name : names) {
-					LOGGER.info("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name);
+					LOGGER.debug("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name);
 					SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(globalProperties);
 					sintechsSamplingSensor.setSensor(sensor);
 					sintechsSamplingSensor.setCreated_at(sampling.created_at);
@@ -102,7 +102,7 @@ public class SintechsSampling implements Serializable {
 					sintechsSamplingSensor.setValue(sensor_obj.getFloat(sensor_name));
 					sintechsSamplingSensor.setRule_condition(sensor_name);
 					sintechsSamplingSensor.setSampling_uuid(sampling.getUuid());
-					LOGGER.info("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name + "SamplingSensor UUID: " + sintechsSamplingSensor.getSampling_uuid());
+					LOGGER.debug("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name + "SamplingSensor UUID: " + sintechsSamplingSensor.getSampling_uuid());
 					sampling.samplingSensors.add(sintechsSamplingSensor);
 				}
 			});

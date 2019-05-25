@@ -4,6 +4,7 @@ package resources.rules.boards.arduino_001
 //list any import classes here.
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.List;
 import br.com.sintechs.stufa.drools.DroolsActionHandler;
 import br.com.sintechs.stufa.models.SintechsSampling;
 import br.com.sintechs.stufa.models.SintechsSamplingSensor;
@@ -38,19 +39,22 @@ dialect "mvel"
         //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
 		//$eventHandler : EventHandler()
 //		$sampling: SintechsSampling($sensors_sampling : samplingSensors)
-		$sampling: SintechsSampling(hashCode > 0) from entry-point "StufaSampingStream"
-        //$sampling_sensor : SintechsSamplingSensor(
-        //	(sensor.uuid == "DHT11#1") && (
-	    //    	(measure_type == "heat_index" && value > rule_condition) ||
-	    //    	(measure_type == "temperature" && value > rule_condition) ||
-	    //    	(measure_type == "humidity" && value < rule_condition)
-	    //    ) 
-        //) from $sensors_sampling
+		$sampling_list: List() from entry-point "StufaSampingStream"
+		$sampling : SintechsSampling( $sensors_sampling : samplingSensors) from $sampling_list
+        $sampling_sensor : SintechsSamplingSensor(
+    		(sensor.uuid == "DHT11#1") 
+    		&& (
+	        	(measure_type == "heat_index" ) //||
+	        //	(measure_type == "temperature" && value > rule_condition) ||
+	        //	(measure_type == "humidity" && value < rule_condition)
+	        ) 
+        ) from $sensors_sampling
     then
         //RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
 		//	"[arduino_board#1.DTH11#1] Sensação "+sampling_sensor.measure_type+" ativou condição empregada",
 		//	"solenoid_1", true, "DTH11#1", "solenoid#1");
 		//$eventHandler.addRuleEvent($sampling, ev);
 		//modify($eventHandler);
-		System.out.println("It works" + $sampling.hashCode());
+		System.out.println("It works" + $sampling.hashCode() + " sensor: " + $sampling_sensor.getSensor().getUuid() + 
+			 " measute_type: " + $sampling_sensor.getMeasure_type());
 end

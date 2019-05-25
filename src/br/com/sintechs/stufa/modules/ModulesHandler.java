@@ -56,6 +56,7 @@ public class ModulesHandler extends Thread {
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
 					Thread.sleep(500);
+					break; // DEBUG
 				}
 				
 				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
