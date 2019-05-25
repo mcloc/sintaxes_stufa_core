@@ -1,5 +1,5 @@
 //created on: 06/05/2019
-package resources.rules.boards.arduino_001
+package resources.rules.boards.arduino_cliematizaion_boards
 
 //list any import classes here.
 import java.math.BigInteger;
@@ -31,22 +31,19 @@ declare SintechsSamplingSensor
 end
 
 
-rule "001-DHT11#1"
+rule "004-climatization_actuation"
 dialect "mvel"
 //no-loop true
     when
-    	//This is for test propouse, the rule must fire with this eval
-        //SintechsSampling($sensors_sampling : samplingSensors) from entry-point StufaSampingStream
-		//$eventHandler : EventHandler()
-//		$sampling: SintechsSampling($sensors_sampling : samplingSensors)
-		$sampling_list: List() from entry-point "StufaSampingStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors) from $sampling_list
+		$eventHandler : EventHandler()
+		$sampling_list: List() from entry-point "StufaClimatizaionStream"
+		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators) from $sampling_list
         $sampling_sensor : SintechsSamplingSensor(
-    		(sensor.uuid == "DHT11#1") 
+    		(sensor.module.name == "arduino_climatization_board#1") 
     		&& (
-	        	(measure_type == "heat_index" ) //||
-	        //	(measure_type == "temperature" && value > rule_condition) ||
-	        //	(measure_type == "humidity" && value < rule_condition)
+	        	(measure_type == "heat_index" > rule_condition) ||
+	        	(measure_type == "temperature" && value > rule_condition) ||
+	        	(measure_type == "humidity" && value < rule_condition)
 	        ) 
         ) from $sensors_sampling
     then
