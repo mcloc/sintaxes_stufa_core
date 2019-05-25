@@ -17,6 +17,7 @@
           <directory>resources</directory>
           <includes>
               <include>META-INF/kmodule.xml</include>
+               <include>**</include>
           </includes>
           <targetPath>.</targetPath>
       </resource>
@@ -55,6 +56,7 @@
         </archive>
         <descriptorRefs>
           <descriptorRef>jar-with-dependencies</descriptorRef>
+          <descriptorRef>src</descriptorRef>
         </descriptorRefs>
       </configuration>
     </plugin>
