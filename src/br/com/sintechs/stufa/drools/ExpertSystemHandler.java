@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
+import br.com.sintechs.stufa.models.ClimatizationEventHandler;
 import br.com.sintechs.stufa.models.SintechsSampling;
 
 public class ExpertSystemHandler extends Thread {
@@ -53,13 +54,15 @@ public class ExpertSystemHandler extends Thread {
 				kieSession.addEventListener(new DebugEventListener());
 
 				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
-				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties);
+				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
 				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
 //				EventHandler eventHandler = new EventHandler();
 //				kieSession.insert(eventHandler);
 				
-				samplingStream = kieSession.getEntryPoint("StufaSampingStream");
+				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
+				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
+				climatizationStream.insert(ClimatizationEventHandler.initialize(globalProperties));
 
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage());

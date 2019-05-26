@@ -36,22 +36,26 @@ dialect "mvel"
 //no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List() from entry-point "StufaClimatizaionStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators) from $sampling_list
-        $sampling_sensor : SintechsSamplingSensor(
-    		(sensor.module.name == "arduino_climatization_board#1") 
-    		&& (
-	        	(measure_type == "heat_index" > rule_condition) ||
-	        	(measure_type == "temperature" && value > rule_condition) ||
-	        	(measure_type == "humidity" && value < rule_condition)
-	        ) 
-        ) from $sensors_sampling
+		$climatization_event_handler: ClimatizationEventHandler (
+			$rule_event_list : rule_event_list,
+			$boards : boards,
+			$globalProperties : globalProperties
+			$actuators_status : actuator_status
+			$actuators_status_time : actuator_status_time
+		) from entry-point "StufaClimatizationStream"
+		
+		
+		$rule_event : RuleEvent(
+			$event_value : value
+			$rule_condition : rule_condition
+			$actuator_uuid : actuator_uuid
+		) from $rule_event_list
+		
+		$actuator : SintechsSamplingActuator(
+			(active == false)
+		) from $actuators_status
+		//eval($boards.size() > globalProperties.getTOTAL_CLIMATIZATION_BOARDS())
     then
-        //RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-		//	"[arduino_board#1.DTH11#1] Sensação "+sampling_sensor.measure_type+" ativou condição empregada",
-		//	"solenoid_1", true, "DTH11#1", "solenoid#1");
-		//$eventHandler.addRuleEvent($sampling, ev);
-		//modify($eventHandler);
-		System.out.println("It works" + $sampling.hashCode() + " sensor: " + $sampling_sensor.getSensor().getUuid() + 
-			 " measute_type: " + $sampling_sensor.getMeasure_type());
+    //$$climatization_event_handler.setLast_status_chage = Time();
+    $$climatization_event_handler.setActuatorON($actuator);
 end

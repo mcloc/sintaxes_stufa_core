@@ -16,67 +16,25 @@ public class RuleEvent {
 	private String sensor_uuid;
 	private String actuator_uuid;
 	private SintechsSampling sampling;
+	private String measure_type;
 	
 	
-	/**
-	 * Hidrate Event wich is not yet on database
-	 * @param rule_name
-	 * @param value
-	 * @param rule_condition
-	 * @param sampling_id
-	 * @param cause_description
-	 * @param command
-	 * @param command_value
-	 * @param sensor_uuid
-	 * @param actuator_uuid
-	 */
 	public RuleEvent(String rule_name, SintechsSampling sampling, SintechsSamplingSensor samplingSensor,
 			String cause_description, String command, boolean command_value, String sensor_uuid,
 			String actuator_uuid) {
-		
-		
 		this.sampling = sampling;
 		this.rule_name = rule_name;
 		this.value = samplingSensor.getValue();
 		this.rule_condition = samplingSensor.getRule_condition();
+		this.measure_type = samplingSensor.getMeasure_type();
 		this.cause_description = cause_description;
 		this.command = command;
 		this.command_value = command_value;
 		this.sensor_uuid = samplingSensor.getSensor().getUuid();
 		this.actuator_uuid = actuator_uuid;
-		
-		
-//		samplingActuator = new SintechsSamplingActuator(actuator_uuid, command_value, sampling.getCreated_at(), sampling.getGlobalProperties());
-//		List<SintechsSamplingActuator> samplingActuatorList = new ArrayList<SintechsSamplingActuator>();
-//		samplingActuatorList.add(samplingActuator);
-//		this.sampling.setSamplingActuators(samplingActuatorList);
 	}
 	
 
-	/**
-	 * Hidrate from json returned from database
-	 * @param json_obj
-	 */
-//	public RuleEvent(JSONObject json_obj) {
-//		this.rule_name = json_obj.getString("rule_name");
-//		this.value = Float.parseFloat(json_obj.getString("value"));
-//		this.rule_condition = Float.parseFloat(json_obj.getString("rule_condition"));
-//		this.sampling_id = json_obj.getBigInteger("sampling_id");
-//		this.sampling_sensor_id = json_obj.getBigInteger("sampling_sensor_id");
-//		this.cause_description = json_obj.getString("cause_description");
-//		this.command = json_obj.getString("command");
-//		this.command_value = "1".equals(json_obj.getString("command_value"));
-//		this.sensor_uuid = json_obj.getString("sensor_uuid");
-//		this.actuator_uuid = json_obj.getString("actuator_uuid");
-//		this.created_at = Timestamp.valueOf(json_obj.getString("created_at"));
-//		this.updated_at = Timestamp.valueOf(json_obj.getString("updated_at"));
-//	}
-	
-	
-	
-	
-	
-	
 	public String getRule_name() {
 		return rule_name;
 	}
@@ -89,6 +47,7 @@ public class RuleEvent {
 		result = prime * result + ((command == null) ? 0 : command.hashCode());
 		result = prime * result + (command_value ? 1231 : 1237);
 		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
+		result = prime * result + ((measure_type == null) ? 0 : measure_type.hashCode());
 		result = prime * result + ((rule_condition == null) ? 0 : rule_condition.hashCode());
 		result = prime * result + ((rule_name == null) ? 0 : rule_name.hashCode());
 		result = prime * result + ((rule_package == null) ? 0 : rule_package.hashCode());
@@ -130,6 +89,11 @@ public class RuleEvent {
 			if (other.created_at != null)
 				return false;
 		} else if (!created_at.equals(other.created_at))
+			return false;
+		if (measure_type == null) {
+			if (other.measure_type != null)
+				return false;
+		} else if (!measure_type.equals(other.measure_type))
 			return false;
 		if (rule_condition == null) {
 			if (other.rule_condition != null)
@@ -248,6 +212,14 @@ public class RuleEvent {
 
 	public void setSampling(SintechsSampling sampling) {
 		this.sampling = sampling;
+	}
+
+	public String getMeasure_type() {
+		return measure_type;
+	}
+
+	public void setMeasure_type(String measure_type) {
+		this.measure_type = measure_type;
 	}
 	
 	
