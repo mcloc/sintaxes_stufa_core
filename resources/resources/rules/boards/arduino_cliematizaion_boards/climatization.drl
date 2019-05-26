@@ -36,12 +36,14 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List() from entry-point "StufaSampingStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) from $sampling_list
+		$sampling_list: List() 
+		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
+			from  entry-point "StufaSampingStream"
+		
         $sampling_sensor : SintechsSamplingSensor(
     		(sensor.module.name == "arduino_climatization_board#1") 
     		&& (
-	        	(measure_type == "heat_index" > rule_condition) ||
+	        	(measure_type == "heat_index" && value > rule_condition) ||
 	        	(measure_type == "temperature" && value > rule_condition) ||
 	        	(measure_type == "humidity" && value < rule_condition)
 	        ) 

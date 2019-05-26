@@ -8,7 +8,7 @@ import java.util.Map;
 
 import br.com.sintechs.stufa.GlobalProperties;
 
-public class ClimatizationEventHandler {
+public class ClimatizationEventHandler2 {
 
 	private List<SintechsModule> modules = new ArrayList<SintechsModule>();
 
@@ -26,21 +26,21 @@ public class ClimatizationEventHandler {
 	private Map<String, BigInteger> actuators_status_time = new HashMap<String, BigInteger>();
 	private GlobalProperties globalProperties;
 
-	private static ClimatizationEventHandler instance = null;
+	private static ClimatizationEventHandler2 instance = null;
 
-	public ClimatizationEventHandler() {
+	public ClimatizationEventHandler2() {
 	}
 
-	public static ClimatizationEventHandler initialize(GlobalProperties globalProperties) {
+	public static ClimatizationEventHandler2 initialize(GlobalProperties globalProperties) {
 		if (instance == null)
-			instance = new ClimatizationEventHandler();
+			instance = new ClimatizationEventHandler2();
 
 		instance.setGlobalProperties(globalProperties);
 
 		return instance;
 	}
 
-	public static ClimatizationEventHandler addEvent(RuleEvent ev, SintechsSamplingSensor samplingSensor) {
+	public static ClimatizationEventHandler2 addEvent(RuleEvent ev, SintechsSamplingSensor samplingSensor) {
 		if (!instance.getModules().contains(ev.getSampling().getModule())) {
 			instance.getModules().add(ev.getSampling().getModule());
 			Map<SintechsModule, List<Float>> heat_index_map = new HashMap<SintechsModule, List<Float>>();
@@ -225,7 +225,7 @@ public class ClimatizationEventHandler {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ClimatizationEventHandler other = (ClimatizationEventHandler) obj;
+		ClimatizationEventHandler2 other = (ClimatizationEventHandler2) obj;
 		if (actuators_list == null) {
 			if (other.actuators_list != null)
 				return false;

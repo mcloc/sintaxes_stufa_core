@@ -104,15 +104,15 @@ public class ExpertSystemHandler extends Thread {
 		}
 	}
 
-	public void addSamplingList(List<SintechsSampling> samplingList) {
-		try {
-			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
-			samplingStream.insert(samplingList);
-		} catch (Exception e) {
-			e.getStackTrace();
-			LOGGER.error(e.getMessage());
-		}
-	}
+//	public void addSamplingList(List<SintechsSampling> samplingList) {
+//		try {
+//			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
+//			samplingStream.insert(samplingList);
+//		} catch (Exception e) {
+//			e.getStackTrace();
+//			LOGGER.error(e.getMessage());
+//		}
+//	}
 
 	// This is a test Method so you guys can see that an Exception with no message
 	// and no stacktrace

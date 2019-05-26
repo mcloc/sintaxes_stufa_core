@@ -17,12 +17,14 @@ public class RuleEvent {
 	private String actuator_uuid;
 	private SintechsSampling sampling;
 	private String measure_type;
-	
-	
+	private SintechsModule module;
+	private String module_name;
+
 	public RuleEvent(String rule_name, SintechsSampling sampling, SintechsSamplingSensor samplingSensor,
-			String cause_description, String command, boolean command_value, String sensor_uuid,
-			String actuator_uuid) {
+			String cause_description, String command, boolean command_value, String sensor_uuid, String actuator_uuid) {
 		this.sampling = sampling;
+		this.module = sampling.getModule();
+		this.module_name = sampling.getModule().getName();
 		this.rule_name = rule_name;
 		this.value = samplingSensor.getValue();
 		this.rule_condition = samplingSensor.getRule_condition();
@@ -33,11 +35,135 @@ public class RuleEvent {
 		this.sensor_uuid = samplingSensor.getSensor().getUuid();
 		this.actuator_uuid = actuator_uuid;
 	}
-	
 
 	public String getRule_name() {
 		return rule_name;
 	}
+
+	public void setRule_name(String rule_name) {
+		this.rule_name = rule_name;
+	}
+
+	public Float getValue() {
+		return value;
+	}
+
+	public void setValue(Float value) {
+		this.value = value;
+	}
+
+	public Float getRule_condition() {
+		return rule_condition;
+	}
+
+	public void setRule_condition(Float rule_condition) {
+		this.rule_condition = rule_condition;
+	}
+
+	public String getDescription_cause() {
+		return cause_description;
+	}
+
+	public void setDescription_cause(String description_cause) {
+		this.cause_description = description_cause;
+	}
+
+	public String getCommand() {
+		return command;
+	}
+
+	public void setCommand(String command) {
+		this.command = command;
+	}
+
+	public boolean isCommand_value() {
+		return command_value;
+	}
+
+	public void setCommand_value(boolean command_value) {
+		this.command_value = command_value;
+	}
+
+	public Timestamp getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(Timestamp created_at) {
+		this.created_at = created_at;
+	}
+
+	public Timestamp getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(Timestamp updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	public String getCause_description() {
+		return cause_description;
+	}
+
+	public void setCause_description(String cause_description) {
+		this.cause_description = cause_description;
+	}
+
+	public String getSensor_uuid() {
+		return sensor_uuid;
+	}
+
+	public void setSensor_uuid(String sensor_uuid) {
+		this.sensor_uuid = sensor_uuid;
+	}
+
+	public String getActuator_uuid() {
+		return actuator_uuid;
+	}
+
+	public void setActuator_uuid(String actuator_uuid) {
+		this.actuator_uuid = actuator_uuid;
+	}
+
+	public String getRule_package() {
+		return rule_package;
+	}
+
+	public void setRule_package(String rule_package) {
+		this.rule_package = rule_package;
+	}
+
+	public SintechsSampling getSampling() {
+		return sampling;
+	}
+
+	public void setSampling(SintechsSampling sampling) {
+		this.sampling = sampling;
+	}
+
+	public String getMeasure_type() {
+		return measure_type;
+	}
+
+	public void setMeasure_type(String measure_type) {
+		this.measure_type = measure_type;
+	}
+
+	public SintechsModule getModule() {
+		return module;
+	}
+
+	public void setModule(SintechsModule module) {
+		this.module = module;
+	}
+
+	public String getModule_name() {
+		return module_name;
+	}
+
+	public void setModule_name(String module_name) {
+		this.module_name = module_name;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -48,6 +174,8 @@ public class RuleEvent {
 		result = prime * result + (command_value ? 1231 : 1237);
 		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
 		result = prime * result + ((measure_type == null) ? 0 : measure_type.hashCode());
+		result = prime * result + ((module == null) ? 0 : module.hashCode());
+		result = prime * result + ((module_name == null) ? 0 : module_name.hashCode());
 		result = prime * result + ((rule_condition == null) ? 0 : rule_condition.hashCode());
 		result = prime * result + ((rule_name == null) ? 0 : rule_name.hashCode());
 		result = prime * result + ((rule_package == null) ? 0 : rule_package.hashCode());
@@ -57,7 +185,6 @@ public class RuleEvent {
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -94,6 +221,16 @@ public class RuleEvent {
 			if (other.measure_type != null)
 				return false;
 		} else if (!measure_type.equals(other.measure_type))
+			return false;
+		if (module == null) {
+			if (other.module != null)
+				return false;
+		} else if (!module.equals(other.module))
+			return false;
+		if (module_name == null) {
+			if (other.module_name != null)
+				return false;
+		} else if (!module_name.equals(other.module_name))
 			return false;
 		if (rule_condition == null) {
 			if (other.rule_condition != null)
@@ -133,95 +270,4 @@ public class RuleEvent {
 		return true;
 	}
 
-
-	public void setRule_name(String rule_name) {
-		this.rule_name = rule_name;
-	}
-	public Float getValue() {
-		return value;
-	}
-	public void setValue(Float value) {
-		this.value = value;
-	}
-	public Float getRule_condition() {
-		return rule_condition;
-	}
-	public void setRule_condition(Float rule_condition) {
-		this.rule_condition = rule_condition;
-	}
-	public String getDescription_cause() {
-		return cause_description;
-	}
-	public void setDescription_cause(String description_cause) {
-		this.cause_description = description_cause;
-	}
-	public String getCommand() {
-		return command;
-	}
-	public void setCommand(String command) {
-		this.command = command;
-	}
-	public boolean isCommand_value() {
-		return command_value;
-	}
-	public void setCommand_value(boolean command_value) {
-		this.command_value = command_value;
-	}
-	public Timestamp getCreated_at() {
-		return created_at;
-	}
-	public void setCreated_at(Timestamp created_at) {
-		this.created_at = created_at;
-	}
-	public Timestamp getUpdated_at() {
-		return updated_at;
-	}
-	public void setUpdated_at(Timestamp updated_at) {
-		this.updated_at = updated_at;
-	}
-	public String getCause_description() {
-		return cause_description;
-	}
-	public void setCause_description(String cause_description) {
-		this.cause_description = cause_description;
-	}
-	public String getSensor_uuid() {
-		return sensor_uuid;
-	}
-	public void setSensor_uuid(String sensor_uuid) {
-		this.sensor_uuid = sensor_uuid;
-	}
-	public String getActuator_uuid() {
-		return actuator_uuid;
-	}
-	public void setActuator_uuid(String actuator_uuid) {
-		this.actuator_uuid = actuator_uuid;
-	}
-
-	public String getRule_package() {
-		return rule_package;
-	}
-
-	public void setRule_package(String rule_package) {
-		this.rule_package = rule_package;
-	}
-
-	public SintechsSampling getSampling() {
-		return sampling;
-	}
-
-	public void setSampling(SintechsSampling sampling) {
-		this.sampling = sampling;
-	}
-
-	public String getMeasure_type() {
-		return measure_type;
-	}
-
-	public void setMeasure_type(String measure_type) {
-		this.measure_type = measure_type;
-	}
-	
-	
-	
 }

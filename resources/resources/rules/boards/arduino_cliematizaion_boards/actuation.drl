@@ -57,5 +57,50 @@ dialect "mvel"
 		//eval($boards.size() > globalProperties.getTOTAL_CLIMATIZATION_BOARDS())
     then
     //$$climatization_event_handler.setLast_status_chage = Time();
-    $$climatization_event_handler.setActuatorON($actuator);
+    $climatization_event_handler.setActuatorON($actuator);
 end
+
+
+
+rule "005-test1_climatization_actuation"
+dialect "mvel"
+//no-loop true
+    when
+		$eventHandler : EventHandler()
+		$climatization_event_handler: ClimatizationEventHandler (
+			$rule_event_list : rule_event_list,
+			$boards : boards,
+			$globalProperties : globalProperties
+			$actuators_status : actuator_status
+			$actuators_status_time : actuator_status_time
+		) from entry-point "StufaClimatizationStream"
+		
+		
+		$rule_event : RuleEvent(
+			$event_value : value
+			$rule_condition : rule_condition
+			$actuator_uuid : actuator_uuid
+		) from $rule_event_list
+		
+		$actuator : SintechsSamplingActuator(
+			(active == false)
+		) from $actuators_status
+		//eval($boards.size() > globalProperties.getTOTAL_CLIMATIZATION_BOARDS())
+    then
+    //$$climatization_event_handler.setLast_status_chage = Time();
+    $climatization_event_handler.setActuatorON($actuator);
+end
+/*
+rule "Apply 10% discount to orders over US$ 100,00"
+when
+    $order : Order()
+    $total : Number( doubleValue > 100 ) 
+             from accumulate( OrderItem( order == $order, $value : value ),
+                              init( double total = 0; ),
+                              action( total += $value; ),
+                              reverse( total -= $value; ),
+                              result( total ) )
+then
+    # apply discount to $order
+end
+*/
