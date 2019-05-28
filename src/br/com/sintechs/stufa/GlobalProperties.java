@@ -1,6 +1,8 @@
 package br.com.sintechs.stufa;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GlobalProperties {
@@ -42,8 +44,42 @@ public class GlobalProperties {
 	private Map<String, String> MAX_HEAT_INDEX = new HashMap<String, String>();
 	private Map<String, String> MAX_TEMPERATURE = new HashMap<String, String>();
 	private Map<String, String> MIN_HUMIDITY = new HashMap<String, String>();
+	private List<String> CLIMATIZATION_MODULES = new ArrayList<String>();
+	private List<String> SOIL_MODULES = new ArrayList<String>();
+	private Map<String,String> CLIMATIZATION_MODULES_SENSORS = new HashMap<String,String>();
+	private Map<String,String> SOIL_MODULES_SENSORS = new HashMap<String,String>();
 
 	public GlobalProperties() {
+		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#1");
+		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#2");
+		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#3");
+		
+		this.SOIL_MODULES.add("arduino_soil_board#1");
+		this.SOIL_MODULES.add("arduino_soil_board#2");
+		this.SOIL_MODULES.add("arduino_soil_board#3");
+		this.SOIL_MODULES.add("arduino_soil_board#4");
+		
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#1", "DHT11#1");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#1", "DHT11#2");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#1", "DHT11#3");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#2", "DHT11#4");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#2", "DHT11#5");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#2", "DHT11#6");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", "DHT11#7");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", "DHT11#8");
+		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", "DHT11#9");
+//		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_external_climatization_board#1", "DHT21#1");
+		
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#1", "LM393#1");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#1", "Ds18b20#1");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#2", "LM393#2");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#2", "Ds18b20#2");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#3", "LM393#3");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#3", "Ds18b20#3");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#4", "LM393#4");
+		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#4", "Ds18b20#4");
+		
+		
 		this.MAX_HEAT_INDEX.put("DHT11#1", "27");
 		this.MAX_TEMPERATURE.put("DHT11#1", "26");
 		this.MIN_HUMIDITY.put("DHT11#1", "77");
@@ -299,6 +335,38 @@ public class GlobalProperties {
 
 	public void setREST_MODULE_SLEEP(Integer rEST_MODULE_SLEEP) {
 		REST_MODULE_SLEEP = rEST_MODULE_SLEEP;
+	}
+
+	public List<String> getCLIMATIZATION_MODULES() {
+		return CLIMATIZATION_MODULES;
+	}
+
+	public void setCLIMATIZATION_MODULES(List<String> cLIMATIZATION_MODULES) {
+		CLIMATIZATION_MODULES = cLIMATIZATION_MODULES;
+	}
+
+	public List<String> getSOIL_MODULES() {
+		return SOIL_MODULES;
+	}
+
+	public void setSOIL_MODULES(List<String> sOIL_MODULES) {
+		SOIL_MODULES = sOIL_MODULES;
+	}
+
+	public Map<String, String> getCLIMATIZATION_MODULES_SENSORS() {
+		return CLIMATIZATION_MODULES_SENSORS;
+	}
+
+	public void setCLIMATIZATION_MODULES_SENSORS(Map<String, String> cLIMATIZATION_MODULES_SENSORS) {
+		CLIMATIZATION_MODULES_SENSORS = cLIMATIZATION_MODULES_SENSORS;
+	}
+
+	public Map<String, String> getSOIL_MODULES_SENSORS() {
+		return SOIL_MODULES_SENSORS;
+	}
+
+	public void setSOIL_MODULES_SENSORS(Map<String, String> sOIL_MODULES_SENSORS) {
+		SOIL_MODULES_SENSORS = sOIL_MODULES_SENSORS;
 	}
 
 	

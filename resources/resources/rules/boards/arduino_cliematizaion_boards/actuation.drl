@@ -37,11 +37,8 @@ dialect "mvel"
     when
 		$eventHandler : EventHandler()
 		$climatization_event_handler: ClimatizationEventHandler (
-			$rule_event_list : rule_event_list,
-			$boards : boards,
+			$climatization_event_list : climatization_event_list,
 			$globalProperties : globalProperties
-			$actuators_status : actuator_status
-			$actuators_status_time : actuator_status_time
 		) from entry-point "StufaClimatizationStream"
 		
 		
@@ -49,7 +46,7 @@ dialect "mvel"
 			$event_value : value
 			$rule_condition : rule_condition
 			$actuator_uuid : actuator_uuid
-		) from $rule_event_list
+		) from $climatization_event_list
 		
 		$actuator : SintechsSamplingActuator(
 			(active == false)

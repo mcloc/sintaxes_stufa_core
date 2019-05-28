@@ -6,28 +6,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.sintechs.stufa.GlobalProperties;
 
 public class ClimatizationEventHandler {
-
-	private List<SintechsModule> modules = new ArrayList<SintechsModule>();
-
-	private Map<SintechsModule, List<SintechsSampling>> sampling_map = new HashMap<SintechsModule, List<SintechsSampling>>();
-	private Map<SintechsModule, List<Float>> heat_index_map = new HashMap<SintechsModule, List<Float>>();
-	private Map<SintechsModule, List<Float>> temperature_map = new HashMap<SintechsModule, List<Float>>();
-	private Map<SintechsModule, List<Float>> humidity_map = new HashMap<SintechsModule, List<Float>>();
-	private Map<SintechsModule, List<RuleEvent>> rule_event_map = new HashMap<SintechsModule, List<RuleEvent>>();
-
-	// private List<RuleEvent> rule_event_list = new ArrayList<RuleEvent>();
-	private RuleEvent last_rule_event;
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClimatizationEventHandler.class);
+	
+//	private Map<SintechsModule, Map<SintechsSampling,List<ClimatizationEvent>>> climatization_event_map = new HashMap<SintechsModule, Map<SintechsSampling,List <ClimatizationEvent>>>();
+	private List<ClimatizationEvent> climatization_event_list = new ArrayList <ClimatizationEvent>();
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private List<SintechsSamplingActuator> actuators_list = new ArrayList<SintechsSamplingActuator>();
 	private Map<String, Boolean> actuators_status = new HashMap<String, Boolean>();
 	private Map<String, BigInteger> actuators_status_time = new HashMap<String, BigInteger>();
 	private GlobalProperties globalProperties;
 
 	private static ClimatizationEventHandler instance = null;
-
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public ClimatizationEventHandler() {
 	}
 
@@ -40,55 +39,53 @@ public class ClimatizationEventHandler {
 		return instance;
 	}
 
-	public static ClimatizationEventHandler addEvent(RuleEvent ev, SintechsSamplingSensor samplingSensor) {
-		if (!instance.getModules().contains(ev.getSampling().getModule())) {
-			instance.getModules().add(ev.getSampling().getModule());
-			Map<SintechsModule, List<Float>> heat_index_map = new HashMap<SintechsModule, List<Float>>();
-			Map<SintechsModule, List<Float>> temperature_map = new HashMap<SintechsModule, List<Float>>();
-			Map<SintechsModule, List<Float>> humidity_map = new HashMap<SintechsModule, List<Float>>();
-			Map<SintechsModule, List<RuleEvent>> rule_event_map = new HashMap<SintechsModule, List<RuleEvent>>();
-			Map<SintechsModule, List<SintechsSampling>> sampling_map = new HashMap<SintechsModule, List<SintechsSampling>>();
-
-			List<Float> heat_index_list = new ArrayList<Float>();
-			List<Float> temperature_list = new ArrayList<Float>();
-			List<Float> humidity_list = new ArrayList<Float>();
-			List<RuleEvent> rule_event_list = new ArrayList<RuleEvent>();
-			List<SintechsSampling> sampling_list = new ArrayList<SintechsSampling>();
-			heat_index_map.put(ev.getModule(), heat_index_list);
-			temperature_map.put(ev.getModule(), temperature_list);
-			humidity_map.put(ev.getModule(), humidity_list);
-			rule_event_map.put(ev.getModule(), rule_event_list);
-			sampling_map.put(ev.getModule(), sampling_list);
-			instance.setHeat_index_map(heat_index_map);
-			instance.setTemperature_map(temperature_map);
-			instance.setHumidity_map(humidity_map);
-			instance.setRule_event_map(rule_event_map);
-			instance.setSampling_map(sampling_map);
+	public static ClimatizationEventHandler addEvent(ClimatizationEvent new_ce) {
+		boolean ce_exists = false;
+		for(int i =0; i < instance.getClimatization_event_list().size();i++) {
+			
+			//THERE IS ALREADY AN CEVENT FOR THE NEW EV MODULE AND SAMPLING AND SENSOR, SO JUST UPDATE MEASURE_TYPE VALUES
+			if(instance.getClimatization_event_list().get(i).getModule().equals(new_ce.getModule()) &&
+				instance.getClimatization_event_list().get(i).getSampling().equals(new_ce.getSampling()) &&
+				instance.getClimatization_event_list().get(i).getSensor_uuid().equals(new_ce.getSensor_uuid())
+			) {
+				//REMOVE OLD_CE TO UPDATE IT
+				ClimatizationEvent ce = instance.getClimatization_event_list().remove(i);
+				switch (new_ce.getTmp_measure_type()) {
+				case "heat_index":
+					ce.setHeat_index(new_ce.getHeat_index());
+					ce.setRule_condition_heat_index(new_ce.getRule_condition_heat_index());
+					ce_exists = true;
+					break;
+				case "temperature":
+					ce.setTemperature(new_ce.getTemperature());
+					ce.setRule_condition_temperature(new_ce.getRule_condition_temperature());
+					ce_exists = true;
+					break;
+				case "humidity":
+					ce.setHumidity(new_ce.getHumidity());
+					ce.setRule_condition_humidity(new_ce.getRule_condition_humidity());
+					ce_exists = true;
+					break;
+				}
+				//ADD THE UPDATED CEVENT WITH THE NEW MEASURE_TYPE
+				instance.getClimatization_event_list().add(ce);
+				break; // break the loop
+			} 
+		} // AND OF LOOP in climatization_event_list
+		
+		//THE NEW_CE DON'T EXISTS ON THE LIST SO ADD IT
+		if(!ce_exists) {
+			instance.getClimatization_event_list().add(new_ce);
 		}
+		
 
 		
-		instance.getSampling_map().get(ev.getModule()).add(ev.getSampling());
-		instance.getRule_event_map().get(ev.getModule()).add(ev);
-		instance.setLast_rule_event(ev);
-
-		switch (samplingSensor.getMeasure_type()) {
-		case "heat_index":
-			instance.getHeat_index_map().get(ev.getModule()).add(samplingSensor.getValue());
-			break;
-		case "temperature":
-			instance.getTemperature_map().get(ev.getModule()).add(samplingSensor.getValue());
-			break;
-		case "humidity":
-			instance.getHumidity_map().get(ev.getModule()).add(samplingSensor.getValue());
-			break;
-		}
-
-		List<SintechsSamplingActuator> samplingActuatorsList = ev.getSampling().getSamplingActuators();
-		for (SintechsSamplingActuator sampling_actuator : samplingActuatorsList) {
-			instance.actuators_status.put(sampling_actuator.getActuator().getUuid(), sampling_actuator.isActive());
-			instance.actuators_status_time.put(sampling_actuator.getActuator().getUuid(),
-					sampling_actuator.getActivated_time());
-		}
+//		List<SintechsSamplingActuator> samplingActuatorsList = ev.getSampling().getSamplingActuators();
+//		for (SintechsSamplingActuator sampling_actuator : samplingActuatorsList) {
+//			instance.actuators_status.put(sampling_actuator.getActuator().getUuid(), sampling_actuator.isActive());
+//			instance.actuators_status_time.put(sampling_actuator.getActuator().getUuid(),
+//					sampling_actuator.getActivated_time());
+//		}
 
 		return instance;
 	}
@@ -112,28 +109,14 @@ public class ClimatizationEventHandler {
 		return null;
 	}
 
-	public RuleEvent getLast_rule_event() {
-		return last_rule_event;
+
+
+	public List<ClimatizationEvent> getClimatization_event_list() {
+		return climatization_event_list;
 	}
 
-	public void setLast_rule_event(RuleEvent last_rule_event) {
-		this.last_rule_event = last_rule_event;
-	}
-
-	public GlobalProperties getGlobalProperties() {
-		return globalProperties;
-	}
-
-	public void setGlobalProperties(GlobalProperties globalProperties) {
-		this.globalProperties = globalProperties;
-	}
-
-	public Map<String, Boolean> getActuators_status() {
-		return actuators_status;
-	}
-
-	public void setActuators_status(Map<String, Boolean> actuators_status) {
-		this.actuators_status = actuators_status;
+	public void setClimatization_event_list(List<ClimatizationEvent> climatization_event_list) {
+		this.climatization_event_list = climatization_event_list;
 	}
 
 	public List<SintechsSamplingActuator> getActuators_list() {
@@ -144,12 +127,12 @@ public class ClimatizationEventHandler {
 		this.actuators_list = actuators_list;
 	}
 
-	public List<SintechsModule> getModules() {
-		return modules;
+	public Map<String, Boolean> getActuators_status() {
+		return actuators_status;
 	}
 
-	public void setModules(List<SintechsModule> modules) {
-		this.modules = modules;
+	public void setActuators_status(Map<String, Boolean> actuators_status) {
+		this.actuators_status = actuators_status;
 	}
 
 	public Map<String, BigInteger> getActuators_status_time() {
@@ -160,44 +143,20 @@ public class ClimatizationEventHandler {
 		this.actuators_status_time = actuators_status_time;
 	}
 
-	public Map<SintechsModule, List<Float>> getHeat_index_map() {
-		return heat_index_map;
+	public GlobalProperties getGlobalProperties() {
+		return globalProperties;
 	}
 
-	public void setHeat_index_map(Map<SintechsModule, List<Float>> heat_index_map) {
-		this.heat_index_map = heat_index_map;
+	public void setGlobalProperties(GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
 	}
 
-	public Map<SintechsModule, List<Float>> getTemperature_map() {
-		return temperature_map;
+	public static ClimatizationEventHandler getInstance() {
+		return instance;
 	}
 
-	public void setTemperature_map(Map<SintechsModule, List<Float>> temperature_map) {
-		this.temperature_map = temperature_map;
-	}
-
-	public Map<SintechsModule, List<Float>> getHumidity_map() {
-		return humidity_map;
-	}
-
-	public void setHumidity_map(Map<SintechsModule, List<Float>> humidity_map) {
-		this.humidity_map = humidity_map;
-	}
-
-	public Map<SintechsModule, List<RuleEvent>> getRule_event_map() {
-		return rule_event_map;
-	}
-
-	public void setRule_event_map(Map<SintechsModule, List<RuleEvent>> rule_event_map) {
-		this.rule_event_map = rule_event_map;
-	}
-
-	public Map<SintechsModule, List<SintechsSampling>> getSampling_map() {
-		return sampling_map;
-	}
-
-	public void setSampling_map(Map<SintechsModule, List<SintechsSampling>> sampling_map) {
-		this.sampling_map = sampling_map;
+	public static void setInstance(ClimatizationEventHandler instance) {
+		ClimatizationEventHandler.instance = instance;
 	}
 
 	@Override
@@ -207,13 +166,7 @@ public class ClimatizationEventHandler {
 		result = prime * result + ((actuators_list == null) ? 0 : actuators_list.hashCode());
 		result = prime * result + ((actuators_status == null) ? 0 : actuators_status.hashCode());
 		result = prime * result + ((actuators_status_time == null) ? 0 : actuators_status_time.hashCode());
-		result = prime * result + ((heat_index_map == null) ? 0 : heat_index_map.hashCode());
-		result = prime * result + ((humidity_map == null) ? 0 : humidity_map.hashCode());
-		result = prime * result + ((last_rule_event == null) ? 0 : last_rule_event.hashCode());
-		result = prime * result + ((modules == null) ? 0 : modules.hashCode());
-		result = prime * result + ((rule_event_map == null) ? 0 : rule_event_map.hashCode());
-		result = prime * result + ((sampling_map == null) ? 0 : sampling_map.hashCode());
-		result = prime * result + ((temperature_map == null) ? 0 : temperature_map.hashCode());
+		result = prime * result + ((climatization_event_list == null) ? 0 : climatization_event_list.hashCode());
 		return result;
 	}
 
@@ -241,42 +194,13 @@ public class ClimatizationEventHandler {
 				return false;
 		} else if (!actuators_status_time.equals(other.actuators_status_time))
 			return false;
-		if (heat_index_map == null) {
-			if (other.heat_index_map != null)
+		if (climatization_event_list == null) {
+			if (other.climatization_event_list != null)
 				return false;
-		} else if (!heat_index_map.equals(other.heat_index_map))
-			return false;
-		if (humidity_map == null) {
-			if (other.humidity_map != null)
-				return false;
-		} else if (!humidity_map.equals(other.humidity_map))
-			return false;
-		if (last_rule_event == null) {
-			if (other.last_rule_event != null)
-				return false;
-		} else if (!last_rule_event.equals(other.last_rule_event))
-			return false;
-		if (modules == null) {
-			if (other.modules != null)
-				return false;
-		} else if (!modules.equals(other.modules))
-			return false;
-		if (rule_event_map == null) {
-			if (other.rule_event_map != null)
-				return false;
-		} else if (!rule_event_map.equals(other.rule_event_map))
-			return false;
-		if (sampling_map == null) {
-			if (other.sampling_map != null)
-				return false;
-		} else if (!sampling_map.equals(other.sampling_map))
-			return false;
-		if (temperature_map == null) {
-			if (other.temperature_map != null)
-				return false;
-		} else if (!temperature_map.equals(other.temperature_map))
+		} else if (!climatization_event_list.equals(other.climatization_event_list))
 			return false;
 		return true;
 	}
+
 
 }

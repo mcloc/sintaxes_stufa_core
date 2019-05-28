@@ -11,6 +11,7 @@ import br.com.sintechs.stufa.models.SintechsSamplingSensor;
 import br.com.sintechs.stufa.models.SintechsSamplingActuator;
 import br.com.sintechs.stufa.models.SintechsSensor;
 import br.com.sintechs.stufa.models.RuleEvent;
+import br.com.sintechs.stufa.models.ClimatizationEvent;
 
 //declare any global variables here
 
@@ -30,13 +31,28 @@ declare SintechsSamplingSensor
 	updated_at : Timestamp 
 end
 
+rule "000-arduino_climatization_boards"
+dialect "mvel"
+//no-loop true
+    when
+    //ALL BOARD ARE DONE 
+    	$climatizationEventStack : ClimatizaionEventStack (
+    		isReady == true
+    	)
+	then
+	// UPDATE
+	ClimatizationEventHandler cev = ClimatizationEventHandler.addEvent($climatizationEventStack);
+	$climatizationEventStack.reset();
+	modify($cliematizationEventStack);
+	drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").modify(cev);
+end
 
 rule "001-arduino_climatization_board#1"
 dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List() 
+		$climatizationEventStack : ClimatizationEventStack()
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from  entry-point "StufaSampingStream"
 		
@@ -59,64 +75,59 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEventHandler cev = ClimatizationEventHandler.addEvent(ev, $sampling_sensor);
-		drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").modify(cev);
+		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		$climatizationEventStack.addEvent(ce);
+		modify($cliematizationEventStack);
+		//ClimatizationEventHandler cev = ClimatizationEventHandler.addEvent(ce);
+		//drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").modify(cev);
 end
 
-rule "002-arduino_climatization_board#2"
+rule "001-NOT-arduino_climatization_board#1"
 dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List() from entry-point "StufaSampingStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators) from $sampling_list
-        $sampling_sensor : SintechsSamplingSensor(
-    		(sensor.module.name == "arduino_climatization_board#2") 
-    		&& (
-	        	(measure_type == "heat_index" > rule_condition) ||
-	        	(measure_type == "temperature" && value > rule_condition) ||
-	        	(measure_type == "humidity" && value < rule_condition)
-	        ) 
-        ) from $sensors_sampling
-    then
-       	//1 - createEvent for this module with
-		 ClimatizationEvent ev = ClimatizationEvent.addEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#2]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
-			","+$sampling_sensor.getRule_condition()+")",
-			"DN20_2", true, $sampling_sensor.sensor.getUuid(), "DN20#2");
-			
-		//2 - Add event for this module on EventHandler
-		$eventHandler.addRuleEvent($sampling, ev.getRule_event());
+		$sampling_list: List() 
+		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
+			from  entry-point "StufaSampingStream"
 		
-		//3 - Modify ClimatizationEvent for further processing
-		drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizaionStream").modify(ev);
-end
-
-rule "003-arduino_climatization_board#3"
-dialect "mvel"
-no-loop true
-    when
-		$eventHandler : EventHandler()
-		$sampling_list: List() from entry-point "StufaSampingStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators) from $sampling_list
         $sampling_sensor : SintechsSamplingSensor(
-    		(sensor.module.name == "arduino_climatization_board#3") 
+    		(sensor.module.name == "arduino_climatization_board#1") 
     		&& (
-	        	(measure_type == "heat_index" > rule_condition) ||
-	        	(measure_type == "temperature" && value > rule_condition) ||
-	        	(measure_type == "humidity" && value < rule_condition)
+	        	(measure_type == "heat_index" && value <= rule_condition) ||
+	        	(measure_type == "temperature" && value <= rule_condition) ||
+	        	(measure_type == "humidity" && value >= rule_condition)
 	        ) 
         ) from $sensors_sampling
     then
     	//1 - createEvent for this module with
-		 ClimatizationEvent ev = ClimatizationEvent.addEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#3]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+    	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
+			"[arduino_climatization_board#1]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
-			"DN20_3", true, $sampling_sensor.sensor.getUuid(), "DN20#3");
-			
+			"DN20_1", true, $sampling_sensor.sensor.getUuid(), "DN20#1");
+    	
 		//2 - Add event for this module on EventHandler
-		$eventHandler.addRuleEvent($sampling, ev.getRule_event());
+		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizaionStream").modify(ev);
+		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEventHandler cev = ClimatizationEventHandler.addEvent(ce);
+		drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").modify(cev);
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

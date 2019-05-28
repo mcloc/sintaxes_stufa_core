@@ -39,7 +39,7 @@ public class ModulesHandler extends Thread {
 			LOGGER.info("Starting ModulesHandler...");
 			try {
 				
-				//TODO: get All active Modules
+				//TODO: change to get from GLobalProperties
 				RESTClient client = new RESTClient(globalProperties);
 				List<SintechsModule> modules = client.getModules(); 
 				

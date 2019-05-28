@@ -1,11 +1,11 @@
 package br.com.sintechs.stufa.drools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
-import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.EntryPoint;
@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.models.ClimatizationEventHandler;
+import br.com.sintechs.stufa.models.ClimatizationEventStack;
+import br.com.sintechs.stufa.models.SintechsModule;
 import br.com.sintechs.stufa.models.SintechsSampling;
 
 public class ExpertSystemHandler extends Thread {
@@ -24,6 +26,7 @@ public class ExpertSystemHandler extends Thread {
 
 	private KieSession kieSession;
 	private EntryPoint samplingStream;
+	private List<SintechsModule> activeModules = new ArrayList<SintechsModule>();
 
 	public ExpertSystemHandler(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt) {
 		this.globalProperties = globalProperties;
@@ -60,7 +63,10 @@ public class ExpertSystemHandler extends Thread {
 //				EventHandler eventHandler = new EventHandler();
 //				kieSession.insert(eventHandler);
 				
+				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
 				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
+				samplingStream.insert(cEventStack);
+				
 				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
 				climatizationStream.insert(ClimatizationEventHandler.initialize(globalProperties));
 
