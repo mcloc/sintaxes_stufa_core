@@ -38,6 +38,12 @@ public class ClimatizationEventHandler {
 
 		return instance;
 	}
+	
+	public static ClimatizationEventHandler addStack(ClimatizationEventStack climatization_event_stack) {
+		instance.setClimatization_event_list(climatization_event_stack.getClimatization_event_list());
+		
+		return instance;
+	}
 
 	public static ClimatizationEventHandler addEvent(ClimatizationEvent new_ce) {
 		boolean ce_exists = false;
