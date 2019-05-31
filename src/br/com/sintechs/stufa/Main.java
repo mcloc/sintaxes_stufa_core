@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.sintechs.stufa.drools.ExpertSystemHandler;
-import br.com.sintechs.stufa.ipc.IPCHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.modules.ModulesHandler;
 

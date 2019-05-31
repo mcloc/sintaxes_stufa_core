@@ -14,12 +14,15 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 import br.com.sintechs.stufa.drools.DroolsActionHandler;
+import br.com.sintechs.stufa.drools.EventHandler;
 import br.com.sintechs.stufa.models.SintechsSampling;
 import br.com.sintechs.stufa.models.SintechsSamplingSensor;
 import br.com.sintechs.stufa.models.SintechsSamplingActuator;
 import br.com.sintechs.stufa.models.SintechsSensor;
 import br.com.sintechs.stufa.models.RuleEvent;
 import br.com.sintechs.stufa.models.ClimatizationEvent;
+import br.com.sintechs.stufa.models.ClimatizationEventHandler;
+import br.com.sintechs.stufa.models.ClimatizationEventStack;
 
 //declare any global variables here
 global br.com.sintechs.stufa.drools.DroolsActionHandler drlActionHandler;
@@ -45,17 +48,15 @@ rule "0000-arduino_climatization_boards"
 dialect "mvel"
 // LOOP YES
     when
-    	$climatizationEventStack : ClimatizaionEventStack (
-    		isReady == true
-    	)
+    	$climatizationEventStack : ClimatizationEventStack (
+    		ready == true
+    	) from entry-point "StufaSamplingStream"
 	then
+	ClimatizationEventHandler cev = ClimatizationEventHandler.addStack($climatizationEventStack);
 	// RESET THE STACK AND MODIFY ClimatizationEventHandler ON THE OTHER STREAM (StufaClimatizationStream) WITH 
 	// STACK FULLY CREATED FOR THIS ROUND OF MODULES DATA
-	ClimatizationEventHandler cev = ClimatizationEventHandler.addStack($climatizationEventStack);
 	$climatizationEventStack.reset();
-	modify($cliematizationEventStack);
-	
-	
+	modify($climatizationEventStack);
 	drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").modify(cev);
 end
 
@@ -64,9 +65,9 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$climatizationEventStack : ClimatizationEventStack()
+		$climatizationEventStack : ClimatizationEventStack()  from entry-point "StufaSamplingStream"
 		
-		$sampling_list : List<SintechsSampling>() from  entry-point "StufaSampingStream"
+		$sampling_list : List() from  entry-point "StufaSampingStream"
 		
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from $sampling_list
@@ -82,7 +83,7 @@ no-loop true
     then
     	//1 - createEvent for this module with
     	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#1]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+			"[arduino_climatization_board#1]: "+$sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
 			"DN20_1", true, $sampling_sensor.sensor.getUuid(), "DN20#1");
     	
@@ -90,9 +91,11 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, 
+			$sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+			
 		$climatizationEventStack.addEvent(ce);
-		modify($cliematizationEventStack);
+		modify($climatizationEventStack);
 end
 
 rule "0001-NOT-arduino_climatization_board#1"
@@ -100,9 +103,10 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List<SintechsSampling>() from  entry-point "StufaSampingStream"
+		$climatizationEventStack : ClimatizationEventStack()  from  entry-point "StufaSamplingStream"
+		$sampling_list: List() from  entry-point "StufaSampingStream"
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
-			from  sampling_list
+			from  $sampling_list
 		
         $sampling_sensor : SintechsSamplingSensor(
     		(sensor.module.name == "arduino_climatization_board#1") 
@@ -115,7 +119,7 @@ no-loop true
     then
     	//1 - createEvent for this module with
     	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#1]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+			"[arduino_climatization_board#1]: "+$sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
 			"DN20_1", true, $sampling_sensor.sensor.getUuid(), "DN20#1");
     	
@@ -123,9 +127,9 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
 		$climatizationEventStack.addEvent(ce);
-		modify($cliematizationEventStack);
+		modify($climatizationEventStack);
 end
 
 
@@ -134,9 +138,8 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$climatizationEventStack : ClimatizationEventStack()
-		
-		$sampling_list : List<SintechsSampling>() from  entry-point "StufaSampingStream"
+		$climatizationEventStack : ClimatizationEventStack()  from  entry-point "StufaSamplingStream"
+		$sampling_list : List() from  entry-point "StufaSampingStream"
 		
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from $sampling_list
@@ -152,7 +155,7 @@ no-loop true
     then
     	//1 - createEvent for this module with
     	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#2]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+			"[arduino_climatization_board#2]: "+$sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
 			"DN20_2", true, $sampling_sensor.sensor.getUuid(), "DN20#2");
     	
@@ -160,9 +163,9 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
 		$climatizationEventStack.addEvent(ce);
-		modify($cliematizationEventStack);
+		modify($climatizationEventStack);
 end
 
 rule "0002-NOT-arduino_climatization_board#1"
@@ -170,9 +173,10 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List<SintechsSampling>() from  entry-point "StufaSampingStream"
+		$climatizationEventStack : ClimatizationEventStack()  from  entry-point "StufaSamplingStream"
+		$sampling_list: List() from  entry-point "StufaSampingStream"
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
-			from  sampling_list
+			from  $sampling_list
 		
         $sampling_sensor : SintechsSamplingSensor(
     		(sensor.module.name == "arduino_climatization_board#2") 
@@ -185,7 +189,7 @@ no-loop true
     then
     	//1 - createEvent for this module with
     	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#2]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+			"[arduino_climatization_board#2]: "+$sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
 			"DN20_2", true, $sampling_sensor.sensor.getUuid(), "DN20#2");
     	
@@ -193,9 +197,9 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
 		$climatizationEventStack.addEvent(ce);
-		modify($cliematizationEventStack);
+		modify($climatizationEventStack);
 end
 
 
@@ -204,9 +208,8 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$climatizationEventStack : ClimatizationEventStack()
-		
-		$sampling_list : List<SintechsSampling>() from  entry-point "StufaSampingStream"
+		$climatizationEventStack : ClimatizationEventStack()  from  entry-point "StufaSamplingStream"		
+		$sampling_list : List() from  entry-point "StufaSampingStream"
 		
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from $sampling_list
@@ -222,7 +225,7 @@ no-loop true
     then
     	//1 - createEvent for this module with
     	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#3]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+			"[arduino_climatization_board#3]: "+$sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
 			"DN20_3", true, $sampling_sensor.sensor.getUuid(), "DN20#3");
     	
@@ -230,9 +233,9 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
 		$climatizationEventStack.addEvent(ce);
-		modify($cliematizationEventStack);
+		modify($climatizationEventStack);
 end
 
 rule "0003-NOT-arduino_climatization_board#1"
@@ -240,9 +243,10 @@ dialect "mvel"
 no-loop true
     when
 		$eventHandler : EventHandler()
-		$sampling_list: List<SintechsSampling>() from  entry-point "StufaSampingStream"
+		$climatizationEventStack : ClimatizationEventStack()  from  entry-point "StufaSamplingStream"
+		$sampling_list: List() from  entry-point "StufaSampingStream"
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
-			from  sampling_list
+			from  $sampling_list
 		
         $sampling_sensor : SintechsSamplingSensor(
     		(sensor.module.name == "arduino_climatization_board#3") 
@@ -255,7 +259,7 @@ no-loop true
     then
     	//1 - createEvent for this module with
     	RuleEvent ev = new RuleEvent(drools.getRule().getName(),  $sampling, $sampling_sensor,
-			"[arduino_climatization_board#3]: "+sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
+			"[arduino_climatization_board#3]: "+$sampling_sensor.measure_type+" ativou condição empregada ("+$sampling_sensor.getValue()+
 			","+$sampling_sensor.getRule_condition()+")",
 			"DN20_3", true, $sampling_sensor.sensor.getUuid(), "DN20#3");
     	
@@ -263,9 +267,9 @@ no-loop true
 		$eventHandler.addRuleEvent($sampling, ev);
 		
 		//3 - Modify ClimatizationEvent for further processing
-		ClimatizationEvent ce = new CliematizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
+		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
 		$climatizationEventStack.addEvent(ce);
-		modify($cliematizationEventStack);
+		modify($climatizationEventStack);
 end
 
 

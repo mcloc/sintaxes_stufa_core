@@ -19,22 +19,22 @@ public class ClimatizationEvent {
 	private String tmp_measure_type;
 
 	public ClimatizationEvent(SintechsModule module, SintechsSampling sampling, String sensor_uuid, String measure_type,
-			Float heat_index, Float temperature, Float humidity, Float rule_condition) {
+			Float value, Float rule_condition) {
 		this.module = module;
 		this.sampling = sampling;
 		this.sensor_uuid = sensor_uuid;
 		this.tmp_measure_type = measure_type;
 		switch (measure_type) {
 		case "heat_index":
-			this.heat_index = heat_index;
+			this.heat_index = value;
 			this.rule_condition_heat_index = rule_condition;
 			break;
 		case "temperature":
-			this.temperature = temperature;
+			this.temperature = value;
 			this.rule_condition_temperature = rule_condition;
 			break;
 		case "humidity":
-			this.humidity = humidity;
+			this.humidity = value;
 			this.rule_condition_humidity = rule_condition;
 			break;
 		}
