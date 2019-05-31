@@ -17,7 +17,9 @@ public class ClimatizationEventStack {
 	private List<String> active_modules_list = new ArrayList<String>();
 	private List<String> stacked_modules_list = new ArrayList<String>();
 	private Map<String,String> modules_sensors_map = new HashMap<String,String>();
-	private Map<String,String> stacked_modules_sensors_map = new HashMap<String,String>();	
+	private Map<String,String> sensors_measure_type_map = new HashMap<String,String>();
+	private Map<String,String> stacked_modules_sensors_map = new HashMap<String,String>();
+	private Map<String,String> stacked_sensors_measure_type_map = new HashMap<String,String>();	
 	private boolean ready = false;
 
 	private GlobalProperties globalProperties;
@@ -26,13 +28,15 @@ public class ClimatizationEventStack {
 		this.globalProperties = globalProperties;
 		this.active_modules_list = globalProperties.getCLIMATIZATION_MODULES();
 		this.modules_sensors_map = globalProperties.getCLIMATIZATION_MODULES_SENSORS();
+		this.sensors_measure_type_map = globalProperties.getSENSORS_MEASURE_TYPES();
 	}
 	
 	public void reset() {
 		this.stacked_modules_list = new ArrayList<String>();
 		this.stacked_modules_sensors_map = new HashMap<String,String>();
+		this.stacked_sensors_measure_type_map = new HashMap<String,String>();
 		this.climatization_event_list = new ArrayList<ClimatizationEvent>();
-		ready = false;
+		this.ready = false;
 	}
 	
 	public void addEvent(ClimatizationEvent new_ce) {
@@ -64,33 +68,39 @@ public class ClimatizationEventStack {
 						ce_exists = true;
 						break;
 					}
+					
 					//ADD THE UPDATED CEVENT WITH THE NEW MEASURE_TYPE
 					climatization_event_list.add(ce);
-
 					break; // break the loop
 				} else { // SENSOR DONT EXISTS
 					climatization_event_list.add(new_ce);
-					if(!stacked_modules_list.contains(new_ce.getModule().getName()))
-						stacked_modules_list.add(new_ce.getModule().getName());
-					
-					if(!stacked_modules_sensors_map.containsValue(new_ce.getSensor_uuid()))
-						stacked_modules_sensors_map.put(new_ce.getModule().getName(), new_ce.getSensor_uuid());		
+//					climatization_event_list.get(i).getSampling().put(new_ce.getSampling(), )
 				}
+				
+				
 			}
 		} // AND OF LOOP in climatization_event_list
 		
 		//THE NEW_CE DON'T EXISTS ON THE LIST SO ADD IT
 		if(!ce_exists) {
 			climatization_event_list.add(new_ce);
-			if(!stacked_modules_list.contains(new_ce.getModule().getName()))
-				stacked_modules_list.add(new_ce.getModule().getName());
-			if(!stacked_modules_sensors_map.containsValue(new_ce.getSensor_uuid()))
-				stacked_modules_sensors_map.put(new_ce.getModule().getName(), new_ce.getSensor_uuid());			
-			
 		}
 		
-		if(stacked_modules_list.containsAll(active_modules_list) && stacked_modules_sensors_map.values().containsAll(modules_sensors_map.values()))
+		if(!stacked_modules_list.contains(new_ce.getModule().getName()))
+			stacked_modules_list.add(new_ce.getModule().getName());
+		
+		if(!stacked_modules_sensors_map.containsValue(new_ce.getSensor_uuid()))
+			stacked_modules_sensors_map.put(new_ce.getModule().getName(), new_ce.getSensor_uuid());
+		
+		if(stacked_sensors_measure_type_map.containsValue(new_ce.getTmp_measure_type()))
+			stacked_sensors_measure_type_map.put(new_ce.getSensor_uuid(), new_ce.getTmp_measure_type());
+		
+		if(stacked_modules_list.containsAll(active_modules_list) && 
+				stacked_modules_sensors_map.values().containsAll(modules_sensors_map.values()) &&
+				stacked_sensors_measure_type_map.values().containsAll(sensors_measure_type_map.values())
+		) {
 			ready = true;
+		}
 	}
 
 	public List<ClimatizationEvent> getClimatization_event_list() {

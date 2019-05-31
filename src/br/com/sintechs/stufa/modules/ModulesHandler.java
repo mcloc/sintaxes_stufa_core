@@ -52,9 +52,9 @@ public class ModulesHandler extends Thread {
 					
 					SintechsSampling sampling = client.getModuleSampling(module);
 					LOGGER.info("Adding sampling: " + sampling.getUuid());
-//					samplingList.add(sampling);
+					samplingList.add(sampling);
 					
-					drools.addSampling(sampling);
+//					drools.addSampling(sampling);
 					
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
@@ -63,7 +63,7 @@ public class ModulesHandler extends Thread {
 				}
 				
 				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
-//				drools.addSamplingList(samplingList);
+				drools.addSamplingList(samplingList);
 				
 				
 			} catch (Exception e) {

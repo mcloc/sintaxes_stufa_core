@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class GlobalProperties {
 
-	//TODO: getAllFrom database with rest request to web_admin
+	// TODO: getAllFrom database with rest request to web_admin
 	private String SHM_ADDRESS_READ = "/dev/shm/serial2arduinoRead";
 	private String SHM_ADDRESS_WRITE = "/dev/shm/serial2arduinoWrite";
 	private String SHM_ADDRESS_READ_LOCK = "/dev/shm/serial2arduinoReadLock";
@@ -28,37 +28,36 @@ public class GlobalProperties {
 	private String REST_API_GET_SENSOR_ID_URL = REST_API_SERVER + "/api/getSensorId";
 	private String REST_API_GET_SENSOR_BY_UUID_URL = REST_API_SERVER + "/api/getSensorByUUID";
 	private String REST_API_GET_ACTUATOR_BY_UUID_URL = REST_API_SERVER + "/api/getActuatorByUUID";
-	
-	
+
 	/**
-	 * REST for Modules MOCK DATA 
+	 * REST for Modules MOCK DATA
 	 */
 	private String REST_API_GET_MODULE_SAPMLING_URL = REST_API_SERVER + "/api/getMockModuleSampling";
-	
-	
-	
+
 	/*
 	 * DRL CONSTANTS
 	 */
-	private Map<String, Map<String, String>> DRL_CONSTANTS = new HashMap<String, Map<String,String>>(); 
+	private Map<String, Map<String, String>> DRL_CONSTANTS = new HashMap<String, Map<String, String>>();
 	private Map<String, String> MAX_HEAT_INDEX = new HashMap<String, String>();
 	private Map<String, String> MAX_TEMPERATURE = new HashMap<String, String>();
 	private Map<String, String> MIN_HUMIDITY = new HashMap<String, String>();
 	private List<String> CLIMATIZATION_MODULES = new ArrayList<String>();
 	private List<String> SOIL_MODULES = new ArrayList<String>();
-	private Map<String,String> CLIMATIZATION_MODULES_SENSORS = new HashMap<String,String>();
-	private Map<String,String> SOIL_MODULES_SENSORS = new HashMap<String,String>();
+	private Map<String, String> CLIMATIZATION_MODULES_SENSORS = new HashMap<String, String>();
+	private Map<String, String> SOIL_MODULES_SENSORS = new HashMap<String, String>();
+	private Map<String, String> CLIMATIZATION_SENSORS_MEASURE_TYPES = new HashMap<String, String>();
+	private Map<String, String> SOIL_SENSORS_MEASURE_TYPES = new HashMap<String, String>();
 
 	public GlobalProperties() {
 		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#1");
 		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#2");
 		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#3");
-		
+
 		this.SOIL_MODULES.add("arduino_soil_board#1");
 		this.SOIL_MODULES.add("arduino_soil_board#2");
 		this.SOIL_MODULES.add("arduino_soil_board#3");
 		this.SOIL_MODULES.add("arduino_soil_board#4");
-		
+
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#1", "DHT11#1");
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#1", "DHT11#2");
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#1", "DHT11#3");
@@ -68,8 +67,9 @@ public class GlobalProperties {
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", "DHT11#7");
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", "DHT11#8");
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", "DHT11#9");
-//		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_external_climatization_board#1", "DHT21#1");
-		
+		// this.CLIMATIZATION_MODULES_SENSORS.put("arduino_external_climatization_board#1",
+		// "DHT21#1");
+
 		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#1", "LM393#1");
 		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#1", "Ds18b20#1");
 		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#2", "LM393#2");
@@ -78,8 +78,60 @@ public class GlobalProperties {
 		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#3", "Ds18b20#3");
 		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#4", "LM393#4");
 		this.SOIL_MODULES_SENSORS.put("arduino_soil_board#4", "Ds18b20#4");
-		
-		
+
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#1", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#1", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#1", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#2", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#2", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#2", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#3", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#3", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#3", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#4", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#4", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#4", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#5", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#5", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#5", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#6", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#6", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#6", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#7", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#7", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#7", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#8", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#8", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#8", "humidity");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#9", "heat_index");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#9", "temperature");
+		this.CLIMATIZATION_SENSORS_MEASURE_TYPES.put("DHT11#9", "humidity");
+
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#1", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#1", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#2", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#2", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#3", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#3", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#4", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#4", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#5", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#5", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#6", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#6", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#7", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#7", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#8", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#8", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#9", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#9", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#10", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#10", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#11", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#11", "temperature");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("LM393#12", "humidity");
+		this.SOIL_SENSORS_MEASURE_TYPES.put("Ds18b20#12", "temperature");
+
 		this.MAX_HEAT_INDEX.put("DHT11#1", "27");
 		this.MAX_TEMPERATURE.put("DHT11#1", "26");
 		this.MIN_HUMIDITY.put("DHT11#1", "77");
@@ -107,11 +159,11 @@ public class GlobalProperties {
 		this.MAX_HEAT_INDEX.put("DHT11#9", "27");
 		this.MAX_TEMPERATURE.put("DHT11#9", "26");
 		this.MIN_HUMIDITY.put("DHT11#9", "77");
-		
+
 		this.MAX_HEAT_INDEX.put("DHT21#1", "27");
 		this.MAX_TEMPERATURE.put("DHT21#1", "26");
 		this.MIN_HUMIDITY.put("DHT21#1", "77");
-		
+
 		this.MIN_HUMIDITY.put("LM393#1", "86");
 		this.MAX_TEMPERATURE.put("Ds18b20#1", "23");
 		this.MIN_HUMIDITY.put("LM393#2", "86");
@@ -137,9 +189,8 @@ public class GlobalProperties {
 		this.MIN_HUMIDITY.put("LM393#11", "86");
 		this.MAX_TEMPERATURE.put("Ds18b20#11", "23");
 		this.MIN_HUMIDITY.put("LM393#12", "86");
-		this.MAX_TEMPERATURE.put("Ds18b20#12", "23");		
-		
-		
+		this.MAX_TEMPERATURE.put("Ds18b20#12", "23");
+
 		this.DRL_CONSTANTS.put("MAX_HEAT_INDEX", MAX_HEAT_INDEX);
 		this.DRL_CONSTANTS.put("MAX_TEMPERATURE", MAX_TEMPERATURE);
 		this.DRL_CONSTANTS.put("MIN_HUMIDITY", MIN_HUMIDITY);
@@ -369,6 +420,12 @@ public class GlobalProperties {
 		SOIL_MODULES_SENSORS = sOIL_MODULES_SENSORS;
 	}
 
-	
+	public Map<String, String> getSENSORS_MEASURE_TYPES() {
+		return CLIMATIZATION_SENSORS_MEASURE_TYPES;
+	}
+
+	public void setSENSORS_MEASURE_TYPES(Map<String, String> sENSORS_MEASURE_TYPES) {
+		CLIMATIZATION_SENSORS_MEASURE_TYPES = sENSORS_MEASURE_TYPES;
+	}
 
 }

@@ -45,7 +45,7 @@ public class ClimatizationEventHandler {
 		return instance;
 	}
 
-	public static ClimatizationEventHandler addEvent(ClimatizationEvent new_ce) {
+	/*public static ClimatizationEventHandler addEvent(ClimatizationEvent new_ce) {
 		boolean ce_exists = false;
 		for(int i =0; i < instance.getClimatization_event_list().size();i++) {
 			
@@ -94,7 +94,7 @@ public class ClimatizationEventHandler {
 //		}
 
 		return instance;
-	}
+	}*/
 
 	private Float getAvarage(List<Float> list) {
 		if (list == null)

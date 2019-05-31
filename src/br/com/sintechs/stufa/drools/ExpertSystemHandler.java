@@ -100,25 +100,25 @@ public class ExpertSystemHandler extends Thread {
 	// This is the real addSampling method called in the serialComm class
 	// It's not been called any time in this TEST DEBUG version
 	// Check the method below
-	public synchronized void addSampling(SintechsSampling sampling) {
-		try {
-			LOGGER.info("inserting samping: " + sampling.hashCode() + " into KieSession");
-			samplingStream.insert(sampling);
-		} catch (Exception e) {
-			e.getStackTrace();
-			LOGGER.error(e.getMessage());
-		}
-	}
-
-//	public void addSamplingList(List<SintechsSampling> samplingList) {
+//	public synchronized void addSampling(SintechsSampling sampling) {
 //		try {
-//			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
-//			samplingStream.insert(samplingList);
+//			LOGGER.info("inserting samping: " + sampling.hashCode() + " into KieSession");
+//			samplingStream.insert(sampling);
 //		} catch (Exception e) {
 //			e.getStackTrace();
 //			LOGGER.error(e.getMessage());
 //		}
 //	}
+
+	public void addSamplingList(List<SintechsSampling> samplingList) {
+		try {
+			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
+			samplingStream.insert(samplingList);
+		} catch (Exception e) {
+			e.getStackTrace();
+			LOGGER.error(e.getMessage());
+		}
+	}
 
 	// This is a test Method so you guys can see that an Exception with no message
 	// and no stacktrace
