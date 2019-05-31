@@ -52,12 +52,12 @@ dialect "mvel"
     		ready == true
     	) from entry-point "StufaSamplingStream"
 	then
-	ClimatizationEventHandler cev = ClimatizationEventHandler.addStack($climatizationEventStack);
 	// RESET THE STACK AND MODIFY ClimatizationEventHandler ON THE OTHER STREAM (StufaClimatizationStream) WITH 
 	// STACK FULLY CREATED FOR THIS ROUND OF MODULES DATA
+	ClimatizationEventHandler cev = ClimatizationEventHandler.addStack($climatizationEventStack);
 	$climatizationEventStack.reset();
 	modify($climatizationEventStack);
-	drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").modify(cev);
+	drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").update(drlActionHandler.getClimatization_fact_handler(), cev);
 end
 
 rule "0001-arduino_climatization_board#1"

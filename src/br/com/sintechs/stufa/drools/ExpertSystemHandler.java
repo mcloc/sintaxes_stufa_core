@@ -1,8 +1,11 @@
 package br.com.sintechs.stufa.drools;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
+import org.drools.core.marshalling.impl.ProtobufMessages.FactHandle;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
@@ -55,20 +58,33 @@ public class ExpertSystemHandler extends Thread {
 				LOGGER.info("Creating KieSession.");
 				kieSession = kieContainer.newKieSession("ksession-rules");
 				kieSession.addEventListener(new DebugEventListener());
-
-				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
-				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
-				kieSession.setGlobal("drlActionHandler", drlActionHandler);
-				
-//				EventHandler eventHandler = new EventHandler();
-//				kieSession.insert(eventHandler);
 				
 				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
 				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
 				samplingStream.insert(cEventStack);
 				
 				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
-				climatizationStream.insert(ClimatizationEventHandler.initialize(globalProperties));
+				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
+				climatizationStream.insert(climatizationEventHandler);
+
+				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
+				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, climatizationStream.getFactHandle(climatizationEventHandler));
+				kieSession.setGlobal("drlActionHandler", drlActionHandler);
+				
+//				EventHandler eventHandler = new EventHandler();
+//				kieSession.insert(eventHandler);
+				
+
+				
+//				Collection<org.kie.api.runtime.rule.FactHandle> cFH;
+//				Iterator it;
+//				cFH = climatizationStream.getFactHandles();
+//				it = cFH.iterator();
+//				while (it.hasNext()) {
+//					System.out.println(it.next() + "aaaaaaaaaaaaaaaaa \n ");;
+//				}
+				
+				
 
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage());
