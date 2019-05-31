@@ -42,15 +42,17 @@ dialect "mvel"
 		) from entry-point "StufaClimatizationStream"
 		
 		
-		$rule_event : RuleEvent(
-			$event_value : value
-			$rule_condition : rule_condition
-			$actuator_uuid : actuator_uuid
+		$climatization_event : ClimatizationEvent(
+			$module : module
+			$sampling : sampling
 		) from $climatization_event_list
 		
-		$actuator : SintechsSamplingActuator(
-			(active == false)
-		) from $actuators_status
+		//if $climatization_event == hot / warm / cold (conjunto A B C)
+		// check the actuators as well (actuator ON, OFF)
+		
+		//$actuator : SintechsSamplingActuator(
+		//	(active == false)
+		//) from $actuators_status
 		//eval($boards.size() > globalProperties.getTOTAL_CLIMATIZATION_BOARDS())
     then
     //$$climatization_event_handler.setLast_status_chage = Time();
