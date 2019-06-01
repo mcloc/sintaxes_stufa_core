@@ -11,6 +11,7 @@ import br.com.sintechs.stufa.drools.ExpertSystemHandler;
 import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.models.SintechsModule;
 import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.sintechs.stufa.models.SintechsSamplingPack;
 import br.com.sintechs.stufa.rest.RESTClient;
 
 public class ModulesHandler extends Thread {
@@ -43,7 +44,8 @@ public class ModulesHandler extends Thread {
 				RESTClient client = new RESTClient(globalProperties);
 				List<SintechsModule> modules = client.getModules(); 
 				
-				List<SintechsSampling> samplingList = new ArrayList<SintechsSampling>();
+//				List<SintechsSampling> samplingList = new ArrayList<SintechsSampling>();
+				SintechsSamplingPack samplingPack = new SintechsSamplingPack();
 				for (SintechsModule module : modules) {
 					Thread.sleep(globalProperties.getREST_MODULE_SLEEP());	
 					//TODO: check for enabled modules and LOG why there're unabled
@@ -52,18 +54,22 @@ public class ModulesHandler extends Thread {
 					
 					SintechsSampling sampling = client.getModuleSampling(module);
 					LOGGER.info("Adding sampling: " + sampling.getUuid());
-					samplingList.add(sampling);
+					samplingPack.getSampling_list().add(sampling);
 					
-//					drools.addSampling(sampling);
+					
+					LOGGER.info("Iserting "+sampling.getModule().getName()+" sampling into WorkingMemory entryPoing ");
+					drools.addSampling(sampling);
 					
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
 					Thread.sleep(500);
-					break; // DEBUG
+					break; // DEBUG check just the first module
 				}
 				
-				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
-				drools.addSamplingList(samplingList);
+//				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
+//				drools.addSamplingList(samplingList);
+//				LOGGER.info("Iserting "+samplingPack.getSampling_list().size()+" samplings into WorkingMemory entryPoing ");
+//				drools.addSamplingPack(samplingPack);
 				
 				
 			} catch (Exception e) {

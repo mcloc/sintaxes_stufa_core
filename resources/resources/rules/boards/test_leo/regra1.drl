@@ -1,0 +1,20 @@
+//created on: 06/05/2019
+package resources.rules.boards.test_leo
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	BASIC THIS DRL IS USED AS ETL TO TRANSFORM SintechsSampling INTO CLIMATIZATION_EVENTS
+//	MORE REFINED CLIMATIZATION BUSINESS RULES ARE MADE ON actuation.drl OF THIS OWN PACKAGE
+//	
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+import br.com.sintechs.stufa.models.SintechsSampling;
+
+rule "testLeo"
+dialect "mvel"
+when
+	$ss : SintechsSampling() from entry-point  "PontoDeEntradaDoLeo"
+	
+then
+	System.out.println("DISPAROU PORRA!" + $ss.getModule().getName());
+end

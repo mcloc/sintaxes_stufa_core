@@ -1,11 +1,8 @@
 package br.com.sintechs.stufa.drools;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.drools.core.marshalling.impl.ProtobufMessages.FactHandle;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
@@ -21,6 +18,7 @@ import br.com.sintechs.stufa.models.ClimatizationEventHandler;
 import br.com.sintechs.stufa.models.ClimatizationEventStack;
 import br.com.sintechs.stufa.models.SintechsModule;
 import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.sintechs.stufa.models.SintechsSamplingPack;
 
 public class ExpertSystemHandler extends Thread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExpertSystemHandler.class);
@@ -59,17 +57,18 @@ public class ExpertSystemHandler extends Thread {
 				kieSession = kieContainer.newKieSession("ksession-rules");
 				kieSession.addEventListener(new DebugEventListener());
 				
-				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
-				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
-				samplingStream.insert(cEventStack);
+//				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
+//				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
+//				samplingStream.insert(cEventStack);
 				
-				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
-				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
-				climatizationStream.insert(climatizationEventHandler);
+//				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
+//				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
+//				climatizationStream.insert(climatizationEventHandler);
 
 				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
-				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, climatizationStream.getFactHandle(climatizationEventHandler));
-				kieSession.setGlobal("drlActionHandler", drlActionHandler);
+//				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, climatizationStream.getFactHandle(climatizationEventHandler));
+				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
+//				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
 //				EventHandler eventHandler = new EventHandler();
 //				kieSession.insert(eventHandler);
@@ -116,25 +115,39 @@ public class ExpertSystemHandler extends Thread {
 	// This is the real addSampling method called in the serialComm class
 	// It's not been called any time in this TEST DEBUG version
 	// Check the method below
-//	public synchronized void addSampling(SintechsSampling sampling) {
-//		try {
-//			LOGGER.info("inserting samping: " + sampling.hashCode() + " into KieSession");
+	public synchronized void addSampling(SintechsSampling sampling) {
+		try {
+			LOGGER.info("inserting sampling: " + sampling.hashCode() + " into Kiesession.samplingStream");
+			kieSession.getEntryPoint("StufaSamplingStream").insert(sampling);
 //			samplingStream.insert(sampling);
+			LOGGER.info("VAI INSERIR A POORRA do MODULE: " + sampling.getModule().getName());
+//			kieSession.insert(sampling);
+//			kieSession.fireAllRules();
+		} catch (Exception e) {
+			e.getStackTrace();
+			LOGGER.error(e.getMessage());
+		}
+	}
+	
+//	public void addSamplingPack(SintechsSamplingPack samplingPack) {
+//		try {
+//			LOGGER.info("inserting samplingPack: " + samplingPack.hashCode() + " into Kiesession.samplingStream");
+//			samplingStream.insert(samplingPack);
 //		} catch (Exception e) {
 //			e.getStackTrace();
 //			LOGGER.error(e.getMessage());
 //		}
 //	}
 
-	public void addSamplingList(List<SintechsSampling> samplingList) {
-		try {
-			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
-			samplingStream.insert(samplingList);
-		} catch (Exception e) {
-			e.getStackTrace();
-			LOGGER.error(e.getMessage());
-		}
-	}
+//	public void addSamplingList(List<SintechsSampling> samplingList) {
+//		try {
+//			LOGGER.info("inserting samping: " + samplingList.hashCode() + " into KieSession");
+//			samplingStream.insert(samplingList);
+//		} catch (Exception e) {
+//			e.getStackTrace();
+//			LOGGER.error(e.getMessage());
+//		}
+//	}
 
 	// This is a test Method so you guys can see that an Exception with no message
 	// and no stacktrace

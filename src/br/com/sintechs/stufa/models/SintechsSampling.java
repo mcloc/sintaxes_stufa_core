@@ -18,7 +18,7 @@ import br.com.sintechs.stufa.GlobalProperties;
 import br.com.sintechs.stufa.rest.RESTClient;
 
 @Role(Role.Type.EVENT)
-@Expires("2m")
+@Expires("10m")
 public class SintechsSampling implements Serializable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SintechsSampling.class);
