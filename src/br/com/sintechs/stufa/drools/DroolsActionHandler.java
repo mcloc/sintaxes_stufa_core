@@ -15,11 +15,13 @@ public class DroolsActionHandler {
 	private GlobalProperties globalProperties;
 	private KieSession drools_session;
 	private FactHandle climatization_fact_handler;
+	private FactHandle sampling_fact_handler;
 
-	public DroolsActionHandler(GlobalProperties globalProperties, KieSession kieSession, FactHandle factHandle) {
+	public DroolsActionHandler(GlobalProperties globalProperties, KieSession kieSession, FactHandle climatization_fact_handler, FactHandle sampling_fact_handler) {
 		this.globalProperties = globalProperties;
 		this.drools_session = kieSession;
 		this.climatization_fact_handler = climatization_fact_handler;
+		this.sampling_fact_handler = sampling_fact_handler;
 	}
 
 	public boolean checkPreviousEvent(RuleEvent ev) {
@@ -67,6 +69,14 @@ public class DroolsActionHandler {
 
 	public void setClimatization_fact_handler(FactHandle climatization_fact_handler) {
 		this.climatization_fact_handler = climatization_fact_handler;
+	}
+
+	public FactHandle getSampling_fact_handler() {
+		return sampling_fact_handler;
+	}
+
+	public void setSampling_fact_handler(FactHandle sampling_fact_handler) {
+		this.sampling_fact_handler = sampling_fact_handler;
 	}
 
 }

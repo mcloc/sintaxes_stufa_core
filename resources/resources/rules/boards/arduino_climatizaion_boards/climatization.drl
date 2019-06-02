@@ -3,7 +3,7 @@ package resources.rules.boards.arduino_climatizaion_boards
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//	BASIC THIS DRL IS USED AS ETL TO TRANSFORM SintechsSampling INTO CLIMATIZATION_EVENTS
+//	BASICLY THIS DRL IS USED AS ETL TO TRANSFORM SintechsSampling INTO CLIMATIZATION_EVENTS.
 //	MORE REFINED CLIMATIZATION BUSINESS RULES ARE MADE ON actuation.drl OF THIS OWN PACKAGE
 //	
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +28,7 @@ import br.com.sintechs.stufa.models.ClimatizationEventStack;
 //declare any global variables here
 global br.com.sintechs.stufa.drools.DroolsActionHandler drlActionHandler;
 global br.com.sintechs.stufa.drools.EventHandler eventHandler;
+global br.com.sintechs.stufa.models.ClimatizationEventStack climatizationEventStack;
 
 declare SintechsSampling 
     @role( event )
@@ -77,7 +78,7 @@ dialect "mvel"
 no-loop true
     when
 		//$eventHandler : EventHandler()
-		$climatizationEventStack : ClimatizationEventStack() from entry-point "StufaSamplingStream"
+		//$climatizationEventStack : ClimatizationEventStack() from entry-point "StufaSamplingStream"
 		//SintechsSamplingPack($sampling_list : sampling_list) from entry-point "StufaSamplingStream"
 		
 		//$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
@@ -112,15 +113,14 @@ no-loop true
 		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, 
 			$sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
 			
-		$climatizationEventStack.addEvent(ce);
-		modify(ce);
+		climatizationEventStack.addEvent(ce);
+		drlActionHandler.getDrools_session().getEntryPoint("StufaSamplingStream").update(drlActionHandler.getSampling_fact_handler(), climatizationEventStack);
 end
 
 rule "0001-NOT-arduino_climatization_board#1"
 dialect "mvel"
 no-loop true
     when
-		$climatizationEventStack : ClimatizationEventStack()  from  entry-point "StufaSamplingStream"
 		SintechsSamplingPack($sampling_list : sampling_list)  from  entry-point "StufaSamplingStream"
 		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from  $sampling_list
@@ -145,7 +145,7 @@ no-loop true
 		
 		//3 - Modify ClimatizationEvent for further processing
 		ClimatizationEvent ce = new ClimatizationEvent($sampling.getModule(), $sampling, $sampling_sensor.sensor.getUuid(), $sampling_sensor.getMeasure_type(),  $sampling_sensor.getValue(),$sampling_sensor.getRule_condition());
-		$climatizationEventStack.addEvent(ce);
-		modify($climatizationEventStack);
+		climatizationEventStack.addEvent(ce);
+		drlActionHandler.getDrools_session().getEntryPoint("StufaSamplingStream").update(drlActionHandler.getSampling_fact_handler(), climatizationEventStack);
 end
 

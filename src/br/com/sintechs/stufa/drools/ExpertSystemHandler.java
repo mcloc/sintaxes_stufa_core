@@ -59,13 +59,15 @@ public class ExpertSystemHandler extends Thread {
 				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
 				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
 				samplingStream.insert(cEventStack);
+				kieSession.setGlobal("climatizationEventStack", cEventStack);
 				
 				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
 				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
 				climatizationStream.insert(climatizationEventHandler);
 
 				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
-				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, climatizationStream.getFactHandle(climatizationEventHandler));
+				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, 
+						climatizationStream.getFactHandle(climatizationEventHandler), samplingStream.getFactHandle(cEventStack));
 //				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
 				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
