@@ -126,7 +126,7 @@ public class ClimatizationEventStack {
 				boolean contains_all_sensors_measure_types = true;
 				for(Entry<String,List<String>> entry_sensor : stacked_modules_sensors_map.entrySet()){
 					for(Entry<String,List<String>> entry_measure_type : stacked_sensors_measure_type_map.entrySet()){
-						if(!entry_measure_type.getValue().containsAll(stacked_sensors_measure_type_map.get(entry_sensor.getKey()))) {
+						if(!entry_measure_type.getValue().containsAll(sensors_measure_type_map.get(entry_sensor.getKey()))) {
 							contains_all_sensors_measure_types = false;
 							break;
 						}

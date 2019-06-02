@@ -45,56 +45,6 @@ public class ClimatizationEventHandler {
 		return instance;
 	}
 
-	/*public static ClimatizationEventHandler addEvent(ClimatizationEvent new_ce) {
-		boolean ce_exists = false;
-		for(int i =0; i < instance.getClimatization_event_list().size();i++) {
-			
-			//THERE IS ALREADY AN CEVENT FOR THE NEW EV MODULE AND SAMPLING AND SENSOR, SO JUST UPDATE MEASURE_TYPE VALUES
-			if(instance.getClimatization_event_list().get(i).getModule().equals(new_ce.getModule()) &&
-				instance.getClimatization_event_list().get(i).getSampling().equals(new_ce.getSampling()) &&
-				instance.getClimatization_event_list().get(i).getSensor_uuid().equals(new_ce.getSensor_uuid())
-			) {
-				//REMOVE OLD_CE TO UPDATE IT
-				ClimatizationEvent ce = instance.getClimatization_event_list().remove(i);
-				switch (new_ce.getTmp_measure_type()) {
-				case "heat_index":
-					ce.setHeat_index(new_ce.getHeat_index());
-					ce.setRule_condition_heat_index(new_ce.getRule_condition_heat_index());
-					ce_exists = true;
-					break;
-				case "temperature":
-					ce.setTemperature(new_ce.getTemperature());
-					ce.setRule_condition_temperature(new_ce.getRule_condition_temperature());
-					ce_exists = true;
-					break;
-				case "humidity":
-					ce.setHumidity(new_ce.getHumidity());
-					ce.setRule_condition_humidity(new_ce.getRule_condition_humidity());
-					ce_exists = true;
-					break;
-				}
-				//ADD THE UPDATED CEVENT WITH THE NEW MEASURE_TYPE
-				instance.getClimatization_event_list().add(ce);
-				break; // break the loop
-			} 
-		} // AND OF LOOP in climatization_event_list
-		
-		//THE NEW_CE DON'T EXISTS ON THE LIST SO ADD IT
-		if(!ce_exists) {
-			instance.getClimatization_event_list().add(new_ce);
-		}
-		
-
-		
-//		List<SintechsSamplingActuator> samplingActuatorsList = ev.getSampling().getSamplingActuators();
-//		for (SintechsSamplingActuator sampling_actuator : samplingActuatorsList) {
-//			instance.actuators_status.put(sampling_actuator.getActuator().getUuid(), sampling_actuator.isActive());
-//			instance.actuators_status_time.put(sampling_actuator.getActuator().getUuid(),
-//					sampling_actuator.getActivated_time());
-//		}
-
-		return instance;
-	}*/
 
 	private Float getAvarage(List<Float> list) {
 		if (list == null)
