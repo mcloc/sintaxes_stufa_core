@@ -18,7 +18,6 @@ import br.com.sintechs.stufa.models.ClimatizationEventHandler;
 import br.com.sintechs.stufa.models.ClimatizationEventStack;
 import br.com.sintechs.stufa.models.SintechsModule;
 import br.com.sintechs.stufa.models.SintechsSampling;
-import br.com.sintechs.stufa.models.SintechsSamplingPack;
 
 public class ExpertSystemHandler extends Thread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExpertSystemHandler.class);
@@ -57,21 +56,22 @@ public class ExpertSystemHandler extends Thread {
 				kieSession = kieContainer.newKieSession("ksession-rules");
 				kieSession.addEventListener(new DebugEventListener());
 				
-//				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
-//				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
-//				samplingStream.insert(cEventStack);
+				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
+				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
+				samplingStream.insert(cEventStack);
 				
-//				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
-//				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
-//				climatizationStream.insert(climatizationEventHandler);
+				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
+				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
+				climatizationStream.insert(climatizationEventHandler);
 
 				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
-//				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, climatizationStream.getFactHandle(climatizationEventHandler));
-				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
-//				kieSession.setGlobal("drlActionHandler", drlActionHandler);
+				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, climatizationStream.getFactHandle(climatizationEventHandler));
+//				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
+				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
-//				EventHandler eventHandler = new EventHandler();
+				EventHandler eventHandler = new EventHandler();
 //				kieSession.insert(eventHandler);
+				kieSession.setGlobal("eventHandler", eventHandler);
 				
 
 				
@@ -100,7 +100,7 @@ public class ExpertSystemHandler extends Thread {
 			// we're already in another thread dedicated for drools
 			// kieSession.fireAllRules();
 
-			// FIXME: I think there's no need to create another thread.
+			// FIXME: I think there's no need to create another thread.: YES THERE IS !!!
 			new Thread() {
 
 				@Override
@@ -118,11 +118,10 @@ public class ExpertSystemHandler extends Thread {
 	public synchronized void addSampling(SintechsSampling sampling) {
 		try {
 			LOGGER.info("inserting sampling: " + sampling.hashCode() + " into Kiesession.samplingStream");
-			kieSession.getEntryPoint("StufaSamplingStream").insert(sampling);
-//			samplingStream.insert(sampling);
-			LOGGER.info("VAI INSERIR A POORRA do MODULE: " + sampling.getModule().getName());
+			
+//			kieSession.getEntryPoint("StufaSamplingStream").insert(sampling); //bEAUTY .ar
+			samplingStream.insert(sampling);
 //			kieSession.insert(sampling);
-//			kieSession.fireAllRules();
 		} catch (Exception e) {
 			e.getStackTrace();
 			LOGGER.error(e.getMessage());

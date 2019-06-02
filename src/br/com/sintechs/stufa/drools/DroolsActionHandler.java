@@ -16,10 +16,10 @@ public class DroolsActionHandler {
 	private KieSession drools_session;
 	private FactHandle climatization_fact_handler;
 
-	public DroolsActionHandler(GlobalProperties globalProperties, KieSession kieSession) {
+	public DroolsActionHandler(GlobalProperties globalProperties, KieSession kieSession, FactHandle factHandle) {
 		this.globalProperties = globalProperties;
 		this.drools_session = kieSession;
-//		this.climatization_fact_handler = climatization_fact_handler;
+		this.climatization_fact_handler = climatization_fact_handler;
 	}
 
 	public boolean checkPreviousEvent(RuleEvent ev) {
