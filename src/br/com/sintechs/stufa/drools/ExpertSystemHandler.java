@@ -17,7 +17,7 @@ import br.com.sintechs.stufa.ipc.IPCWriteInterrupt;
 import br.com.sintechs.stufa.models.ClimatizationEventHandler;
 import br.com.sintechs.stufa.models.ClimatizationEventStack;
 import br.com.sintechs.stufa.models.SintechsModule;
-import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.sintechs.stufa.models.SintechsSamplingPack;
 
 public class ExpertSystemHandler extends Thread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExpertSystemHandler.class);
@@ -117,28 +117,28 @@ public class ExpertSystemHandler extends Thread {
 	// This is the real addSampling method called in the serialComm class
 	// It's not been called any time in this TEST DEBUG version
 	// Check the method below
-	public synchronized void addSampling(SintechsSampling sampling) {
-		try {
-			LOGGER.info("inserting sampling: " + sampling.hashCode() + " into Kiesession.samplingStream");
-			
-//			kieSession.getEntryPoint("StufaSamplingStream").insert(sampling); //bEAUTY .ar
-			samplingStream.insert(sampling);
-//			kieSession.insert(sampling);
-		} catch (Exception e) {
-			e.getStackTrace();
-			LOGGER.error(e.getMessage());
-		}
-	}
-	
-//	public void addSamplingPack(SintechsSamplingPack samplingPack) {
+//	public synchronized void addSampling(SintechsSampling sampling) {
 //		try {
-//			LOGGER.info("inserting samplingPack: " + samplingPack.hashCode() + " into Kiesession.samplingStream");
-//			samplingStream.insert(samplingPack);
+//			LOGGER.info("inserting sampling: " + sampling.hashCode() + " into Kiesession.samplingStream");
+//			
+////			kieSession.getEntryPoint("StufaSamplingStream").insert(sampling); //bEAUTY .ar
+//			samplingStream.insert(sampling);
+////			kieSession.insert(sampling);
 //		} catch (Exception e) {
 //			e.getStackTrace();
 //			LOGGER.error(e.getMessage());
 //		}
 //	}
+	
+	public void addSamplingPack(SintechsSamplingPack samplingPack) {
+		try {
+			LOGGER.info("inserting samplingPack: " + samplingPack.hashCode() + " into Kiesession.samplingStream");
+			samplingStream.insert(samplingPack);
+		} catch (Exception e) {
+			e.getStackTrace();
+			LOGGER.error(e.getMessage());
+		}
+	}
 
 //	public void addSamplingList(List<SintechsSampling> samplingList) {
 //		try {

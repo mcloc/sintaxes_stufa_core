@@ -58,7 +58,7 @@ public class ModulesHandler extends Thread {
 					
 					
 					LOGGER.info("Iserting "+sampling.getModule().getName()+" sampling into WorkingMemory entryPoing ");
-					drools.addSampling(sampling);
+//					drools.addSampling(sampling);
 					
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
@@ -69,7 +69,7 @@ public class ModulesHandler extends Thread {
 //				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
 //				drools.addSamplingList(samplingList);
 //				LOGGER.info("Iserting "+samplingPack.getSampling_list().size()+" samplings into WorkingMemory entryPoing ");
-//				drools.addSamplingPack(samplingPack);
+				drools.addSamplingPack(samplingPack);
 				
 				
 			} catch (Exception e) {
