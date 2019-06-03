@@ -51,12 +51,6 @@ rule "0101-climatization_actuation"
 dialect "mvel"
 //no-loop true
     when
-		$eventHandler : EventHandler()
-		$climatization_event_handler: ClimatizationEventHandler (
-			$climatization_event_list : climatization_event_list,
-			$globalProperties : globalProperties
-		) from entry-point "StufaClimatizationStream"
-		
 		
 		$climatization_event : ClimatizationEvent(
 			$module: module,
@@ -65,7 +59,7 @@ dialect "mvel"
 			$heat_index : heat_index,
 			$temperature : temperature,
 			$humidity : humidity
-		) from $climatization_event_list
+		) from entry-point "StufaClimatizationStream"
 		
 		//if $climatization_event == hot / warm / cold (conjunto A B C)
 		// check the actuators as well (actuator ON, OFF)
@@ -76,11 +70,11 @@ dialect "mvel"
 		//eval($boards.size() > globalProperties.getTOTAL_CLIMATIZATION_BOARDS())
     then
     System.out.println("actuation: " + 
-		"moduyle: "+$module+" "
-		"sampling: "+$sampling+" "
-		"sensor_uuid: "+$sensor_uuid+" "
-		"heaT_index: "+$heat_index+" "
-		"temperature: "+$temperature+" "
+		"moduyle: "+$module+" "+
+		"sampling: "+$sampling+" "+
+		"sensor_uuid: "+$sensor_uuid+" "+
+		"heaT_index: "+$heat_index+" "+
+		"temperature: "+$temperature+" "+
 		"Humidity: "+$humidity+"");
     //$$climatization_event_handler.setLast_status_chage = Time();
     //$climatization_event_handler.setActuatorON($actuator);

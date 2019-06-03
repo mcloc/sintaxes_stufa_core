@@ -35,7 +35,8 @@ end
 
 declare SintechsSamplingSensor 
  	sampling_uuid : Timestamp
- 	sensor : SintechsSensor 
+ 	sensor : SintechsSensor
+ 	module : SintechsModule 
 	measure_type: String 
 	value: Float
 	rule_condition : Float
@@ -62,7 +63,10 @@ dialect "mvel"
 	$climatizationEventStack.reset();
 	drlActionHandler.getDrools_session().getEntryPoint("StufaSamplingStream").update(drlActionHandler.getSampling_fact_handler(), $climatizationEventStack);
 	//modify($climatizationEventStack);
-	drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").update(drlActionHandler.getClimatization_fact_handler(), ceh);
+	for(ClimatizationEvent ce : ceh.getInstance().getClimatization_event_list()){
+		drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").insert(ce);
+	}
+	drlActionHandler.getDrools_session().getEntryPoint("StufaClimatizationStream").update(drlActionHandler.getClimatization_fact_handler(), ceh.getInstance().getClimatization_event_list());
 end
 
 rule "testLeo"

@@ -67,11 +67,12 @@ public class GlobalProperties {
 		tmp_list.add("DHT11#4");
 		tmp_list.add("DHT11#5");
 		tmp_list.add("DHT11#6");
+//		tmp_list.add("DHT11#7");
 		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#2", tmp_list);
 //		tmp_list = new ArrayList<String>();
-//		tmp_list.add("DHT11#6");
 //		tmp_list.add("DHT11#7");
 //		tmp_list.add("DHT11#8");
+//		tmp_list.add("DHT11#9");
 //		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", tmp_list);
 		// this.CLIMATIZATION_MODULES_SENSORS.put("arduino_external_climatization_board#1",
 		// "DHT21#1");

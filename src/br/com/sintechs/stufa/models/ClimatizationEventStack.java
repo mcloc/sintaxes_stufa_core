@@ -82,12 +82,7 @@ public class ClimatizationEventStack {
 					//ADD THE UPDATED CEVENT WITH THE NEW MEASURE_TYPE
 					instance.climatization_event_list.add(ce);
 					break; // break the loop
-				} else { // SENSOR DONT EXISTS
-					instance.climatization_event_list.add(new_ce);
-//					instance.climatization_event_list.get(i).getSampling().put(new_ce.getSampling(), )
 				}
-				
-				
 			}
 		} // AND OF LOOP in instance.climatization_event_list
 		

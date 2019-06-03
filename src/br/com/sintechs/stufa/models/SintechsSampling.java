@@ -95,6 +95,7 @@ public class SintechsSampling implements Serializable {
 				for(String sensor_name : names) {
 					LOGGER.debug("module: "+module.getName()+ " sensor: " + sensor.getUuid() + " measure_type: " + sensor_name);
 					SintechsSamplingSensor sintechsSamplingSensor = new SintechsSamplingSensor(globalProperties);
+					sintechsSamplingSensor.setModule(module);
 					sintechsSamplingSensor.setSensor(sensor);
 					sintechsSamplingSensor.setCreated_at(sampling.created_at);
 					sintechsSamplingSensor.setUpdated_at(sampling.updated_at);
@@ -115,6 +116,7 @@ public class SintechsSampling implements Serializable {
 				SintechsActuator actuator = client.getActuatorByUUID(sampling_actuator_obj.getString("uuid"), module);
 				SintechsSamplingActuator sintechsSamplingActuator = new SintechsSamplingActuator(globalProperties);
 				sintechsSamplingActuator.setActuator(actuator);
+				sintechsSamplingActuator.setModule(module);
 				sintechsSamplingActuator.setCreated_at(sampling.created_at);
 				sintechsSamplingActuator.setUpdated_at(sampling.updated_at);
 				// Loop for one actuator values, for actuators which have multiple return values, this will happen ONCE per parent LOOP
