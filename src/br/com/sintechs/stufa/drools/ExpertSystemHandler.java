@@ -27,6 +27,7 @@ public class ExpertSystemHandler extends Thread {
 	private KieSession kieSession;
 	private EntryPoint samplingStream;
 	private List<SintechsModule> activeModules = new ArrayList<SintechsModule>();
+	private EntryPoint climatizationStream;
 
 	public ExpertSystemHandler(GlobalProperties globalProperties, IPCWriteInterrupt writeInterrupt) {
 		this.globalProperties = globalProperties;
@@ -56,23 +57,22 @@ public class ExpertSystemHandler extends Thread {
 				kieSession = kieContainer.newKieSession("ksession-rules");
 				kieSession.addEventListener(new DebugEventListener());
 				
-				ClimatizationEventStack cEventStack = new ClimatizationEventStack(globalProperties);
+				ClimatizationEventStack cEventStack = ClimatizationEventStack.initialize(globalProperties);
 				samplingStream = kieSession.getEntryPoint("StufaSamplingStream");
 				samplingStream.insert(cEventStack);
-				kieSession.setGlobal("climatizationEventStack", cEventStack);
-				
-				EntryPoint climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
-				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
-				climatizationStream.insert(climatizationEventHandler);
+//				kieSession.setGlobal("climatizationEventStack", cEventStack);
 
-				// Collection<KiePackage> x = kieSession.getKieBase().getKiePackages();
+				ClimatizationEventHandler climatizationEventHandler = ClimatizationEventHandler.initialize(globalProperties);
+				climatizationStream = kieSession.getEntryPoint("StufaClimatizationStream");
+				climatizationStream.insert(climatizationEventHandler);
+//				kieSession.setGlobal("climatizationEventHandler", climatizationEventHandler);
+				
 				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession, 
 						climatizationStream.getFactHandle(climatizationEventHandler), samplingStream.getFactHandle(cEventStack));
 //				DroolsActionHandler drlActionHandler = new DroolsActionHandler(globalProperties, kieSession);
 				kieSession.setGlobal("drlActionHandler", drlActionHandler);
 				
 				EventHandler eventHandler = new EventHandler();
-//				kieSession.insert(eventHandler);
 				kieSession.setGlobal("eventHandler", eventHandler);
 				
 

@@ -30,6 +30,10 @@ public class ClimatizationEventHandler {
 	public ClimatizationEventHandler() {
 	}
 
+	public ClimatizationEventHandler(GlobalProperties globalProperties) {
+		this.globalProperties = globalProperties;
+	}
+
 	public static ClimatizationEventHandler initialize(GlobalProperties globalProperties) {
 		if (instance == null)
 			instance = new ClimatizationEventHandler();
@@ -39,10 +43,16 @@ public class ClimatizationEventHandler {
 		return instance;
 	}
 	
-	public static ClimatizationEventHandler addStack(ClimatizationEventStack climatization_event_stack) {
+	public static ClimatizationEventHandler addStaticStack(ClimatizationEventStack climatization_event_stack) {
 		instance.setClimatization_event_list(climatization_event_stack.getClimatization_event_list());
 		
 		return instance;
+	}
+	
+	public   void  addStack(ClimatizationEventStack climatization_event_stack) {
+		this.climatization_event_list = climatization_event_stack.getClimatization_event_list();
+		
+//		return instance;
 	}
 
 
