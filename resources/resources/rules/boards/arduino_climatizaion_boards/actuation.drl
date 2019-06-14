@@ -36,6 +36,9 @@ end
 declare ClimatizationEvent 
  	  module:SintechsModule
 	  sampling:SintechsSampling
+	  actuator_uuid: String 
+	  actuator_active: Boolean
+	  actuator_activated_time : BigInteger 
 	  sensor_uuid:String
 	  heat_index:Float
 	  temperature:Float
@@ -55,11 +58,16 @@ dialect "mvel"
 		$climatization_event : ClimatizationEvent(
 			$module: module,
 			$sampling : sampling,
+			$actuator_uuid : actuator_uuid,
+			$actuator_active : actuator_active,
+			$actuator_activated_time : actuator_activated_time,
 			$sensor_uuid : sensor_uuid,
 			$heat_index : heat_index,
 			$temperature : temperature,
 			$humidity : humidity
 		) from entry-point "StufaClimatizationStream"
+		
+		//$module (name = "arduino_climatization_board#1")
 		
 		//if $climatization_event == hot / warm / cold (conjunto A B C)
 		// check the actuators as well (actuator ON, OFF)
@@ -72,6 +80,9 @@ dialect "mvel"
     System.out.println("actuation: " + 
 		"moduyle: "+$module+" "+
 		"sampling: "+$sampling+" "+
+		"actuator_uuid:"+$actuator_uuid+" "+
+		"actuator_active:"+$actuator_active+" "+
+		"actuator_activated_time:"+$actuator_activated_time+" "+
 		"sensor_uuid: "+$sensor_uuid+" "+
 		"heaT_index: "+$heat_index+" "+
 		"temperature: "+$temperature+" "+

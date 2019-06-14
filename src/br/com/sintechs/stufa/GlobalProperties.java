@@ -44,6 +44,7 @@ public class GlobalProperties {
 	private List<String> CLIMATIZATION_MODULES = new ArrayList<String>();
 	private List<String> SOIL_MODULES = new ArrayList<String>();
 	private Map<String, List<String>> CLIMATIZATION_MODULES_SENSORS = new HashMap<String, List<String>>();
+	private Map<String, List<String>> CLIMATIZATION_MODULES_ACTUATORS = new HashMap<String, List<String>>();
 	private Map<String, List<String>> SOIL_MODULES_SENSORS = new HashMap<String, List<String>>();
 	private Map<String, List<String>> CLIMATIZATION_SENSORS_MEASURE_TYPES = new HashMap<String, List<String>>();
 	private Map<String, List<String>> SOIL_SENSORS_MEASURE_TYPES = new HashMap<String, List<String>>();
@@ -76,6 +77,14 @@ public class GlobalProperties {
 //		this.CLIMATIZATION_MODULES_SENSORS.put("arduino_climatization_board#3", tmp_list);
 		// this.CLIMATIZATION_MODULES_SENSORS.put("arduino_external_climatization_board#1",
 		// "DHT21#1");
+		tmp_list = new ArrayList<String>();
+		tmp_list.add("DN20#1");
+		this.CLIMATIZATION_MODULES_ACTUATORS.put("arduino_climatization_board#1", tmp_list);
+		tmp_list.add("DN20#2");
+		this.CLIMATIZATION_MODULES_ACTUATORS.put("arduino_climatization_board#2", tmp_list);
+		tmp_list.add("DN20#3");
+		this.CLIMATIZATION_MODULES_ACTUATORS.put("arduino_climatization_board#3", tmp_list);
+		
 
 		tmp_list = new ArrayList<String>();
 		tmp_list.add("LM393#1");
@@ -488,6 +497,14 @@ public class GlobalProperties {
 
 	public void setSOIL_SENSORS_MEASURE_TYPES(Map<String, List<String>> sOIL_SENSORS_MEASURE_TYPES) {
 		SOIL_SENSORS_MEASURE_TYPES = sOIL_SENSORS_MEASURE_TYPES;
+	}
+
+	public Map<String, List<String>> getCLIMATIZATION_MODULES_ACTUATORS() {
+		return CLIMATIZATION_MODULES_ACTUATORS;
+	}
+
+	public void setCLIMATIZATION_MODULES_ACTUATORS(Map<String, List<String>> cLIMATIZATION_MODULES_ACTUATORS) {
+		CLIMATIZATION_MODULES_ACTUATORS = cLIMATIZATION_MODULES_ACTUATORS;
 	}
 
 

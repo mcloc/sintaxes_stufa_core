@@ -1,5 +1,8 @@
 package br.com.sintechs.stufa.models;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +13,9 @@ public class ClimatizationEvent {
 	private SintechsModule module;
 	private SintechsSampling sampling;
 	private String sensor_uuid;
+	private String actuator_uuid;
+	private Boolean actuator_active;
+	private BigInteger actuator_activated_time;
 	private Float heat_index;
 	private Float temperature;
 	private Float humidity;
@@ -23,6 +29,7 @@ public class ClimatizationEvent {
 		this.module = module;
 		this.sampling = sampling;
 		this.sensor_uuid = sensor_uuid;
+		this.actuator_uuid = null;
 		this.tmp_measure_type = measure_type;
 		switch (measure_type) {
 		case "heat_index":
@@ -38,6 +45,16 @@ public class ClimatizationEvent {
 			this.rule_condition_humidity = rule_condition;
 			break;
 		}
+	}
+	
+	public ClimatizationEvent(SintechsModule module, SintechsSampling sampling, String actuator_uuid, Boolean active, 
+			BigInteger activated_time) {
+		this.module = module;
+		this.sampling = sampling;
+		this.actuator_uuid = actuator_uuid;
+		this.actuator_active = active;
+		this.actuator_activated_time = activated_time;
+		this.sensor_uuid = null;
 	}
 
 	public SintechsModule getModule() {
@@ -120,10 +137,37 @@ public class ClimatizationEvent {
 		this.rule_condition_humidity = rule_condition_humidity;
 	}
 
+	public String getActuator_uuid() {
+		return actuator_uuid;
+	}
+
+	public void setActuator_uuid(String actuator_uuid) {
+		this.actuator_uuid = actuator_uuid;
+	}
+
+	public Boolean getActuator_active() {
+		return actuator_active;
+	}
+
+	public void setActuator_active(Boolean actuator_active) {
+		this.actuator_active = actuator_active;
+	}
+
+	public BigInteger getActuator_activated_time() {
+		return actuator_activated_time;
+	}
+
+	public void setActuator_activated_time(BigInteger actuator_activated_time) {
+		this.actuator_activated_time = actuator_activated_time;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((actuator_activated_time == null) ? 0 : actuator_activated_time.hashCode());
+		result = prime * result + ((actuator_active == null) ? 0 : actuator_active.hashCode());
+		result = prime * result + ((actuator_uuid == null) ? 0 : actuator_uuid.hashCode());
 		result = prime * result + ((heat_index == null) ? 0 : heat_index.hashCode());
 		result = prime * result + ((humidity == null) ? 0 : humidity.hashCode());
 		result = prime * result + ((module == null) ? 0 : module.hashCode());
@@ -145,6 +189,21 @@ public class ClimatizationEvent {
 		if (getClass() != obj.getClass())
 			return false;
 		ClimatizationEvent other = (ClimatizationEvent) obj;
+		if (actuator_activated_time == null) {
+			if (other.actuator_activated_time != null)
+				return false;
+		} else if (!actuator_activated_time.equals(other.actuator_activated_time))
+			return false;
+		if (actuator_active == null) {
+			if (other.actuator_active != null)
+				return false;
+		} else if (!actuator_active.equals(other.actuator_active))
+			return false;
+		if (actuator_uuid == null) {
+			if (other.actuator_uuid != null)
+				return false;
+		} else if (!actuator_uuid.equals(other.actuator_uuid))
+			return false;
 		if (heat_index == null) {
 			if (other.heat_index != null)
 				return false;
@@ -192,5 +251,6 @@ public class ClimatizationEvent {
 			return false;
 		return true;
 	}
+
 
 }

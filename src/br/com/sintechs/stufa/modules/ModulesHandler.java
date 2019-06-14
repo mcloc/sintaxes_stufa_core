@@ -67,6 +67,8 @@ public class ModulesHandler extends Thread {
 						break; // DEBUG check just the first module
 				}
 				
+				//TODO: ETL Here
+				
 //				LOGGER.info("Iserting "+samplingList.size()+" samplings into WorkingMemory entryPoing ");
 //				drools.addSamplingList(samplingList);
 //				LOGGER.info("Iserting "+samplingPack.getSampling_list().size()+" samplings into WorkingMemory entryPoing ");
