@@ -158,19 +158,8 @@ public class ClimatizationEventStack {
 			tmp_list.add(new_ce.getActuator_uuid());
 			instance.stacked_modules_actuators_map.put(new_ce.getModule().getName(), tmp_list);
 		} else { 
-			// Modules Exists but Sensor_uuid not, so add it on the list
+			// Modules Exists but Actuator_uuid not, so add it on the list
 			instance.stacked_modules_actuators_map.get(new_ce.getModule().getName()).add(new_ce.getActuator_uuid());
-		}
-		
-		//Check if the module already are set in the map
-		if(!instance.stacked_modules_actuators_map.containsKey(new_ce.getModule().getName())){
-			//If not create a new List with the Sensor_uuid
-			List<String> tmp_list = new ArrayList<String>();
-			tmp_list.add(new_ce.getSensor_uuid());
-			instance.stacked_modules_actuators_map.put(new_ce.getModule().getName(), tmp_list);
-		} else { 
-			// Modules Exists but Sensor_uuid not, so add it on the list
-			instance.stacked_modules_actuators_map.get(new_ce.getModule().getName()).add(new_ce.getSensor_uuid());
 		}
 		
 		instance.checkReady();
@@ -189,10 +178,9 @@ public class ClimatizationEventStack {
 				}
 				contains_all_sensors = true;
 			}
-			
 			for(Entry<String,List<String>> entry : instance.stacked_modules_actuators_map.entrySet()){
 				if(!entry.getValue().containsAll(instance.modules_actuators_map.get(entry.getKey()))) {
-					contains_all_actuators = false;
+					contains_all_actuators = false; //false true DEBUG 
 					break;
 				}
 				contains_all_actuators = true;

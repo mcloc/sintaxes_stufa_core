@@ -51,7 +51,7 @@ public class GlobalProperties {
 
 	public GlobalProperties() {
 		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#1");
-		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#2");
+//		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#2");
 //		this.CLIMATIZATION_MODULES.add("arduino_climatization_board#3");
 
 		this.SOIL_MODULES.add("arduino_soil_board#1");
@@ -80,8 +80,10 @@ public class GlobalProperties {
 		tmp_list = new ArrayList<String>();
 		tmp_list.add("DN20#1");
 		this.CLIMATIZATION_MODULES_ACTUATORS.put("arduino_climatization_board#1", tmp_list);
+		tmp_list = new ArrayList<String>();
 		tmp_list.add("DN20#2");
 		this.CLIMATIZATION_MODULES_ACTUATORS.put("arduino_climatization_board#2", tmp_list);
+		tmp_list = new ArrayList<String>();
 		tmp_list.add("DN20#3");
 		this.CLIMATIZATION_MODULES_ACTUATORS.put("arduino_climatization_board#3", tmp_list);
 		

@@ -63,7 +63,7 @@ public class ModulesHandler extends Thread {
 					//TODO: Loop trough all modules and hidrate Sampling per module
 					//TODO: insert List<Sampling> into drools
 					Thread.sleep(500);
-					if(module.getName().contains("#2")) // DEBUG
+					if(module.getName().contains("#1")) // DEBUG
 						break; // DEBUG check just the first module
 				}
 				
