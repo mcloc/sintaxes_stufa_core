@@ -51,10 +51,11 @@ public class ClimatizationEvent {
 			BigInteger activated_time) {
 		this.module = module;
 		this.sampling = sampling;
+		this.sensor_uuid = null;
 		this.actuator_uuid = actuator_uuid;
 		this.actuator_active = active;
 		this.actuator_activated_time = activated_time;
-		this.sensor_uuid = null;
+		
 	}
 
 	public SintechsModule getModule() {

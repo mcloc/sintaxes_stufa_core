@@ -120,39 +120,11 @@ public class ClimatizationEventStack {
 			instance.stacked_sensors_measure_type_map.get(new_ce.getSensor_uuid()).add(new_ce.getTmp_measure_type());
 		}
 		
-		
-		if(instance.stacked_modules_list.containsAll(instance.active_modules_list)) {
-			boolean contains_all_sensors = false;
-			for(Entry<String,List<String>> entry : instance.stacked_modules_sensors_map.entrySet()){
-				if(!entry.getValue().containsAll(instance.modules_sensors_map.get(entry.getKey()))) {
-					contains_all_sensors = false;
-					break;
-				}
-				contains_all_sensors = true;
-			}
-			
-			if(contains_all_sensors) {
-				boolean contains_all_sensors_measure_types = true;
-				for(Entry<String,List<String>> entry_sensor : instance.stacked_modules_sensors_map.entrySet()){
-					for(String sensor_uuid : entry_sensor.getValue()) {
-						for(Entry<String,List<String>> entry_measure_type : instance.stacked_sensors_measure_type_map.entrySet()){
-							if(!entry_measure_type.getValue().containsAll(instance.sensors_measure_type_map.get(sensor_uuid))) {
-								contains_all_sensors_measure_types = false;
-								break;
-							}
-						}	
-					}
-				}
-				
-				if(contains_all_sensors_measure_types)
-					instance.ready = true;
-			}
-				
-		}
+		instance.checkReady();
 		
 		return instance;
 	}
-	
+
 	
 	public static ClimatizationEventStack addEventActuator(ClimatizationEvent new_ce) {
 		boolean ce_exists = false;
@@ -163,7 +135,8 @@ public class ClimatizationEventStack {
 				instance.climatization_event_list.get(i).getSampling().equals(new_ce.getSampling())) {
 				
 				//SENSOR ALREADY EXISTS, UPDATE MEASURE_TYPE
-				if(instance.climatization_event_list.get(i).getActuator_uuid().equals(new_ce.getActuator_uuid())) {
+				if(instance.climatization_event_list.get(i).getActuator_uuid() != null &&
+						instance.climatization_event_list.get(i).getActuator_uuid().equals(new_ce.getActuator_uuid())) {
 					ce_exists = true;
 					break; // break the loop
 				}
@@ -189,9 +162,6 @@ public class ClimatizationEventStack {
 			instance.stacked_modules_actuators_map.get(new_ce.getModule().getName()).add(new_ce.getActuator_uuid());
 		}
 		
-		
-		
-		
 		//Check if the module already are set in the map
 		if(!instance.stacked_modules_actuators_map.containsKey(new_ce.getModule().getName())){
 			//If not create a new List with the Sensor_uuid
@@ -203,15 +173,29 @@ public class ClimatizationEventStack {
 			instance.stacked_modules_actuators_map.get(new_ce.getModule().getName()).add(new_ce.getSensor_uuid());
 		}
 		
+		instance.checkReady();
 		
+		return instance;
+	}
+	
+	private void checkReady() {
 		if(instance.stacked_modules_list.containsAll(instance.active_modules_list)) {
 			boolean contains_all_sensors = false;
+			boolean contains_all_actuators = false;
 			for(Entry<String,List<String>> entry : instance.stacked_modules_sensors_map.entrySet()){
 				if(!entry.getValue().containsAll(instance.modules_sensors_map.get(entry.getKey()))) {
 					contains_all_sensors = false;
 					break;
 				}
 				contains_all_sensors = true;
+			}
+			
+			for(Entry<String,List<String>> entry : instance.stacked_modules_actuators_map.entrySet()){
+				if(!entry.getValue().containsAll(instance.modules_actuators_map.get(entry.getKey()))) {
+					contains_all_actuators = false;
+					break;
+				}
+				contains_all_actuators = true;
 			}
 			
 			if(contains_all_sensors) {
@@ -227,16 +211,11 @@ public class ClimatizationEventStack {
 					}
 				}
 				
-				if(contains_all_sensors_measure_types)
+				if(contains_all_sensors_measure_types && contains_all_actuators)
 					instance.ready = true;
 			}
-				
 		}
-		
-		return instance;
 	}
-	
-	
 
 	public List<ClimatizationEvent> getClimatization_event_list() {
 		return this.climatization_event_list;
