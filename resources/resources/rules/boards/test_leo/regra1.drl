@@ -8,7 +8,7 @@ package resources.rules.boards.test_leo
 //	
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-import br.com.sintechs.stufa.models.SintechsSampling;
+import br.com.vger.stufa.models.SintechsSampling;
 
 rule "testLeo"
 dialect "mvel"

@@ -4,16 +4,16 @@ package resources.rules.handlers
 //list any import classes here.
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import br.com.sintechs.stufa.drools.DroolsActionHandler;
-import br.com.sintechs.stufa.models.SintechsSampling;
-import br.com.sintechs.stufa.models.SintechsSamplingSensor;
-import br.com.sintechs.stufa.models.SintechsSamplingActuator;
-import br.com.sintechs.stufa.models.SintechsSensor;
-import br.com.sintechs.stufa.models.RuleEvent;
+import br.com.vger.stufa.drools.DroolsActionHandler;
+import br.com.vger.stufa.models.SintechsSampling;
+import br.com.vger.stufa.models.SintechsSamplingSensor;
+import br.com.vger.stufa.models.SintechsSamplingActuator;
+import br.com.vger.stufa.models.SintechsSensor;
+import br.com.vger.stufa.models.RuleEvent;
 
 //declare any global variables here
 
-global br.com.sintechs.stufa.drools.DroolsActionHandler drlActionHandler;
+global br.com.vger.stufa.drools.DroolsActionHandler drlActionHandler;
 
 declare RuleEvent 
     @role( event )

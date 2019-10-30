@@ -5,19 +5,19 @@ package resources.rules.boards.arduino_climatizaion_boards
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
-import br.com.sintechs.stufa.drools.DroolsActionHandler;
-import br.com.sintechs.stufa.drools.EventHandler;
-import br.com.sintechs.stufa.models.SintechsSampling;
-import br.com.sintechs.stufa.models.SintechsModule
-import br.com.sintechs.stufa.models.SintechsSamplingSensor;
-import br.com.sintechs.stufa.models.SintechsSamplingActuator;
-import br.com.sintechs.stufa.models.SintechsSensor;
-import br.com.sintechs.stufa.models.ClimatizationEventHandler;
-import br.com.sintechs.stufa.models.ClimatizationEvent;
+import br.com.vger.stufa.drools.DroolsActionHandler;
+import br.com.vger.stufa.drools.EventHandler;
+import br.com.vger.stufa.models.SintechsSampling;
+import br.com.vger.stufa.models.SintechsModule
+import br.com.vger.stufa.models.SintechsSamplingSensor;
+import br.com.vger.stufa.models.SintechsSamplingActuator;
+import br.com.vger.stufa.models.SintechsSensor;
+import br.com.vger.stufa.models.ClimatizationEventHandler;
+import br.com.vger.stufa.models.ClimatizationEvent;
 
 //declare any global variables here
 
-global br.com.sintechs.stufa.drools.DroolsActionHandler drlActionHandler;
+global br.com.vger.stufa.drools.DroolsActionHandler drlActionHandler;
 
 declare SintechsSampling 
     @role( event )

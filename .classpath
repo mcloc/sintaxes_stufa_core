@@ -18,7 +18,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/arduino.jar"/>
 	<classpathentry exported="true" kind="con" path="DROOLS/Drools"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
