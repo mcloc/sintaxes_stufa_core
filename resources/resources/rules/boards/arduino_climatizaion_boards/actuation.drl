@@ -7,11 +7,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import br.com.vger.stufa.drools.DroolsActionHandler;
 import br.com.vger.stufa.drools.EventHandler;
-import br.com.vger.stufa.models.SintechsSampling;
-import br.com.vger.stufa.models.SintechsModule
-import br.com.vger.stufa.models.SintechsSamplingSensor;
-import br.com.vger.stufa.models.SintechsSamplingActuator;
-import br.com.vger.stufa.models.SintechsSensor;
+import br.com.vger.stufa.models.VgerSampling;
+import br.com.vger.stufa.models.VgerModule
+import br.com.vger.stufa.models.VgerSamplingSensor;
+import br.com.vger.stufa.models.VgerSamplingActuator;
+import br.com.vger.stufa.models.VgerSensor;
 import br.com.vger.stufa.models.ClimatizationEventHandler;
 import br.com.vger.stufa.models.ClimatizationEvent;
 
@@ -19,13 +19,13 @@ import br.com.vger.stufa.models.ClimatizationEvent;
 
 global br.com.vger.stufa.drools.DroolsActionHandler drlActionHandler;
 
-declare SintechsSampling 
+declare VgerSampling 
     @role( event )
 end
 
-declare SintechsSamplingSensor 
+declare VgerSamplingSensor 
  	sampling_uuid : Timestamp
- 	sensor : SintechsSensor 
+ 	sensor : VgerSensor 
 	measure_type: String 
 	value: Float
 	rule_condition : Float
@@ -34,8 +34,8 @@ declare SintechsSamplingSensor
 end
 
 declare ClimatizationEvent 
- 	  module:SintechsModule
-	  sampling:SintechsSampling
+ 	  module:VgerModule
+	  sampling:VgerSampling
 	  actuator_uuid: String 
 	  actuator_active: Boolean
 	  actuator_activated_time : BigInteger 
@@ -72,7 +72,7 @@ dialect "mvel"
 		//if $climatization_event == hot / warm / cold (conjunto A B C)
 		// check the actuators as well (actuator ON, OFF)
 		
-		//$actuator : SintechsSamplingActuator(
+		//$actuator : VgerSamplingActuator(
 		//	(active == false)
 		//) from $actuators_status
 		//eval($boards.size() > globalProperties.getTOTAL_CLIMATIZATION_BOARDS())

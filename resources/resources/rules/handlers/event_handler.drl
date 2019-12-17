@@ -5,10 +5,10 @@ package resources.rules.handlers
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import br.com.vger.stufa.drools.DroolsActionHandler;
-import br.com.vger.stufa.models.SintechsSampling;
-import br.com.vger.stufa.models.SintechsSamplingSensor;
-import br.com.vger.stufa.models.SintechsSamplingActuator;
-import br.com.vger.stufa.models.SintechsSensor;
+import br.com.vger.stufa.models.VgerSampling;
+import br.com.vger.stufa.models.VgerSamplingSensor;
+import br.com.vger.stufa.models.VgerSamplingActuator;
+import br.com.vger.stufa.models.VgerSensor;
 import br.com.vger.stufa.models.RuleEvent;
 
 //declare any global variables here
@@ -31,7 +31,7 @@ declare RuleEvent
 	  updated_at:Timestamp
 	  sensor_uuid:String
 	  actuator_uuid:String
-	  sampling:SintechsSampling
+	  sampling:VgerSampling
 end
 
 

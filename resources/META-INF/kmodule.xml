@@ -2,7 +2,7 @@
         xmlns="http://www.drools.org/xsd/kmodule">
     <kbase name="rules" equalsBehavior="equality" eventProcessingMode="stream" default="true" packages="resources.rules.boards.arduino_climatizaion_boards">
         <ksession name="ksession-rules" default="true" type="stateful" clockType="pseudo">
-        	<fileLogger file="/var/log/sintechs/drools" threaded="true" interval="10"/>
+        	<fileLogger file="/var/log/vger/drools" threaded="true" interval="10"/>
         </ksession>
     </kbase>
 </kmodule>

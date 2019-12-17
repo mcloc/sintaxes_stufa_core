@@ -19,6 +19,8 @@ public class VgerModule  implements Serializable {
 	private static final long serialVersionUID = -6156684239253178520L;
 	private BigInteger id;
 	private String name;
+	private long _4BCP_UUID; 
+	private String ip_address;
 	private String description;
 	private boolean enabled;
 	private boolean active;
@@ -70,6 +72,21 @@ public class VgerModule  implements Serializable {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
+	
+	public long get_4BCP_UUID() {
+		return _4BCP_UUID;
+	}
+	public void set_4BCP_UUID(long _4bcp_UUID) {
+		_4BCP_UUID = _4bcp_UUID;
+	}
+	
+	
+	public String getIp_address() {
+		return ip_address;
+	}
+	public void setIp_address(String ip_address) {
+		this.ip_address = ip_address;
+	}
 	public static List<VgerModule> hidrateMultiple(JSONObject json_obj, GlobalProperties globalProperties) throws JSONException, Exception {
 		if (!json_obj.isNull("error_code"))
 			throw new Exception ("json error: " + json_obj.getString("error_code"));
@@ -89,8 +106,8 @@ public class VgerModule  implements Serializable {
 			module.setId(data_module_obj.getBigInteger("id"));
 			module.setName(data_module_obj.getString("name"));
 			module.setDescription(data_module_obj.getString("description"));
-			module.setActive("1".equals(data_module_obj.getString("active")));
-			module.setEnabled("1".equals(data_module_obj.getString("enabled")));
+			module.setActive("1".equals(data_module_obj.getInt("active")));
+			module.setEnabled("1".equals(data_module_obj.getInt("enabled")));
 			
 			JSONObject data_module_type = data_module_obj.getJSONObject("module_type");
 			VgerModulesType module_type = VgerModulesType.hidratefromJson(data_module_type);
@@ -113,6 +130,7 @@ public class VgerModule  implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (int) (_4BCP_UUID ^ (_4BCP_UUID >>> 32));
 		result = prime * result + (active ? 1231 : 1237);
 		result = prime * result + ((created_at == null) ? 0 : created_at.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
@@ -132,6 +150,8 @@ public class VgerModule  implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		VgerModule other = (VgerModule) obj;
+		if (_4BCP_UUID != other._4BCP_UUID)
+			return false;
 		if (active != other.active)
 			return false;
 		if (created_at == null) {
@@ -168,7 +188,6 @@ public class VgerModule  implements Serializable {
 			return false;
 		return true;
 	}
-	
 	
 	
 }

@@ -3,7 +3,7 @@ package resources.rules.boards.arduino_climatizaion_boards
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//	BASICLY THIS DRL IS USED AS ETL TO TRANSFORM SintechsSampling INTO CLIMATIZATION_EVENTS.
+//	BASICLY THIS DRL IS USED AS ETL TO TRANSFORM VgerSampling INTO CLIMATIZATION_EVENTS.
 //	MORE REFINED CLIMATIZATION BUSINESS RULES ARE MADE ON actuation.drl OF THIS OWN PACKAGE
 //	
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,11 +15,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import br.com.vger.stufa.drools.DroolsActionHandler;
 import br.com.vger.stufa.drools.EventHandler;
-import br.com.vger.stufa.models.SintechsSampling;
-import br.com.vger.stufa.models.SintechsSamplingPack;
-import br.com.vger.stufa.models.SintechsSamplingSensor;
-import br.com.vger.stufa.models.SintechsSamplingActuator;
-import br.com.vger.stufa.models.SintechsSensor;
+import br.com.vger.stufa.models.VgerSampling;
+import br.com.vger.stufa.models.VgerSamplingPack;
+import br.com.vger.stufa.models.VgerSamplingSensor;
+import br.com.vger.stufa.models.VgerSamplingActuator;
+import br.com.vger.stufa.models.VgerSensor;
 import br.com.vger.stufa.models.RuleEvent;
 import br.com.vger.stufa.models.ClimatizationEvent;
 import br.com.vger.stufa.models.ClimatizationEventHandler;
@@ -29,14 +29,14 @@ import br.com.vger.stufa.models.ClimatizationEventStack;
 global br.com.vger.stufa.drools.DroolsActionHandler drlActionHandler;
 global br.com.vger.stufa.drools.EventHandler eventHandler;
 
-declare SintechsSampling 
+declare VgerSampling 
     @role( event )
 end
 
-declare SintechsSamplingSensor 
+declare VgerSamplingSensor 
  	sampling_uuid : Timestamp
- 	sensor : SintechsSensor
- 	module : SintechsModule 
+ 	sensor : VgerSensor
+ 	module : VgerModule 
 	measure_type: String 
 	value: Float
 	rule_condition : Float
@@ -76,14 +76,14 @@ no-loop true
     when
 		//$eventHandler : EventHandler()
 		//$climatizationEventStack : ClimatizationEventStack() from entry-point "StufaSamplingStream"
-		SintechsSamplingPack($sampling_list : sampling_list)  from  entry-point "StufaSamplingStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
+		VgerSamplingPack($sampling_list : sampling_list)  from  entry-point "StufaSamplingStream"
+		$sampling : VgerSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from $sampling_list
 		
-		//$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
+		//$sampling : VgerSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 		//	 from entry-point "StufaSamplingStream"
 		
-        $sampling_sensor : SintechsSamplingSensor(
+        $sampling_sensor : VgerSamplingSensor(
     		(sensor.module.name == "arduino_climatization_board#1") 
         ) from $sensors_sampling
     then
@@ -114,11 +114,11 @@ no-loop true
     when
 		//$eventHandler : EventHandler()
 		//$climatizationEventStack : ClimatizationEventStack() from entry-point "StufaSamplingStream"
-		SintechsSamplingPack($sampling_list : sampling_list)  from  entry-point "StufaSamplingStream"
-		$sampling : SintechsSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
+		VgerSamplingPack($sampling_list : sampling_list)  from  entry-point "StufaSamplingStream"
+		$sampling : VgerSampling( $sensors_sampling : samplingSensors, $actuators_sampling : samplingActuators, $globalProperties : globalProperties) 
 			from $sampling_list
 		
-        $sampling_actuator : SintechsSamplingActuator(
+        $sampling_actuator : VgerSamplingActuator(
     		(module.name == "arduino_climatization_board#1") 
         ) from $actuators_sampling
     then

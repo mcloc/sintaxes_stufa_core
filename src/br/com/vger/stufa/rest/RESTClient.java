@@ -393,6 +393,8 @@ public class RESTClient {
 		try {
 			HttpGet request = new HttpGet(globalProperties.getREST_API_GET_ACTIVE_MODULES_URL());
 			HttpResponse response = httpClient.execute(request);
+			
+			//429 too many requests
 			while(response.getStatusLine().getStatusCode() == 429) {
 				HttpEntity entity = response.getEntity();
 				EntityUtils.consume(entity);

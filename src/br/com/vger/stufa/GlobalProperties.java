@@ -18,7 +18,7 @@ public class GlobalProperties {
 	private Integer REST_429_SLEEP = 4500;
 	private Integer REST_MODULE_SLEEP = 2500;
 	private Integer TOTAL_CLIMATIZATION_BOARDS = 3;
-	private String REST_API_SERVER = "http://admin.vger.com.br:888";
+	private String REST_API_SERVER = "http://admin.vger.com.br:8888";
 	private String REST_API_STORE_SAMPLING_URL = REST_API_SERVER + "/api/storeSampling";
 	private String REST_API_STORE_RULE_EVENT_URL = REST_API_SERVER + "/api/storeRuleEvent";
 	private String REST_API_GET_SAMPLING_URL = REST_API_SERVER + "/api/getSampling";

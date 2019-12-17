@@ -37,7 +37,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>br.com.sintechs.stufaSerialRead.Main</mainClass>
+              <mainClass>br.com.vger.stufaSerialRead.Main</mainClass>
             </manifest>
           </archive>
         </configuration>

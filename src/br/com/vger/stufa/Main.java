@@ -25,8 +25,8 @@ public class Main {
 		//Start Drools Thread
 		ExpertSystemHandler es = new ExpertSystemHandler(globalProperties, writeInterrupt);
 		es.run();
-		
-		Thread.sleep(200);
+//		
+//		Thread.sleep(200);
 		
 //		IPCHandler ipc = new IPCHandler(globalProperties, writeInterrupt);
 		
